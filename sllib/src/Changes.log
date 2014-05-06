@@ -1,0 +1,186 @@
+Version 1.0.0
+		Initial release.
+		(Sep.6,2009)
+
+Version 1.0.1	
+		CSTREAMIO updates:
+		 - Changed args of bread() and bwrite().
+		 - Added new bread() and bwrite() member functions which support
+		   arg of bstream_info array.
+		TSTRING updates:
+		 - Added regmatch() of advanced version.
+		 - Added reg_elem_length(), reg_pos(), reg_length() and reg_cstr().
+		 - Supported back reference of regreplace().
+		 - Added crop().
+		(Sep.16,2009)
+
+Version 1.0.2
+		TSTRING updates:
+		 - Added operator<() for STL map.
+		   (Thanks to Yamamoto-san)
+		TARRAY_TSTRING updates:
+		 - Rearranged code using TARRAY template class.
+		ASARRAY_TSTRING updates:
+		 - Added at_cs(const char *) member function.
+		   (Thanks to Yamamoto-san)
+		MDARRAY updates:
+		 - Added get_elements() and put_elements() member functions.
+		Other updates:
+		 - Added TARRAY template class.
+		 - Added ASARRAY template class.
+		(Sep.19,2009)
+
+Version 1.0.2a
+		Updated s++.src:
+		 - Added CnR function.
+		 - "-o program_name" is complemented.
+		DIGESTSTREAMIO updates:
+		 - Added is_write_mode() member function.
+		(Oct.2,2009)
+
+Version 1.0.2b
+		Updates for glibc-2.10/gcc-4.4.0 support.
+		- Updated private/{c_memchr.c,c_strpbrk.c,suffix2filetype.c,
+			           c_strchr.c,c_strrchr.c}.
+		Changed name of package.
+
+Version 1.0.2c
+		There are no source files dynamically generated.
+		 - Stopped use of make_sli_eof_h.cc and make_sli_seek_h.cc.
+		 - Stopped use of mk_sli_endian.sh.
+		 - Appended sli__eof(), sli__seek_set(), sli__seek_cur(),
+		   sli__seek_end(), sli__byte_order_is_little_endian() and
+		   sli__float_word_order_is_little_endian() to sli_funcs.{h,cc}.
+		
+Version 1.0.3
+		MDARRAY updates:
+		 - Supported operators +,-,*,/.
+		 - Added inherited classes of mdarray.
+		   (mdarray_double, mdarray_float, mdarray_int, etc.)
+		 - Added mathematical functions for mdarray-series classes.
+		   (mdarray_math.{h,cc})
+		 - Added resize(), calc{1,2}(), cdimarray() and ope_size_type().
+		TSTRING updates:
+		 - Added reg_cstrarray().
+		STDSTREAMIO updates:
+		 - Supported selection of stdout/stderr using constructor.
+		Other updates:
+		 - Added dprint() to mdarray, tstring, tarray_tstring and 
+		   asarray_tstring classes.
+		 - Appended header files, numeric_minmax.h, numeric_indefs.h and
+		   size_types.h.
+		 - Enhanced some constructors.
+		(Nov.11,2009)
+
+Version 1.0.4
+                Final release of version 1.0 series.
+                 - Bug fixes.
+                (Nov.18,2009)
+
+Version 1.1.0
+		OVERALL:
+		 - Applied autoconf and automake.
+		ASARRAY_TSTRING updates:
+		 - Appended assign_keys() and assign_values() member functions.
+		(Jan.20,2010)
+
+Version 1.1.0a
+		Fixed a bug in ftpstreamio.cc.
+		 - Code for ftp://username:passwd@hostname does not work, fixed.
+		(Oct.13,2011)
+
+Version 1.2.0
+		OVERALL:
+		 - Supported complex types in mdarray.
+		 - Added some functions for complex types.
+		 - Added rskip() and wskip() in cstreamio and child classes.
+		 - complete support of eof(), error() and clearerr() of
+		   cstreamio and child classes.
+		 - Improved close() that returns correct status.
+		 - Performance improvements.  For example, `inline' is applied
+		   to member functions that might be written in loop.
+		 - Added comment for each public member functions in all header
+		   files.
+		TSTRING updates:
+		 - Added update_length() member function.
+		DIGESTSTREAMIO updates:
+		 - Supported pigz and lbzip2 for local files.
+		MDARRAY updates:
+		 - Performance improvement of member functions for image processings.
+		(Apr.10,2012)
+
+Version 1.2.1
+		Performance improvements:
+		- Applied `inline' attribute to static functions around mdarray
+		  class.
+		- Minimized use of function pointer in mdarray class.
+		- Improved performance of memory I/O (e.g., byte-swap, etc.).
+		(Sep.25,2012)
+
+Version 1.2.1a
+		- Performance improvements of private/byte_swap.cc, etc.
+		- Added more comments to private/byte_swap.cc, etc.
+		(Oct.4,2012)
+
+Version 1.4.0
+		OVERALL:
+		 - Peformance tuning of mdarray class including use of SIMD
+		   instructions.
+		 - Added a number of APIs of mdarray to handle arrays using 
+		   IDL-like string expressions.
+		 - Added a lot of new functions.
+		 - Added heap_mem.h for low-level memory managements.
+		MDARRAY updates:
+		 - Improved performance of operators and APIs for image 
+		   processing.
+		 - Applied shallow copy to return temporary object in mdarray.
+		 - Added APIs for fast transpose and rotate.
+		 - Changed APIs of scan_along_x(), etc.
+		 - Added a number of new useful functions.
+		 - Added basic functions for statistics (mean, median, etc.):
+		   mdarray_statistics.h.
+		TSTRING updates:
+		 - Added tstring::find_quoted(), etc.
+		 - Added tstring::erase_quotes(), etc.
+		TARRAY_TSTRING updates:
+		 - Added enhanced explode().
+		TREGEX updates:
+		 - .compile() returns status of compile of regular expression.
+		Other updates:
+		 - Supports "make test" in sample/CTINDEX/.
+		 - Supports almost all C99 complex fuctions : complex.h.
+		(Feb.13,2013)
+
+Version 1.4.0a
+		- Fixed problem that including mdarray_statistics.h after 
+                  mdarray_math.h
+		- Improved header files when using cmath.
+		(Mar.5,2013)
+
+Version 1.4.2
+		- mdarray class supports complete shallow copy.
+		- Added code for shallow copy for tstring class.
+		- Added a number of java-doc comments.
+		(Apr.15,2013)
+
+Version 1.4.2a
+		- Updated javadoc comments. All public functions have '@brief'.
+		(May.14,2013)
+
+Version 1.4.2c
+		- Added examples directory and a number of example codes.
+		- Improved configure script (automatic lib64 directory support)
+		- Fixed bug of mdarray::pastef(): wrong ndim.
+		(May.30,2013)
+
+Version 1.4.2e
+		- Example codes are installed.
+		- Improved s++ script: selectable template source.
+		- Improved Makefile.src: /usr/lib32 (FreeBSD) support.
+		(Jun.5,2013)
+
+Version 1.4.2f
+		- Added missing 'static' of inline functions.
+		  (complex.h, mdarray_statistics.h)
+		- Minor improvement of s++.
+		(Jun.24,2013)

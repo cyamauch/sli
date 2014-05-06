@@ -1,0 +1,101 @@
+
+== SUPPORTED OS ===============================================================
+
+  You can build this software under Linux, FreeBSD, MacOSX, Solaris and Cygwin.
+  Both 32-bit and 64-bit editions are supported.
+
+
+== HOW TO BUILD ===============================================================
+
+  You can select an way from two options, Way-1 or Way-2, to install this
+  software:
+
+  Way-1:  For general users and scientists.
+          Required command is `make' only.
+          This creates a static library only.
+
+  Way-2:  For developers and hackers.
+          This follows `sh configure' -> `make' style, and 
+          creates both static and shared libraries.
+
+  In both of them, the build system automatically detects OS type and sets
+  necessary options to g++ compiler.
+
+  -- Way-1 : For general users and scientists ---------------------------------
+
+  This procedure creates a static library only.  If you want to create a shared
+  library, please select Way-2.
+
+  Installation of zlib, bz2lib, GNU readline and SLLIB is required to build
+  this software. Install them like this:
+    # yum install zlib-devel
+    # yum install bzip2-devel
+    # yum install ncurses-devel
+    # yum install readline-devel
+  If your origin of distribution is Debian, the names might be zlib1g-dev, 
+  libbz2-dev, and libreadline5-dev.
+
+  To get SLLIB, visit http://www.ir.isas.jaxa.jp/~cyamauch/sli/ and get the
+  source package.
+
+  Then, build SLLIB.  Do not use IDE to build this library.
+    $ gzip -dc sllib-xxx.tar.gz | tar xvf -
+    $ cd sllib-xxx
+    $ make
+    $ su
+    # make install32
+  When you use 64-bit OS, replace "install32" with "install64".
+
+  Then, build SFITSIO.  Do not use IDE to build this library.
+    $ gzip -dc sfitsio-xxx.tar.gz | tar xvf -
+    $ cd sfitsio-xxx
+    $ make
+    $ su
+    # make install32
+  When you use 64-bit OS, replace "install32" with "install64".
+
+  If you want to build 64-bit library under MacOSX, etc., append an argument
+  like this:
+    $ make CCFLAGS=-m64
+
+  If you want to create a binary package, you can use overrides of PREFIX and
+  DESTDIR.
+
+  -- Way-2 : For developers and hackers ---------------------------------------
+
+  This procedure follows `sh configure' -> `make' style, and creates both static
+  and shared libraries.
+
+  Installation of zlib, bz2lib, GNU readline and SLLIB is required to build
+  this software. Install them like this:
+    # yum install zlib-devel
+    # yum install bzip2-devel
+    # yum install ncurses-devel
+    # yum install readline-devel
+  If your origin of distribution is Debian, the names might be zlib1g-dev, 
+  libbz2-dev, and libreadline5-dev.
+
+  To get SLLIB, visit http://www.ir.isas.jaxa.jp/~cyamauch/sli/ and get the
+  source package.
+
+  Then, build SLLIB.  Do not use IDE to build this library.
+    $ gzip -dc sllib-xxx.tar.gz | tar xvf -
+    $ cd sllib-xxx
+    $ sh configure [options]
+    $ make
+    $ su
+    # make install
+
+  To build SFITSIO:
+    $ gzip -dc sfitsio-xxx.tar.gz | tar xvf -
+    $ cd sfitsio-xxx
+    $ sh configure [options]
+    $ make
+    $ su
+    # make install
+
+  You might have to set some options such as 
+    --libdir='${prefix}/lib64'
+  when your OS is 64-bit edition.
+
+  If you want to create a binary package, you can use overrides of DESTDIR.

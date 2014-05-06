@@ -1,0 +1,6 @@
+#define HAVE_LIBSLLIB 1
+#define USE_SIMD 1
+#define PACKAGE_NAME "@NAME@"
+#define PACKAGE_VERSION "@VER@"
+#define PACKAGE_BUGREPORT "@MAIL@"
+#define BUILD_SFITSIO 1

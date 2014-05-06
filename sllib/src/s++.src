@@ -1,0 +1,360 @@
+#!/bin/sh
+
+#           #
+# FUNCTIONS #
+#           #
+is_cx_file () {
+  if [ "`echo $1 | egrep -i '\.c$|\.cc$|\.cpp$'`" = "" ]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+is_cc_file () {
+  if [ "`echo $1 | egrep -i '\.cc$|\.cpp$'`" = "" ]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+is_not_lib_file () {
+  if [ "`echo $1 | egrep -i '\.a$|\.so$|\.dylib$|\.dll$'`" = "" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+get_bin_name() {
+  echo $1 | sed -e 's/\(.*\)\(\.\)\([^\.]*\)/\1/'
+}
+
+#      #
+# MAIN #
+#      #
+CPPC=g++
+#CPPC=icc
+DEFAULT_OPT_FLAGS="-Wall -O2"
+
+BASENAME=`basename $0`
+
+OS="`uname -s | tr '[A-Z]' '[a-z]'`"
+if [ "`echo $OS | cut -b 1-7`" = "cygwin_" ]; then
+  OS="cygwin"
+fi
+
+XARG_IINC=
+XARG_LLIB=
+XARG_LIBSLLIB=
+XARG_LIBPRIVATE=
+XARG_RLIB=
+DOCDIR=
+
+IINC_SLI=`echo ${XARG_IINC}/sli | cut -b 3- | tr -s '/'`
+
+if [ "$1" = "" ]; then
+  #echo "${BASENAME}: No input files specified."
+  echo "[USAGE]"
+  echo " - To compile:"
+  echo "   \$ ${BASENAME} main.cc sub1.cc sub2.cc ..."
+  echo " - To compile/run:"
+  echo "   \$ ${BASENAME} main.cc sub1.cc sub2.cc ... / arg1 arg2 ..."
+  echo " - To create a new template of source file:"
+  echo "   \$ ${BASENAME} foo.cc"
+  echo ""
+  echo "[HEADER FILES]"
+  if [ -d $IINC_SLI ]; then
+    echo "==== In $IINC_SLI ===="
+    ls $IINC_SLI/
+  fi
+  echo ""
+  echo "[EXAMPLE FILES]"
+  EXDIR=${DOCDIR}/examples
+  EX0DIR=`dirname ${DOCDIR}`/sfitsio/examples
+  EX1DIR=`dirname ${DOCDIR}`/sfitsio/tools
+  for i in $EXDIR $EX0DIR $EX1DIR ; do
+    if [ -d $i ]; then
+      echo "==== In $i ===="
+      ls $i/
+    fi
+  done
+  exit 1
+fi
+
+if [ "$2" = "" -o "$2" = "-lsfitsio" ]; then
+  if is_cc_file $1 ; then
+    if [ ! -f $1 ]; then
+      if [ "$2" = "" ]; then
+	# SLLIB only
+	EXDIR=${DOCDIR}/examples
+        echo "Available theme of template sources:"
+	echo "[STREAM]"
+	echo " 0. Example of STDOUT and STDERR"
+	echo " 1. Read a text file from local or network"
+	echo " 2. An animation using gnuplot"
+	echo " 3. Read commands on a terminal (using GNU readline)"
+	echo " 4. Simple HTTP-1.0 client"
+	echo "[STRING and STRING ARRAY]"
+	echo " 8. A basic example for handling string"
+	echo " 9. Edit of strings"
+	echo " a. Shell-like match of strings"
+	echo " b. Regular expression to handle strings"
+	echo " c. A basic example for handling string array"
+	echo " d. Match using regular expressions, and store back reference info"
+	echo " e. Split strings of csv, ssv, etc."
+	echo " f. Associative string array"
+	echo "[N-DIM ARRAY]"
+	echo " g. Basic example for handling array objects"
+	echo " h. Edit array objects"
+	echo " i. Fast access to elements of array objects"
+	echo " j. Handle array object using IDL-like expressions"
+	echo " k. Statistics of array object"
+        echo "Please choose one to be created:"
+	read TID
+	if [ "$TID" = "0" ]; then
+	  cat $EXDIR/stdout_stderr.cc > $1
+	elif [ "$TID" = "1" ]; then
+	  cat $EXDIR/read_text_from_net.cc > $1
+	elif [ "$TID" = "2" ]; then
+	  cat $EXDIR/gnuplot_animation.cc > $1
+	elif [ "$TID" = "3" ]; then
+	  cat $EXDIR/readline.cc > $1
+	elif [ "$TID" = "4" ]; then
+	  cat $EXDIR/http_client.cc > $1
+	elif [ "$TID" = "8" ]; then
+	  cat $EXDIR/string_basic.cc > $1
+	elif [ "$TID" = "9" ]; then
+	  cat $EXDIR/string_edit.cc > $1
+	elif [ "$TID" = "a" ]; then
+	  cat $EXDIR/string_match.cc > $1
+	elif [ "$TID" = "b" ]; then
+	  cat $EXDIR/string_regexp.cc > $1
+	elif [ "$TID" = "c" ]; then
+	  cat $EXDIR/string_array_basic.cc > $1
+	elif [ "$TID" = "d" ]; then
+	  cat $EXDIR/regexp_back_reference.cc > $1
+	elif [ "$TID" = "e" ]; then
+	  cat $EXDIR/split_string.cc > $1
+	elif [ "$TID" = "f" ]; then
+	  cat $EXDIR/associative_string_array.cc > $1
+	elif [ "$TID" = "g" ]; then
+	  cat $EXDIR/array_basic.cc > $1
+	elif [ "$TID" = "h" ]; then
+	  cat $EXDIR/array_edit.cc > $1
+	elif [ "$TID" = "i" ]; then
+	  cat $EXDIR/array_fast_access.cc > $1
+	elif [ "$TID" = "j" ]; then
+	  cat $EXDIR/array_idl.cc > $1
+	elif [ "$TID" = "k" ]; then
+	  cat $EXDIR/array_statistics.cc > $1
+	fi
+      elif [ "$2" = "-lsfitsio" ]; then
+	# SFITSIO support :-)
+	EX0DIR=`dirname ${DOCDIR}`/sfitsio/examples
+	EX1DIR=`dirname ${DOCDIR}`/sfitsio/tools
+	if [ ! -d $EX0DIR ]; then
+	  echo "[ERROR] SFITSIO is not installed"
+	  exit 1
+	fi
+	if [ ! -d $EX1DIR ]; then
+	  echo "[ERROR] SFITSIO is not installed"
+	  exit 1
+	fi
+        echo "Available theme of template sources:"
+	echo "[FILE I/O]"
+	echo " 0. Read a FITS file and write it in another file (imcopy of IRAF)"
+	echo " 1. Read all header in a FITS file"
+	echo " 2. Read a templete file and write a new FITS file"
+	echo "[IMAGE]"
+	echo " 4. A simple example code to create new FITS image"
+	echo " 5. An example code to create new FITS image with header"
+	echo " 6. Statistics of FITS image"
+	echo " 7. Combine FITS images"
+	echo " 8. Convert BITPIX of FITS image"
+	echo " 9. Transpose FITS image"
+	echo " a. Rotate FITS image"
+	echo "[TABLE]"
+	echo " c. Create a new FITS binary table"
+	echo " d. Create a new FITS ASCII table"
+	echo " e. Text-dump of FITS binary or ASCII table"
+	echo " f. Create variable length array of binary table (using low-level APIs)"
+	echo "[HEADER and DISK-based I/O]"
+	echo " g. Fill blank comments automatically"
+	echo " h. Fast header viewer"
+	echo " i. Calculate md5 of each data unit of FITS"
+        echo "Please choose one to be created:"
+	read TID
+	if [ "$TID" = "0" ]; then
+	  cat $EX0DIR/read_and_write_fits.cc > $1
+	elif [ "$TID" = "1" ]; then
+	  cat $EX0DIR/read_fits_header.cc > $1
+	elif [ "$TID" = "2" ]; then
+	  cat $EX1DIR/create_fits_from_template.cc > $1
+	elif [ "$TID" = "4" ]; then
+	  cat $EX0DIR/create_fits_image.cc > $1
+	elif [ "$TID" = "5" ]; then
+	  cat $EX0DIR/create_fits_image_and_header.cc > $1
+	elif [ "$TID" = "6" ]; then
+	  cat $EX0DIR/stat_fits_image_pixels_md.cc > $1
+	elif [ "$TID" = "7" ]; then
+	  cat $EX0DIR/combine_fits_images_md.cc > $1
+	elif [ "$TID" = "8" ]; then
+	  cat $EX1DIR/conv_fits_image_bitpix.cc > $1
+	elif [ "$TID" = "9" ]; then
+	  cat $EX1DIR/transpose_fits_image.cc > $1
+	elif [ "$TID" = "a" ]; then
+	  cat $EX1DIR/rotate_fits_image.cc > $1
+	elif [ "$TID" = "c" ]; then
+	  cat $EX0DIR/create_fits_bintable.cc > $1
+	elif [ "$TID" = "d" ]; then
+	  cat $EX0DIR/create_fits_asciitable.cc > $1
+	elif [ "$TID" = "e" ]; then
+	  cat $EX0DIR/dump_fits_table.cc > $1
+	elif [ "$TID" = "f" ]; then
+	  cat $EX0DIR/create_fits_vl_array.cc > $1
+	elif [ "$TID" = "g" ]; then
+	  cat $EX1DIR/fill_fits_header_comments.cc > $1
+	elif [ "$TID" = "h" ]; then
+	  cat $EX1DIR/hv.cc > $1
+	elif [ "$TID" = "i" ]; then
+	  cat $EX1DIR/fits_dataunit_md5.cc > $1
+	fi
+      fi
+      if [ -f $1 ]; then
+	echo "A template code is written: $1"
+      fi
+      exit 0
+    fi
+  fi
+fi
+
+
+if [ "`echo $CPPC | grep '[+][+]'`" = "" ]; then
+  XARG_LIBPRIVATE="$XARG_LIBPRIVATE -lstdc++"
+fi
+
+if [ "$OS" = "sunos" ]; then
+  #
+  if [ "$XARG_IINC" != "-L/usr/local/include" ]; then
+    XARG_IINC="$XARG_IINC -I/usr/local/include"
+  fi
+  XARG_IINC="$XARG_IINC -I/usr/sfw/include -I/opt/sfw/include"
+  #
+  if [ -d /usr/lib/64 ]; then
+    for i in /usr/local/lib/64 /usr/sfw/lib/64 /opt/sfw/lib/64 ; do
+      if [ "`echo $XARG_LLIB' '|grep '[-]L'$i' '`" = "" ]; then
+        XARG_LLIB="$XARG_LLIB -L$i"
+      fi
+    done
+  fi
+  for i in /usr/local/lib /usr/sfw/lib /opt/sfw/lib ; do
+    if [ "`echo $XARG_LLIB' '|grep '[-]L'$i' '`" = "" ]; then
+      XARG_LLIB="$XARG_LLIB -L$i"
+    fi
+  done
+  #
+  for i in $XARG_LLIB ; do
+    P="`echo $i | cut -b 3-`"
+    CHK="`crle | grep '[	:]'$P'[^/]'`"
+    if [ "$CHK" = "" ]; then
+      XARG_RLIB="$XARG_RLIB -R$P"
+    fi
+  done
+fi
+
+ARG_C=0
+ARG_O=0
+ARG_SHARED=0
+ARG_SLASH=0
+HAS_CX=0
+ARGS_EXEC=""
+BIN_NAME=""
+FIRST_CX=""
+ALL=""
+for i in $@ ; do
+  if [ $ARG_SLASH = 1 ]; then
+    ARGS_EXEC="$ARGS_EXEC $i"
+  elif [ "$i" = "/" ]; then
+    ARG_SLASH=1
+  else
+    if [ "$BIN_NAME" = "" -a $ARG_O = 1 ]; then
+      BIN_NAME="$i"
+    fi
+    if [ "$i" = "-c" ]; then
+      ARG_C=1
+    elif [ "$i" = "-o" ]; then
+      ARG_O=1
+    elif [ "$i" = "-shared" ]; then
+      ARG_SHARED=1
+    elif is_cx_file $i ; then
+      HAS_CX=1
+      if [ "$FIRST_CX" = "" ]; then
+        FIRST_CX=$i
+      fi
+    elif [ "`echo $i|sed -e 's/libsllib\.a//'`" != "$i" ]; then
+      XARG_LIBSLLIB=""
+    fi
+    ALL="$ALL $i"
+  fi
+done
+if [ $ARG_O = 1 -o $ARG_C = 1 -o $ARG_SHARED = 1 ]; then
+  FIRST_CX=""
+fi
+# Insert -o outfile if -o is not set
+if [ "$FIRST_CX" != "" ]; then
+  BIN_NAME="`get_bin_name $FIRST_CX`"
+  ALL="-o $BIN_NAME $ALL"
+fi
+
+S=0
+if [ $ARG_SHARED = 1 ]; then
+  if [ "$OS" = "darwin" ]; then
+    ALL="`echo $ALL' '|sed -e 's/-shared /-dynamiclib /' -e 's/\.so /\.dylib /'`"
+  elif [ "$OS" = "cygwin" ]; then
+    ALL="`echo $ALL' '|sed -e 's/\.so /\.dll /'`"
+  fi
+  echo $CPPC $XARG_LLIB $XARG_RLIB $ALL
+  $CPPC $XARG_LLIB $XARG_RLIB $ALL
+  S=$?
+elif [ $ARG_C = 1 ]; then
+  if [ "$OS" != "cygwin" ]; then
+    ALL="-fPIC $ALL"
+  fi
+  if [ "$OS" = "sunos" ]; then
+    ALL="-D__C99FEATURES__ $ALL"
+  fi
+  echo $CPPC $XARG_IINC $ALL
+  $CPPC $XARG_IINC $ALL
+  S=$?
+else
+  if [ "$OS" = "sunos" ]; then
+    if [ $HAS_CX = 1 ]; then
+      ALL="$ALL -D__C99FEATURES__"
+    fi
+    ALL="$ALL $XARG_LIBSLLIB $XARG_LIBPRIVATE -lsocket -lnsl"
+  else
+    ALL="$ALL $XARG_LIBSLLIB $XARG_LIBPRIVATE"
+  fi
+  if [ "$BIN_NAME" != "" -a $HAS_CX = 1 ]; then
+    if is_not_lib_file $BIN_NAME ; then
+      ALL="$DEFAULT_OPT_FLAGS $ALL"
+    fi
+  fi
+  if [ $ARG_SLASH = 0 ]; then
+    echo $CPPC $XARG_IINC $XARG_LLIB $XARG_RLIB $ALL
+  fi
+  $CPPC $XARG_IINC $XARG_LLIB $XARG_RLIB $ALL
+  S=$?
+fi
+
+if [ "$S" = "0" -a $ARG_SLASH = 1 ]; then
+  if [ "`echo $BIN_NAME | grep '^/'`" = "" ]; then
+    exec ./$BIN_NAME $ARGS_EXEC
+  else
+    exec $BIN_NAME $ARGS_EXEC
+  fi
+fi
+
+exit $S

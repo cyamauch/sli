@@ -1,0 +1,113 @@
+Version 1.0.0
+		Initial release.
+		(Sep.6,2009)
+
+Version 1.0.0a
+		Updated s++.src
+		Added fitscc::access_stream() member function.
+		(Oct.2,2009)
+
+Version 1.0.1
+		Fixed bugs around NAN handling.
+		Improved behavior around undefined values.
+		Added min/max checks for integer variables.
+		Changed some args of fitscc::{append,insert}_image().
+		(Nov.11,2009)
+
+Version 1.1.0
+		New version.
+		(Jan.20,2010)
+
+Version 1.1.1
+		Added allheader_formatted_string() to use SFITSIO with wcslib of WCStools.
+		Improved printf() format of 4-byte float cells in ATE and BTE.
+		(Oct.27,2011)
+
+Version 1.1.1a
+		Improved header_formatted_string() member function so that it outputs actual FITS header.
+		(Nov.14,2011)
+
+Version 1.2.0beta
+		Added support of CFITSIO-like template.
+		Rewritten code to expand CONTINUE records in header.
+		A lot of improvement of output of long string value in header.
+		Supported CONTINUE for header comment.
+		Added fits::table_def_all structure and APIs for it.
+		Added stream I/O member functions for fits_header class.
+		(Dec.13,2011)
+
+Version 1.2.0
+		Merged system header and user header.
+		Added basic support of TXFLDKWD keyword.
+		Added dictionary of default comments to fits_header_record.
+		Improved performance of expanding CONTINUE records.
+		Supported update of CHECKSUM and DATASUM by .write_stream().
+		Supported read and write of BTE of variable length.
+		Supported BTE of variable length of template facility.
+		Some functions use cstreamio::rskip(). This needs SLLIB-1.2.0.
+		Improved performance of member functions for image processing. (convert_type(), paste(), etc.)
+		Added member functions for image statistics such as fits_image::scan_cols(), etc.
+		Changed behavior around FMTTYPE and FTYPEVER.
+		Applied `inline' for some member functions that might be used in loop.
+		(Apr.10.2012)
+
+Version 1.2.1
+		Performance improvements:
+		- Applied `inline' to some static functions.
+		- Added fast code for endian conversion.
+		- Improved performance of macros to scan/copy pixels.
+		- Improved code for statistics of fits_image::stat_pixels().
+		Improvements of APIs for FITS header:
+		- comment is automatically written when arg of comment is NULL.
+		  (header_append(), header_insert(), etc.)
+		(Sep.25,2012)
+
+Version 1.2.1a
+		Performance improvements:
+		- Adjusted member alignment of internal struct definitions.
+		- Small optimization of fits_image::stat_pixels().
+		Updated sample programs.
+		(Oct.4,2012)
+
+Version 1.4.0
+		Overall:
+		- Supports partial read of FITS file using extended expression
+		  such as foo.fits[0[1:100,*]] given to .read_stream() arg.
+		- Updated fits_image class : used new APIs in SLLIB-1.4.0.
+		- Added fits_image_statistics.h including functions for
+		  statistics of FITS images.
+		- Improved code for header handling to preserve original 
+		  80-char records.
+		- Other many improvements.
+		(Feb.13,2013)
+
+Version 1.4.0a
+		- Fixed problem that including fitsim_statistics.h after 
+		  mdarray_math.h
+		- Improved header files when using cmath.
+		(Mar.5,2013)
+
+Version 1.4.2
+		Updates for SLLIB-1.4.2.
+		fits_image returns reference of mdarray_* object.
+		(Apr.14,2013)
+
+Version 1.4.2a
+		- Updated javadoc comments. All public functions have '@brief'.
+		- Fixed a bug when TDISP has 'L' for logical field.
+		(May.14,2013)
+
+Version 1.4.2c
+                - Added examples directory and a number of example codes.
+                - Improved configure script (automatic lib64 directory support)
+                (May.30,2013)
+
+Version 1.4.2e
+		- Example codes are installed.
+		- Improved Makefile.src: /usr/lib32 (FreeBSD) support.
+                (Jun.5,2013)
+
+Version 1.4.2f
+		- Added missing 'static' of inline functions.
+		  (fits_image_statistics.h)
+		(Jun.24,2013)

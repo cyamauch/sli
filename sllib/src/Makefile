@@ -1,0 +1,222 @@
+
+#
+# Directories for installation
+#
+
+DESTDIR  =
+PREFIX   = /usr/local
+
+INCDIR   = $(PREFIX)/include
+LIBDIR   = $(PREFIX)/lib
+L32DIR   = $(PREFIX)/lib32
+L64DIR   = $(PREFIX)/lib64
+L_64DIR  = $(PREFIX)/lib/64
+BINDIR   = $(PREFIX)/bin
+DOCDIR   = $(PREFIX)/share/doc/sllib
+
+#
+# Compiler and libraries
+#
+
+CXX      = g++
+
+LIBPRIVATE = -lreadline -lcurses -lbz2 -lz
+
+#
+# Settings for `make'
+#
+
+# You can build 32-bit or 64-bit library by ...
+#  $ make CCFLAGS=-m32
+# or
+#  $ make CCFLAGS=-m64
+
+CCFLAGS  =
+# for 32-bit library on 64-bit Linux
+#CCFLAGS = -m32
+# for 64-bit library on MacOSX
+#CCFLAGS = -m64
+
+# DO NOT CHANGE
+IINC     = 
+ALL_CCFLAGS = -O2 -Wall $(CCFLAGS) $(EXAMFLAGS)
+SINCDIR  = $(INCDIR)/sli
+
+.cc.o:   ; sh s++.sh $(ALL_CCFLAGS) $(IINC) -c $*.cc
+
+all::	s++.sh s++ static
+
+s++.sh:
+	cat s++.src | sed -e 's|^CPPC=[^=]*|CPPC='"$(CXX)"'|' > s++.sh
+
+#sli_endian.h:
+#	sh mk_sli_endian.sh > $@
+
+cstreamio.o:	s++.sh
+
+stdstreamio.o:	s++.sh
+
+gzstreamio.o:	s++.sh
+
+bzstreamio.o:	s++.sh
+
+pipestreamio.o:	s++.sh
+
+termlineio.o:	s++.sh
+
+termscreenio.o:	s++.sh
+
+inetstreamio.o:	s++.sh
+
+httpstreamio.o:	s++.sh
+
+ftpstreamio.o:	s++.sh
+
+digeststreamio.o:	s++.sh
+
+tregex.o:	s++.sh
+
+tstring.o:	s++.sh
+
+tarray_tstring.o:	s++.sh
+
+asarray_tstring.o:	s++.sh
+
+mdarray.o:	s++.sh
+
+mdarray_float.o:	s++.sh
+
+mdarray_double.o:	s++.sh
+
+mdarray_uchar.o:	s++.sh
+
+mdarray_short.o:	s++.sh
+
+mdarray_int.o:	s++.sh
+
+mdarray_long.o:	s++.sh
+
+mdarray_llong.o:	s++.sh
+
+mdarray_int16.o:	s++.sh
+
+mdarray_int32.o:	s++.sh
+
+mdarray_int64.o:	s++.sh
+
+mdarray_size.o:	s++.sh
+
+mdarray_ssize.o:	s++.sh
+
+mdarray_bool.o:	s++.sh
+
+mdarray_uintptr.o:	s++.sh
+
+mdarray_fcomplex.o:	s++.sh
+
+mdarray_dcomplex.o:	s++.sh
+
+mdarray_math.o:	s++.sh
+
+mdarray_complex.o:	s++.sh
+
+complex.o:	s++.sh
+
+xmlparser.o:	s++.sh
+
+ctindex.o:	s++.sh
+
+ldsrpc.o:	s++.sh
+
+sli_funcs.o:	s++.sh
+
+
+
+static::	 cstreamio.o stdstreamio.o gzstreamio.o bzstreamio.o pipestreamio.o termlineio.o termscreenio.o inetstreamio.o httpstreamio.o ftpstreamio.o digeststreamio.o tregex.o tstring.o tarray_tstring.o asarray_tstring.o mdarray.o mdarray_float.o mdarray_double.o mdarray_uchar.o mdarray_short.o mdarray_int.o mdarray_long.o mdarray_llong.o mdarray_int16.o mdarray_int32.o mdarray_int64.o mdarray_size.o mdarray_ssize.o mdarray_bool.o mdarray_uintptr.o mdarray_fcomplex.o mdarray_dcomplex.o mdarray_math.o mdarray_complex.o complex.o xmlparser.o ctindex.o ldsrpc.o sli_funcs.o
+	ar cru libsllib.a $?
+	ranlib libsllib.a
+
+shared::	 cstreamio.o stdstreamio.o gzstreamio.o bzstreamio.o pipestreamio.o termlineio.o termscreenio.o inetstreamio.o httpstreamio.o ftpstreamio.o digeststreamio.o tregex.o tstring.o tarray_tstring.o asarray_tstring.o mdarray.o mdarray_float.o mdarray_double.o mdarray_uchar.o mdarray_short.o mdarray_int.o mdarray_long.o mdarray_llong.o mdarray_int16.o mdarray_int32.o mdarray_int64.o mdarray_size.o mdarray_ssize.o mdarray_bool.o mdarray_uintptr.o mdarray_fcomplex.o mdarray_dcomplex.o mdarray_math.o mdarray_complex.o complex.o xmlparser.o ctindex.o ldsrpc.o sli_funcs.o
+	sh s++.sh -shared -o libsllib.so $? -lz -lbz2 -lreadline
+
+s++:	s++.sh
+	if [ -d /usr/lib/64 ]; then \
+	  cat s++.sh | sed -e 's|^XARG_IINC=|XARG_IINC=-I'"$(INCDIR)"'|' \
+	   -e 's|^DOCDIR=|DOCDIR=\"'"$(DOCDIR)"'\"|' \
+	   -e 's|^XARG_LIBSLLIB=|XARG_LIBSLLIB=-lsllib|' \
+	   -e 's|^XARG_LIBPRIVATE=|XARG_LIBPRIVATE=\"'"$(LIBPRIVATE)"'\"|' \
+	   -e 's|^XARG_LLIB=|XARG_LLIB=\"-L'"$(LIBDIR)"' -L'$(L_64DIR)'\"|' > s++ ; \
+	elif [ -d /lib64 ]; then \
+	  cat s++.sh | sed -e 's|^XARG_IINC=|XARG_IINC=-I'"$(INCDIR)"'|' \
+	   -e 's|^DOCDIR=|DOCDIR=\"'"$(DOCDIR)"'\"|' \
+	   -e 's|^XARG_LIBSLLIB=|XARG_LIBSLLIB=-lsllib|' \
+	   -e 's|^XARG_LIBPRIVATE=|XARG_LIBPRIVATE=\"'"$(LIBPRIVATE)"'\"|' \
+	   -e 's|^XARG_LLIB=|XARG_LLIB=\"-L'"$(LIBDIR)"' -L'$(L64DIR)'\"|' > s++ ; \
+	else \
+	  cat s++.sh | sed -e 's|^XARG_IINC=|XARG_IINC=-I'"$(INCDIR)"'|' \
+	   -e 's|^DOCDIR=|DOCDIR=\"'"$(DOCDIR)"'\"|' \
+	   -e 's|^XARG_LIBSLLIB=|XARG_LIBSLLIB=-lsllib|' \
+	   -e 's|^XARG_LIBPRIVATE=|XARG_LIBPRIVATE=\"'"$(LIBPRIVATE)"'\"|' \
+	   -e 's|^XARG_LLIB=|XARG_LLIB=-L'"$(LIBDIR)"'|' > s++ ; \
+	fi
+
+clean::
+	rm -f s++ s++.sh \
+		*.o *.lo *.la *.a *.so *.dylib *.dll
+	rm -f config.status config.log libtool sllib.pc
+	rm -rf .deps .libs
+
+install::
+	sh install_help.sh $(LIBDIR) $(L32DIR) $(L64DIR) $(L_64DIR)
+
+install32::	install_common install_lib_32
+
+install64::	install_common install_lib_64
+
+installany::	install_common install_lib_64
+
+
+install_common::
+	if [ ! -d $(DESTDIR)$(BINDIR) ];then sh install-sh -d $(DESTDIR)$(BINDIR); fi
+	sh install-sh -m 755 s++ $(DESTDIR)$(BINDIR)
+	if [ ! -d $(DESTDIR)$(SINCDIR) ];then sh install-sh -d $(DESTDIR)$(SINCDIR); fi
+	sh install-sh -m 644 `echo ' ' *.h | sed -e 's/ config[.]h//'` $(DESTDIR)$(SINCDIR)
+	if [ ! -d $(DESTDIR)$(DOCDIR)/examples ];then sh install-sh -d $(DESTDIR)$(DOCDIR)/examples; fi
+	sh install-sh -m 644 README $(DESTDIR)$(DOCDIR)
+	sh install-sh -m 644 examples/*.cc $(DESTDIR)$(DOCDIR)/examples
+
+install_lib_32::
+	if [ -d /usr/lib32 ]; then \
+	 if [ ! -d $(DESTDIR)$(L32DIR) ];then sh install-sh -d $(DESTDIR)$(L32DIR); fi ; \
+	 if [ -f libsllib.a ];then sh install-sh -m 644 *.a $(DESTDIR)$(L32DIR); fi ; \
+	 if [ -f libsllib.so ];then sh install-sh -m 755 *.so $(DESTDIR)$(L32DIR); fi ; \
+	 if [ -f libsllib.dylib ];then sh install-sh -m 755 *.dylib $(DESTDIR)$(L32DIR); fi ; \
+	 if [ -f libsllib.dll ];then sh install-sh -m 755 *.dll $(DESTDIR)$(L32DIR); fi ; \
+	else \
+	 if [ ! -d $(DESTDIR)$(LIBDIR) ];then sh install-sh -d $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsllib.a ];then sh install-sh -m 644 *.a $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsllib.so ];then sh install-sh -m 755 *.so $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsllib.dylib ];then sh install-sh -m 755 *.dylib $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsllib.dll ];then sh install-sh -m 755 *.dll $(DESTDIR)$(LIBDIR); fi ; \
+	fi
+
+install_lib_64::
+	if [ -d /lib64 ]; then \
+	 if [ ! -d $(DESTDIR)$(L64DIR) ];then sh install-sh -d $(DESTDIR)$(L64DIR); fi ; \
+	 if [ -f libsllib.a ];then sh install-sh -m 644 *.a $(DESTDIR)$(L64DIR); fi ; \
+	 if [ -f libsllib.so ];then sh install-sh -m 755 *.so $(DESTDIR)$(L64DIR); fi ; \
+	 if [ -f libsllib.dylib ];then sh install-sh -m 755 *.dylib $(DESTDIR)$(L64DIR); fi ; \
+	 if [ -f libsllib.dll ];then sh install-sh -m 755 *.dll $(DESTDIR)$(L64DIR); fi ; \
+	elif [ -d /usr/lib/64 ]; then \
+	 if [ ! -d $(DESTDIR)$(L_64DIR) ];then sh install-sh -d $(DESTDIR)$(L_64DIR); fi ; \
+	 if [ -f libsllib.a ];then sh install-sh -m 644 *.a $(DESTDIR)$(L_64DIR); fi ; \
+	 if [ -f libsllib.so ];then sh install-sh -m 755 *.so $(DESTDIR)$(L_64DIR); fi ; \
+	 if [ -f libsllib.dylib ];then sh install-sh -m 755 *.dylib $(DESTDIR)$(L_64DIR); fi ; \
+	 if [ -f libsllib.dll ];then sh install-sh -m 755 *.dll $(DESTDIR)$(L_64DIR); fi ; \
+	else \
+	 if [ ! -d $(DESTDIR)$(LIBDIR) ];then sh install-sh -d $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsllib.a ];then sh install-sh -m 644 *.a $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsllib.so ];then sh install-sh -m 755 *.so $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsllib.dylib ];then sh install-sh -m 755 *.dylib $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsllib.dll ];then sh install-sh -m 755 *.dll $(DESTDIR)$(LIBDIR); fi ; \
+	fi

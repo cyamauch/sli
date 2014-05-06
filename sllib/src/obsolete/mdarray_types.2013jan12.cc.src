@@ -1,0 +1,57 @@
+
+/**  
+ * 画像データ向きのメンバ関数で，自身の内容の一部分を切り出し，<br>
+ * 指定されたオブジェクトdest へコピーします．
+ *
+ * @param      dest コピー先のオブジェクト
+ * @param      col_idx コピー元の列位置
+ * @param      col_len コピー元の列サイズ
+ * @param      row_idx コピー元の行位置
+ * @param      row_len コピー元の行サイズ
+ * @param      layer_idx コピー元のレイヤ位置
+ * @param      layer_len コピー元のレイヤサイズ
+ * @return     自身の参照
+ * @throw      バッファの確保に失敗した場合
+ * @throw      メモリ破壊を起こした場合
+ *
+ */
+@CLASS_NAME_L@ &@CLASS_NAME_L@::cut( @CLASS_NAME_L@ *dest,
+			     ssize_t col_idx, size_t col_len,
+			     ssize_t row_idx, size_t row_len, 
+			     ssize_t layer_idx, size_t layer_len )
+{
+    debug_report("( @CLASS_NAME_L@ *dest, ssize_t, ... )");
+    this->mdarray::cut(dest, col_idx,col_len,
+		       row_idx, row_len, 
+		       layer_idx, layer_len);
+    return *this;
+}
+
+/**  
+ * 画像データ向きのメンバ関数で，自身の内容の一部分を切り出し，<br>
+ * 指定されたオブジェクトdest へコピーします．
+ *
+ * @param      dest コピー先のオブジェクト
+ * @param      col_idx コピー元の列位置
+ * @param      col_len コピー元の列サイズ
+ * @param      row_idx コピー元の行位置
+ * @param      row_len コピー元の行サイズ
+ * @param      layer_idx コピー元のレイヤ位置
+ * @param      layer_len コピー元のレイヤサイズ
+ * @return     自身の参照
+ * @throw      バッファの確保に失敗した場合
+ * @throw      メモリ破壊を起こした場合
+ *
+ */
+@CLASS_NAME_L@ &@CLASS_NAME_L@::cut( @CLASS_NAME_L@ &dest,
+			     ssize_t col_idx, size_t col_len,
+			     ssize_t row_idx, size_t row_len, 
+			     ssize_t layer_idx, size_t layer_len )
+{
+    debug_report("( @CLASS_NAME_L@ &dest, ssize_t, ... )");
+    this->mdarray::cut(dest, col_idx,col_len,
+		       row_idx, row_len, 
+		       layer_idx, layer_len);
+    return *this;
+}
+

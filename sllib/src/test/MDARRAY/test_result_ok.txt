@@ -1,0 +1,2148 @@
+00_constructor_sample
+my_mdarr value(0)... [10]
+my_mdarr value(1)... [20]
+my_mdarr value(0,0)... [10]
+my_mdarr value(1,0)... [20]
+my_mdarr value(0,1)... [30]
+my_mdarr value(1,1)... [0]
+
+01_opeEqu_sample
+area_mdarr value(0)... [17090000]
+area_mdarr value(1)... [9980000]
+area_mdarr value(2)... [9620000]
+my_mdarr value(0)... [17090000]
+my_mdarr value(1)... [9980000]
+my_mdarr value(2)... [9620000]
+area_mdarr size_type ... [8]
+
+02_opeEqu_sample
+my_mdarr value(0)... [125]
+my_mdarr value(1)... [125]
+my_mdarr value(2)... [125]
+my_mdarr value(3)... [125]
+my_mdarr value(4)... [125]
+end
+
+03_opePlus_sample
+*** BEGIN: 03_opePlus_sample ***
+using '+=':
+ result type = 1
+ my_mdarr0 value(0)... [75]
+ my_mdarr0 value(1)... [75]
+ my_mdarr0 value(2)... [75]
+ my_mdarr0 value(3)... [75]
+ my_mdarr0 value(4)... [75]
+using '+' [N=O+N]:
+ result type = 4
+ my_mdarr0 value(0)... [75]
+ my_mdarr0 value(1)... [75]
+ my_mdarr0 value(2)... [75]
+ my_mdarr0 value(3)... [75]
+ my_mdarr0 value(4)... [75]
+using '+' [N=N+O]:
+ result type = -8
+ my_mdarr0 value(0)... [75]
+ my_mdarr0 value(1)... [75]
+ my_mdarr0 value(2)... [75]
+ my_mdarr0 value(3)... [75]
+ my_mdarr0 value(4)... [75]
+using arr + arr [N=N+O]:
+ result type = -8
+ [14][14][14][14][10][10][10][10]
+ [14][14][14][14][10][10][10][10]
+ [14][14][14][14][10][10][10][10]
+ [14][14][14][14][10][10][10][10]
+ [14][14][14][14][10][10][10][10]
+ [4][4][4][4][0][0][0][0]
+ [4][4][4][4][0][0][0][0]
+ [4][4][4][4][0][0][0][0]
+ [4][4][4][4][0][0][0][0]
+using arr + arr [N=O+N]:
+ result type = -8
+ [14][14][14][14][10][10][10][10]
+ [14][14][14][14][10][10][10][10]
+ [14][14][14][14][10][10][10][10]
+ [14][14][14][14][10][10][10][10]
+ [14][14][14][14][10][10][10][10]
+ [4][4][4][4][0][0][0][0]
+ [4][4][4][4][0][0][0][0]
+ [4][4][4][4][0][0][0][0]
+ [4][4][4][4][0][0][0][0]
+*** END: 03_opePlus_sample ***
+
+
+04_opeSubst_sample
+*** BEGIN: 04_opeSubst_sample ***
+obj0 -= obj1 :
+ result type = 1
+ my_mdarr0 value(0)... [90]
+ my_mdarr0 value(1)... [80]
+obj0 = obj0 - double :
+ result type = -8
+ my_mdarr0 value(0)... [84.5]
+ my_mdarr0 value(1)... [74.5]
+obj0 = obj0 - int :
+ result type = -8
+ my_mdarr0 value(0)... [80.5]
+ my_mdarr0 value(1)... [70.5]
+using arr - arr [N=N-O]:
+ result type = -8
+ [6][6][6][6][-4][-4][-4][-4]
+ [6][6][6][6][-4][-4][-4][-4]
+ [6][6][6][6][-4][-4][-4][-4]
+ [6][6][6][6][-4][-4][-4][-4]
+ [6][6][6][6][-4][-4][-4][-4]
+ [10][10][10][10][0][0][0][0]
+ [10][10][10][10][0][0][0][0]
+ [10][10][10][10][0][0][0][0]
+ [10][10][10][10][0][0][0][0]
+using arr - arr [N=O-N]:
+ result type = -8
+ [-6][-6][-6][-6][4][4][4][4]
+ [-6][-6][-6][-6][4][4][4][4]
+ [-6][-6][-6][-6][4][4][4][4]
+ [-6][-6][-6][-6][4][4][4][4]
+ [-6][-6][-6][-6][4][4][4][4]
+ [-10][-10][-10][-10][0][0][0][0]
+ [-10][-10][-10][-10][0][0][0][0]
+ [-10][-10][-10][-10][0][0][0][0]
+ [-10][-10][-10][-10][0][0][0][0]
+*** END: 04_opeSubst_sample ***
+
+
+05_opeMulti_sample
+*** BEGIN: 05_opeMulti_sample ***
+obj0 *= obj1 :
+ result type = 4
+ my_mdarr0 value(0)... [500]
+ my_mdarr0 value(1)... [1000]
+obj0 = obj0 * double :
+ result type = -8
+ my_mdarr0 value(0)... [250]
+ my_mdarr0 value(1)... [500]
+obj0 = obj0 * int :
+ result type = -8
+ my_mdarr0 value(0)... [500]
+ my_mdarr0 value(1)... [1000]
+using arr * arr [N=N*O]:
+ result type = -8
+ [40][40][40][40][10][10][10][10]
+ [40][40][40][40][10][10][10][10]
+ [40][40][40][40][10][10][10][10]
+ [40][40][40][40][10][10][10][10]
+ [40][40][40][40][10][10][10][10]
+ [0][0][0][0][0][0][0][0]
+ [0][0][0][0][0][0][0][0]
+ [0][0][0][0][0][0][0][0]
+ [0][0][0][0][0][0][0][0]
+using arr * arr [N=O*N]:
+ result type = -8
+ [40][40][40][40][0][0][0][0]
+ [40][40][40][40][0][0][0][0]
+ [40][40][40][40][0][0][0][0]
+ [40][40][40][40][0][0][0][0]
+ [40][40][40][40][0][0][0][0]
+ [4][4][4][4][0][0][0][0]
+ [4][4][4][4][0][0][0][0]
+ [4][4][4][4][0][0][0][0]
+ [4][4][4][4][0][0][0][0]
+*** END: 05_opeMulti_sample ***
+
+
+06_opeDivid_sample
+*** BEGIN: 06_opeDivid_sample ***
+obj0 /= obj1 :
+ result type = 2
+ my_mdarr0 value(0)... [50]
+ my_mdarr0 value(1)... [25]
+obj0 = obj0 / double :
+ result type = -8
+ my_mdarr0 value(0)... [25]
+ my_mdarr0 value(1)... [12.5]
+obj0 = obj0 / int :
+ result type = -8
+ my_mdarr0 value(0)... [12.5]
+ my_mdarr0 value(1)... [6.25]
+using arr / arr [N=N/O]:
+ result type = -8
+ [2.5][2.5][2.5][2.5][0][0][0][0]
+ [2.5][2.5][2.5][2.5][0][0][0][0]
+ [2.5][2.5][2.5][2.5][0][0][0][0]
+ [2.5][2.5][2.5][2.5][0][0][0][0]
+ [2.5][2.5][2.5][2.5][0][0][0][0]
+ [10][10][10][10][0][0][0][0]
+ [10][10][10][10][0][0][0][0]
+ [10][10][10][10][0][0][0][0]
+ [10][10][10][10][0][0][0][0]
+using arr / arr [N=O/N]:
+ result type = -8
+ [0.4][0.4][0.4][0.4][4][4][4][4]
+ [0.4][0.4][0.4][0.4][4][4][4][4]
+ [0.4][0.4][0.4][0.4][4][4][4][4]
+ [0.4][0.4][0.4][0.4][4][4][4][4]
+ [0.4][0.4][0.4][0.4][4][4][4][4]
+ [0][0][0][0][0][0][0][0]
+ [0][0][0][0][0][0][0][0]
+ [0][0][0][0][0][0][0][0]
+ [0][0][0][0][0][0][0][0]
+*** END: 06_opeDivid_sample ***
+
+
+07_opeComp_sample
+start
+false
+end
+
+071_opeNotComp_sample
+start
+true
+end
+
+08_size_type_sample
+start
+*** my_mdarr size_type... [4]
+end
+
+09_bytes_sample
+start
+*** my_mdarr bytes... [8]
+*** mdarrld bytes... OK.
+end
+
+10_dim_length_sample
+start
+*** my_mdarr3dim dim... [3]
+*** my_mdarr3dim length... [60]
+*** my_mdarr3dim size_type... [-4]
+*** my_mdarr3dim col... [3]
+*** my_mdarr3dim row... [4]
+*** my_mdarr3dim layer... [5]
+end
+
+11_length_sample
+start
+*** my_mdarr3dim dim... [3]
+*** my_mdarr3dim length... [60]
+*** my_mdarr3dim length 1dim... [3]
+*** my_mdarr3dim length 2dim... [4]
+*** my_mdarr3dim length 3dim... [5]
+*** my_mdarr3dim length 4dim... [1]
+*** my_mdarr3dim length 5dim... [1]
+*** my_mdarr3dim size_type... [-4]
+*** my_mdarr3dim col... [3]
+*** my_mdarr3dim row... [4]
+*** my_mdarr3dim layer... [5]
+end
+
+12_byte_length_sample
+start
+*** my_mdarr3dim dim... [3]
+*** my_mdarr3dim byte_length... [240]
+*** my_mdarr3dim byte_length 1dim... [12]
+*** my_mdarr3dim byte_length 2dim... [16]
+*** my_mdarr3dim byte_length 3dim... [20]
+*** my_mdarr3dim byte_length 4dim... [4]
+*** my_mdarr3dim byte_length 5dim... [4]
+*** my_mdarr3dim size_type... [-4]
+*** my_mdarr3dim col... [3]
+*** my_mdarr3dim row... [4]
+*** my_mdarr3dim layer... [5]
+end
+
+13_col_length_sample
+start
+*** my_mdarr3dim dim... [3]
+*** my_mdarr3dim byte_length... [480]
+*** my_mdarr3dim byte_length 1dim... [24]
+*** my_mdarr3dim byte_length 2dim... [32]
+*** my_mdarr3dim byte_length 3dim... [40]
+*** my_mdarr3dim byte_length 4dim... [8]
+*** my_mdarr3dim byte_length 5dim... [8]
+*** my_mdarr3dim size_type... [-7]
+*** my_mdarr3dim col... [3]
+*** my_mdarr3dim row... [4]
+*** my_mdarr3dim layer... [5]
+end
+
+14_row_length_sample
+start
+*** my_mdarr3dim dim... [4]
+*** my_mdarr3dim length... [360]
+*** my_mdarr3dim byte_length... [720]
+*** my_mdarr3dim byte_length 1dim... [12]
+*** my_mdarr3dim byte_length 2dim... [10]
+*** my_mdarr3dim byte_length 3dim... [8]
+*** my_mdarr3dim byte_length 4dim... [6]
+*** my_mdarr3dim byte_length 5dim... [2]
+*** my_mdarr3dim size_type... [2]
+*** my_mdarr3dim col... [6]
+*** my_mdarr3dim row... [5]
+*** my_mdarr3dim layer... [12]
+end
+
+15_layer_length_sample
+start
+*** my_mdarr3dim dim... [3]
+*** my_mdarr3dim byte_length... [240]
+*** my_mdarr3dim byte_length 1dim... [20]
+*** my_mdarr3dim byte_length 2dim... [16]
+*** my_mdarr3dim byte_length 3dim... [12]
+*** my_mdarr3dim byte_length 4dim... [4]
+*** my_mdarr3dim byte_length 5dim... [4]
+*** my_mdarr3dim size_type... [-4]
+*** my_mdarr3dim layer... [3]
+*** my_mdarr3dim row... [4]
+*** my_mdarr3dim col... [5]
+*** mdarr2dim 2layer... [1]
+*** mdarr1dim 1layer... [1]
+end
+
+16_assign_default_sample
+my_mdarr value(0,0,0)... [0]
+my_mdarr value(1,0,0)... [0]
+my_mdarr value(2,0,0)... [0]
+my_mdarr value(0,1,0)... [0]
+my_mdarr value(1,1,0)... [0]
+my_mdarr value(2,1,0)... [0]
+my_mdarr value(0,0,1)... [0]
+my_mdarr value(1,0,1)... [0]
+my_mdarr value(2,0,1)... [0]
+my_mdarr value(0,1,1)... [0]
+my_mdarr value(1,1,1)... [0]
+my_mdarr value(2,1,1)... [0]
+=> my_mdarr value(0,0,0)... [0]
+=> my_mdarr value(1,0,0)... [0]
+=> my_mdarr value(2,0,0)... [0]
+=> my_mdarr value(0,1,0)... [0]
+=> my_mdarr value(1,1,0)... [0]
+=> my_mdarr value(2,1,0)... [0]
+=> my_mdarr value(0,2,0)... [50]
+=> my_mdarr value(1,2,0)... [50]
+=> my_mdarr value(2,2,0)... [50]
+=> my_mdarr value(0,3,0)... [50]
+=> my_mdarr value(1,3,0)... [50]
+=> my_mdarr value(2,3,0)... [50]
+=> my_mdarr value(0,0,1)... [0]
+=> my_mdarr value(1,0,1)... [0]
+=> my_mdarr value(2,0,1)... [0]
+=> my_mdarr value(0,1,1)... [0]
+=> my_mdarr value(1,1,1)... [0]
+=> my_mdarr value(2,1,1)... [0]
+=> my_mdarr value(0,2,1)... [50]
+=> my_mdarr value(1,2,1)... [50]
+=> my_mdarr value(2,2,1)... [50]
+=> my_mdarr value(0,3,1)... [50]
+=> my_mdarr value(1,3,1)... [50]
+=> my_mdarr value(2,3,1)... [50]
+end
+
+17_default_value_sample
+start
+*** my_mdarr defval... [50]
+end
+
+18_init_sample
+start
+*** my_mdarr 0 dim length ====> [2] *** 
+*** my_mdarr col_length ====> [2] *** 
+*** my_mdarr 1st dim length ====> [3] *** 
+*** my_mdarr row_length ====> [3] *** 
+
+19_auto_resize_sample
+*** my_mdarr0dim auto_resize... [1]
+** before ** dim_length: 0  col: 0  row: 0  layer: 0
+** after1 ** dim_length: 1  col: 5  row: 1  layer: 1
+** after2 ** dim_length: 2  col: 5  row: 3  layer: 1
+** after3 ** dim_length: 2  col: 5  row: 3  layer: 1
+** after4 ** dim_length: 2  col: 5  row: 4  layer: 1
+** after5 ** dim_length: 3  col: 5  row: 4  layer: 3
+** after6 ** dim_length: 3  col: 5  row: 4  layer: 3
+** after8 ** dim_length: 3  col: 5  row: 4  layer: 4
+*** my_mdarr3dim auto_resize... [0]
+end
+
+20_rounding_sample
+my_imdarr value(0)... [1]
+my_imdarr value(1)... [2]
+my_mdarr rounding = [1]
+
+21_dvalue_sample
+start
+my_mdarry dvalue... [123.456]
+my_mdarry dvalue... [   nan]
+
+22_lvalue_sample
+start
+my_mdarry f... [123.556]
+my_mdarry lvalue... [123]
+my_mdarry llvalue... [123]
+my_mdarry lvalue... [124]
+my_mdarry llvalue... [124]
+end
+
+23_assign_sample
+start
+my_mdarr lvalue(0)... [0]
+my_mdarr lvalue(1)... [200]
+mdarr1 lvalue(0)... [100]
+mdarr1 lvalue(1)... [201]
+mdarr1 lvalue(2)... [300]
+mdarr1 lvalue(3)... [401]
+mdarr1 lvalue(4)... [500]
+mdarr1 value(0)... [100.1]
+mdarr1 value(1)... [200.5]
+mdarr1 value(2)... [300.2]
+mdarr1 value(3)... [400.6]
+mdarr1 value(4)... [500.3]
+myfix_mdarr lvalue(0,0)... [100]
+myfix_mdarr lvalue(1,0)... [200]
+myfix_mdarr lvalue(2,0)... [500]
+myfix_mdarr lvalue(0,1)... [300]
+myfix_mdarr lvalue(1,1)... [400]
+myfix_mdarr lvalue(2,1)... [0]
+end
+
+24_f_sample
+start
+my_fmdarr value(0)... [1000.1]
+my_fmdarr value(1)... [2000.2]
+type:double
+mdarr2 lvalue(0)... [3]
+mdarr2 lvalue(1)... [4]
+type:char
+mdarrchar value(0)... [1]
+mdarrchar value(1)... [10]
+type:short
+mdarrshort value(0)... [20]
+mdarrshort value(1)... [300]
+type:int
+mdarrint value(0)... [400]
+mdarrint value(1)... [5000]
+type:long
+mdarrlong value(0)... [5000]
+mdarrlong value(1)... [60000]
+type:longlong
+mdarrlonglong value(0)... [60000]
+mdarrlonglong value(1)... [70000000]
+type:i16
+mdarri16 value(0)... [120]
+mdarri16 value(1)... [-120]
+type:i32
+mdarri32 value(0)... [65535]
+mdarri32 value(1)... [-65535]
+type:bool
+mdarrb value(0)... [1]
+mdarrb value(1)... [0]
+mdarrb value(2)... [1]
+mdarrb value(3)... [0]
+end
+
+25_f_cs_sample
+start
+type:long long
+my_llmdarr value(0)... [60000]
+my_llmdarr value(1)... [70000000]
+type:float
+mdarrf f(0)... [1000]
+mdarrf f(1)... [2000]
+type:double
+mdarr2 lvalue(0)... [3]
+mdarr2 lvalue(1)... [4]
+type:char
+mdarrchar value(0)... [1]
+mdarrchar value(1)... [10]
+type:short
+mdarrshort value(0)... [20]
+mdarrshort value(1)... [300]
+type:int
+mdarrint value(0)... [400]
+mdarrint value(1)... [5000]
+type:long
+mdarrlong value(0)... [5000]
+mdarrlong value(1)... [60000]
+type:long double
+darrlonglong value(0)... [60000]
+darrlonglong value(1)... [7e+07]
+type:i16
+mdarri16 value(0)... [120]
+mdarri16 value(1)... [-120]
+type:i32
+mdarri32 value(0)... [65535]
+mdarri32 value(1)... [-65535]
+type:i64
+mdarri64 value(0)... [429496729]
+mdarri64 value(1)... [-429496729]
+type:size_t
+mdarrz value(0)... [48]
+mdarrz value(1)... [0]
+type:ssize_t
+mdarrsz value(0)... [120]
+mdarrsz value(1)... [-120]
+type:bool
+mdarrb value(0)... [1]
+mdarrb value(1)... [0]
+mdarrb value(2)... [1]
+mdarrb value(3)... [0]
+end
+
+26_put_sample
+my_smdarr value(0)... [0]
+my_smdarr value(1)... [12]
+my_smdarr value(2)... [12]
+
+27_swap_sample
+my_cmdarr value(0,0)... [51]
+my_cmdarr value(1,0)... [52]
+my_cmdarr value(0,1)... [101]
+my_cmdarr value(1,1)... [102]
+=> my_cmdarr value(0,0)... [101]
+=> my_cmdarr value(1,0)... [102]
+=> my_cmdarr value(0,1)... [51]
+=> my_cmdarr value(1,1)... [52]
+
+28_move_sample
+my_cmdarr value(0)... [97]
+my_cmdarr value(1)... [98]
+my_cmdarr value(2)... [0]
+
+29_cpy_sample
+my_lmdarr value(0)... [-2147483646]
+my_lmdarr value(1)... [2147483647]
+my_lmdarr value(2)... [2147483647]
+end
+
+30_insert_sample
+my_mdarr value(0)... [-2147483646]
+my_mdarr value(1)... [0]
+my_mdarr value(2)... [0]
+my_mdarr value(3)... [2147483647]
+
+31_crop_sample
+my_cmdarr value(0,0)... [125]
+my_cmdarr value(0,1)... [127]
+my_cmdarr value(0,2)... [0]
+
+32_erase_sample
+my_mdarr value(0)... [0]
+my_mdarr value(1)... [2147483646]
+my_mdarr value(2)... [2147483647]
+=> my_mdarr value(0)... [0]
+=> my_mdarr value(1)... [2147483647]
+
+33_resize_sample
+my_cmdarr value(0,0)... [70]
+my_cmdarr value(1,0)... [71]
+my_cmdarr value(0,1)... [36]
+my_cmdarr value(1,1)... [37]
+=> my_cmdarr value(0,0)... [70]
+=> my_cmdarr value(1,0)... [71]
+=> my_cmdarr value(0,1)... [36]
+=> my_cmdarr value(1,1)... [37]
+=> my_cmdarr value(0,2)... [0]
+=> my_cmdarr value(1,2)... [0]
+
+34_resizeby_sample
+my_cmdarr value(0)... [0]
+my_cmdarr value(1)... [0]
+my_cmdarr value(2)... [0]
+*** my_cmdarr resizeby: -2 *** 
+=> my_cmdarr value(0)... [0]
+*** my_cmdarr resizeby: +1 *** 
+==> my_cmdarr value(0)... [0]
+==> my_cmdarr value(1)... [0]
+
+35_increase_dim_sample
+my_mdarr dim... [3]
+=> my_mdarr dim... [4]
+
+36_decrease_dim_sample
+my_mdarr dim... [3]
+=> my_mdarr dim... [2]
+
+37_swapObj_sample
+my_fmdarr value(0)... [1000]
+my_fmdarr value(1)... [2000]
+=> my_fmdarr value(0)... [100]
+=> my_fmdarr value(1)... [200]
+
+38_ceil_sample
+my_fmdarr value(0)... [1000.1]
+my_fmdarr value(1)... [2000.6]
+=> my_fmdarr value(0)... [1001]
+=> my_fmdarr value(1)... [2001]
+
+39_floor_sample
+my_fmdarr value(0)... [1000.1]
+my_fmdarr value(1)... [2000.9]
+=> my_fmdarr value(0)... [1000]
+=> my_fmdarr value(1)... [2000]
+
+40_round_sample
+my_fmdarr value[0]... [1000.5]
+my_fmdarr value[1]... [-1000.5]
+=> my_fmdarr value[0]... [1001]
+=> my_fmdarr value[1]... [-1001]
+
+41_trunc_sample
+my_fmdarr value(0)... [1.7]
+my_fmdarr value(1)... [-1.7]
+=> my_fmdarr value(0)... [1]
+=> my_fmdarr value(1)... [-1]
+
+42_abs_sample
+my_fmdarr value(0)... [-1000.1]
+my_fmdarr value(1)... [-2000.6]
+=> my_fmdarr value(0)... [1000.1]
+=> my_fmdarr value(1)... [2000.6]
+
+43_convert_sample
+my_fmdarr type... [-8]
+my_fmdarr value(0)... [1000.1]
+my_fmdarr value(1)... [-2000.6]
+my_fmdarr value(2)... [3000.7]
+my_fmdarr value(3)... [-4000.2]
+=> my_fmdarr type... [4]
+=> my_fmdarr value(0)... [1000]
+=> my_fmdarr value(1)... [-2000]
+=> my_fmdarr value(2)... [3000]
+=> my_fmdarr value(3)... [-4000]
+==> my_fmdarr type... [8]
+==> my_fmdarr value(0)... [1000]
+==> my_fmdarr value(1)... [-2000]
+==> my_fmdarr value(2)... [3000]
+==> my_fmdarr value(3)... [-4000]
+
+44_copy_sample
+size... [1]
+my_fmdarr value(0,0)... [98]
+my_fmdarr value(1,0)... [99]
+my_fmdarr value(0,1)... [101]
+my_fmdarr value(1,1)... [102]
+
+45_copy_sample
+my_cmdarr value(0,0)... [98]
+my_cmdarr value(1,0)... [99]
+my_cmdarr value(0,1)... [101]
+my_cmdarr value(1,1)... [102]
+********************************
+size_type... [-8]
+=> size_type... [1]
+=> ret_size.... [2]
+** copy() **********************
+my_dmdarr value(0,0)... [101]
+my_dmdarr value(1,0)... [102]
+********************************
+my_dmdarr value(?,0,0) ... [-111][112][-113][114]
+my_dmdarr value(?,1,0) ... [-121][122][-123][124]
+my_dmdarr value(?,0,1) ... [-211][212][-212][214]
+my_dmdarr value(?,1,1) ... [-221][222][-222][224]
+my_dmdarr value(?,0,2) ... [-311][312][-312][314]
+my_dmdarr value(?,1,2) ... [-321][322][-322][324]
+** copyf() *********************
+my_cmdarr value(?,0,0) ... [-212][212]
+my_cmdarr value(?,1,0) ... [-222][222]
+
+46_cut_sample
+my_cmdarr length()... [4]
+my_mdarr length()... [0]
+=> my_cmdarr length()... [0]
+=> my_mdarr length()... [4]
+
+48_clean_sample
+my_smdarr value(0,0)... [1]
+my_smdarr value(1,0)... [3]
+my_smdarr value(0,1)... [2]
+my_smdarr value(1,1)... [0]
+
+49_fill_sample
+my_smdarr value(0,0).. [100]
+my_smdarr value(1,0).. [100]
+my_smdarr value(0,1).. [100]
+my_smdarr value(1,1).. [100]
+
+50_add_sample
+*** BEGIN: 50_add_sample ***
+before:
+[00][01][02][03]
+[04][05][06][07]
+[08][09][10][11]
+after:
+[01][02][03][04]
+[15][16][07][08]
+[19][20][11][12]
+*** END: 50_add_sample ***
+
+51_multiply_sample
+my_fmdarr value(0,0)... [50]
+my_fmdarr value(1,0)... [150]
+my_fmdarr value(0,1)... [100]
+my_fmdarr value(1,1)... [200]
+
+52_paste_sample
+[101][102][103][104]
+[201][202][203][204]
+[301][302][303][304]
+[401][402][403][404]
+.paste(), .paste_via_udf()
+=> [1000][2000][103][104]
+=> [3000][4000][203][204]
+=> [301][1352][2353][304]
+=> [401][3452][4453][404]
+.pastef()
+=> [101][102][103][104]
+=> [201][202][203][204]
+=> [301][1000][2000][304]
+=> [401][3000][4000][404]
+.pastef(self)
+=> [101][102][103][104]
+=> [201][202][101][102]
+=> [301][302][201][202]
+=> [401][402][301][302]
+.pastef(self)
+=> [202][203][204][104]
+=> [302][303][304][204]
+=> [402][403][404][304]
+=> [401][402][403][404]
+
+53_add_sample
+my_smdarr value(0,0)... [1]
+my_smdarr value(1,0)... [2]
+my_smdarr value(0,1)... [3]
+my_smdarr value(1,1)... [4]
+=> my_smdarr value(0,0)... [10]
+=> my_smdarr value(1,0)... [10]
+=> my_smdarr value(0,1)... [10]
+=> my_smdarr value(1,1)... [10]
+==> my_smdarr value(0,0)... [19]
+==> my_smdarr value(1,0)... [18]
+==> my_smdarr value(0,1)... [17]
+==> my_smdarr value(1,1)... [16]
+
+54_subtract_sample
+my_fmdarr value(0,0)... [1000]
+my_fmdarr value(1,0)... [2000]
+my_fmdarr value(0,1)... [3000]
+my_fmdarr value(1,1)... [4000]
+=> my_fmdarr value(0,0)... [900]
+=> my_fmdarr value(1,0)... [1800]
+=> my_fmdarr value(0,1)... [2700]
+=> my_fmdarr value(1,1)... [3600]
+
+55_multiply_sample
+my_fmdarr value(0,0)... [1]
+my_fmdarr value(1,0)... [2]
+my_fmdarr value(0,1)... [3]
+my_fmdarr value(1,1)... [4]
+=> my_fmdarr value(0,0)... [10]
+=> my_fmdarr value(1,0)... [40]
+=> my_fmdarr value(0,1)... [90]
+=> my_fmdarr value(1,1)... [160]
+
+56_divide_sample
+my_fmdarr value(0,0)... [1000]
+my_fmdarr value(1,0)... [2000]
+my_fmdarr value(0,1)... [3000]
+my_fmdarr value(1,1)... [4000]
+=> my_fmdarr value(0,0)... [500]
+=> my_fmdarr value(1,0)... [500]
+=> my_fmdarr value(0,1)... [1000]
+=> my_fmdarr value(1,1)... [1000]
+
+57_compare_sample
+*** my_fmdarr compare [1] *** 
+
+58_register_extptr_sample
+tokyoStock_buf length[6]
+tokyoStock_buf id[0]... [3407]
+tokyoStock_buf stock[0]... [438]
+tokyoStock_buf id[1]... [4951]
+tokyoStock_buf stock[1]... [1058]
+tokyoStock_buf id[2]... [4912]
+tokyoStock_buf stock[2]... [449]
+tokyoStock_buf id[3]... [0]
+tokyoStock_buf stock[3]... [0]
+tokyoStock_buf id[4]... [0]
+tokyoStock_buf stock[4]... [0]
+tokyoStock_buf id[5]... [0]
+tokyoStock_buf stock[5]... [0]
+
+59_getdata_sample
+my_fmdarr value(0,0)... [1000.2]
+my_fmdarr value(1,0)... [2000.4]
+my_fmdarr value(0,1)... [3000.3]
+my_fmdarr value(1,1)... [4000.6]
+sizeof myfloat... [16]
+myfloat value[0]... [1000.2]
+myfloat value[1]... [2000.4]
+myfloat value[2]... [3000.3]
+myfloat value[3]... [4000.6]
+
+60_putdata_sample
+my_fmdarr value(0,0)... [1000.3]
+my_fmdarr value(1,0)... [2000.2]
+my_fmdarr value(0,1)... [3000.6]
+my_fmdarr value(1,1)... [4000.5]
+
+61_carray_sample
+*** my_fmdarr data_ptr[0] ---> [3000.3] *** 
+*** my_fmdarr data_ptr[1] ---> [4000.5] *** 
+my_fmdarr value(0,0)... [1000.8]
+my_fmdarr value(1,0)... [5000]
+my_fmdarr value(0,1)... [3000.3]
+my_fmdarr value(1,1)... [4000.5]
+end
+
+63_scan_cols_sample
+*** BEGIN: 63_scan_cols_sample ***
+scan_along_x: (1,6,13): [1613][2613][3613][4613][5613]
+scan_along_x: (1,7,13): [1713][2713][3713][4713][5713]
+scan_along_x: (1,8,13): [1813][2813][3813][4813][5813]
+scan_along_x: (1,9,13): [1913][2913][3913][4913][5913]
+scan_along_x: (1,6,14): [1614][2614][3614][4614][5614]
+scan_along_x: (1,7,14): [1714][2714][3714][4714][5714]
+scan_along_x: (1,8,14): [1814][2814][3814][4814][5814]
+scan_along_x: (1,9,14): [1914][2914][3914][4914][5914]
+scan_along_x: (1,6,23): [1623][2623][3623][4623][5623]
+scan_along_x: (1,7,23): [1723][2723][3723][4723][5723]
+scan_along_x: (1,8,23): [1823][2823][3823][4823][5823]
+scan_along_x: (1,9,23): [1923][2923][3923][4923][5923]
+scan_along_x: (1,6,24): [1624][2624][3624][4624][5624]
+scan_along_x: (1,7,24): [1724][2724][3724][4724][5724]
+scan_along_x: (1,8,24): [1824][2824][3824][4824][5824]
+scan_along_x: (1,9,24): [1924][2924][3924][4924][5924]
+scan_along_x: (1,6,43): [1643][2643][3643][4643][5643]
+scan_along_x: (1,7,43): [1743][2743][3743][4743][5743]
+scan_along_x: (1,8,43): [1843][2843][3843][4843][5843]
+scan_along_x: (1,9,43): [1943][2943][3943][4943][5943]
+scan_along_x: (1,6,44): [1644][2644][3644][4644][5644]
+scan_along_x: (1,7,44): [1744][2744][3744][4744][5744]
+scan_along_x: (1,8,44): [1844][2844][3844][4844][5844]
+scan_along_x: (1,9,44): [1944][2944][3944][4944][5944]
+scan_along_x: (1,6,53): [1653][2653][3653][4653][5653]
+scan_along_x: (1,7,53): [1753][2753][3753][4753][5753]
+scan_along_x: (1,8,53): [1853][2853][3853][4853][5853]
+scan_along_x: (1,9,53): [1953][2953][3953][4953][5953]
+scan_along_x: (1,6,54): [1654][2654][3654][4654][5654]
+scan_along_x: (1,7,54): [1754][2754][3754][4754][5754]
+scan_along_x: (1,8,54): [1854][2854][3854][4854][5854]
+scan_along_x: (1,9,54): [1954][2954][3954][4954][5954]
+
+scan_along_y: (1,6,13): [1613][1713][1813][1913]
+scan_along_y: (2,6,13): [2613][2713][2813][2913]
+scan_along_y: (3,6,13): [3613][3713][3813][3913]
+scan_along_y: (4,6,13): [4613][4713][4813][4913]
+scan_along_y: (5,6,13): [5613][5713][5813][5913]
+scan_along_y: (1,6,14): [1614][1714][1814][1914]
+scan_along_y: (2,6,14): [2614][2714][2814][2914]
+scan_along_y: (3,6,14): [3614][3714][3814][3914]
+scan_along_y: (4,6,14): [4614][4714][4814][4914]
+scan_along_y: (5,6,14): [5614][5714][5814][5914]
+scan_along_y: (1,6,23): [1623][1723][1823][1923]
+scan_along_y: (2,6,23): [2623][2723][2823][2923]
+scan_along_y: (3,6,23): [3623][3723][3823][3923]
+scan_along_y: (4,6,23): [4623][4723][4823][4923]
+scan_along_y: (5,6,23): [5623][5723][5823][5923]
+scan_along_y: (1,6,24): [1624][1724][1824][1924]
+scan_along_y: (2,6,24): [2624][2724][2824][2924]
+scan_along_y: (3,6,24): [3624][3724][3824][3924]
+scan_along_y: (4,6,24): [4624][4724][4824][4924]
+scan_along_y: (5,6,24): [5624][5724][5824][5924]
+scan_along_y: (1,6,43): [1643][1743][1843][1943]
+scan_along_y: (2,6,43): [2643][2743][2843][2943]
+scan_along_y: (3,6,43): [3643][3743][3843][3943]
+scan_along_y: (4,6,43): [4643][4743][4843][4943]
+scan_along_y: (5,6,43): [5643][5743][5843][5943]
+scan_along_y: (1,6,44): [1644][1744][1844][1944]
+scan_along_y: (2,6,44): [2644][2744][2844][2944]
+scan_along_y: (3,6,44): [3644][3744][3844][3944]
+scan_along_y: (4,6,44): [4644][4744][4844][4944]
+scan_along_y: (5,6,44): [5644][5744][5844][5944]
+scan_along_y: (1,6,53): [1653][1753][1853][1953]
+scan_along_y: (2,6,53): [2653][2753][2853][2953]
+scan_along_y: (3,6,53): [3653][3753][3853][3953]
+scan_along_y: (4,6,53): [4653][4753][4853][4953]
+scan_along_y: (5,6,53): [5653][5753][5853][5953]
+scan_along_y: (1,6,54): [1654][1754][1854][1954]
+scan_along_y: (2,6,54): [2654][2754][2854][2954]
+scan_along_y: (3,6,54): [3654][3754][3854][3954]
+scan_along_y: (4,6,54): [4654][4754][4854][4954]
+scan_along_y: (5,6,54): [5654][5754][5854][5954]
+
+scan_along_z: (1,6,13): [1613][1614]
+scan_along_z: (2,6,13): [2613][2614]
+scan_along_z: (3,6,13): [3613][3614]
+scan_along_z: (4,6,13): [4613][4614]
+scan_along_z: (5,6,13): [5613][5614]
+scan_along_z: (1,7,13): [1713][1714]
+scan_along_z: (2,7,13): [2713][2714]
+scan_along_z: (3,7,13): [3713][3714]
+scan_along_z: (4,7,13): [4713][4714]
+scan_along_z: (5,7,13): [5713][5714]
+scan_along_z: (1,8,13): [1813][1814]
+scan_along_z: (2,8,13): [2813][2814]
+scan_along_z: (3,8,13): [3813][3814]
+scan_along_z: (4,8,13): [4813][4814]
+scan_along_z: (5,8,13): [5813][5814]
+scan_along_z: (1,9,13): [1913][1914]
+scan_along_z: (2,9,13): [2913][2914]
+scan_along_z: (3,9,13): [3913][3914]
+scan_along_z: (4,9,13): [4913][4914]
+scan_along_z: (5,9,13): [5913][5914]
+scan_along_z: (1,6,23): [1623][1624]
+scan_along_z: (2,6,23): [2623][2624]
+scan_along_z: (3,6,23): [3623][3624]
+scan_along_z: (4,6,23): [4623][4624]
+scan_along_z: (5,6,23): [5623][5624]
+scan_along_z: (1,7,23): [1723][1724]
+scan_along_z: (2,7,23): [2723][2724]
+scan_along_z: (3,7,23): [3723][3724]
+scan_along_z: (4,7,23): [4723][4724]
+scan_along_z: (5,7,23): [5723][5724]
+scan_along_z: (1,8,23): [1823][1824]
+scan_along_z: (2,8,23): [2823][2824]
+scan_along_z: (3,8,23): [3823][3824]
+scan_along_z: (4,8,23): [4823][4824]
+scan_along_z: (5,8,23): [5823][5824]
+scan_along_z: (1,9,23): [1923][1924]
+scan_along_z: (2,9,23): [2923][2924]
+scan_along_z: (3,9,23): [3923][3924]
+scan_along_z: (4,9,23): [4923][4924]
+scan_along_z: (5,9,23): [5923][5924]
+scan_along_z: (1,6,43): [1643][1644]
+scan_along_z: (2,6,43): [2643][2644]
+scan_along_z: (3,6,43): [3643][3644]
+scan_along_z: (4,6,43): [4643][4644]
+scan_along_z: (5,6,43): [5643][5644]
+scan_along_z: (1,7,43): [1743][1744]
+scan_along_z: (2,7,43): [2743][2744]
+scan_along_z: (3,7,43): [3743][3744]
+scan_along_z: (4,7,43): [4743][4744]
+scan_along_z: (5,7,43): [5743][5744]
+scan_along_z: (1,8,43): [1843][1844]
+scan_along_z: (2,8,43): [2843][2844]
+scan_along_z: (3,8,43): [3843][3844]
+scan_along_z: (4,8,43): [4843][4844]
+scan_along_z: (5,8,43): [5843][5844]
+scan_along_z: (1,9,43): [1943][1944]
+scan_along_z: (2,9,43): [2943][2944]
+scan_along_z: (3,9,43): [3943][3944]
+scan_along_z: (4,9,43): [4943][4944]
+scan_along_z: (5,9,43): [5943][5944]
+scan_along_z: (1,6,53): [1653][1654]
+scan_along_z: (2,6,53): [2653][2654]
+scan_along_z: (3,6,53): [3653][3654]
+scan_along_z: (4,6,53): [4653][4654]
+scan_along_z: (5,6,53): [5653][5654]
+scan_along_z: (1,7,53): [1753][1754]
+scan_along_z: (2,7,53): [2753][2754]
+scan_along_z: (3,7,53): [3753][3754]
+scan_along_z: (4,7,53): [4753][4754]
+scan_along_z: (5,7,53): [5753][5754]
+scan_along_z: (1,8,53): [1853][1854]
+scan_along_z: (2,8,53): [2853][2854]
+scan_along_z: (3,8,53): [3853][3854]
+scan_along_z: (4,8,53): [4853][4854]
+scan_along_z: (5,8,53): [5853][5854]
+scan_along_z: (1,9,53): [1953][1954]
+scan_along_z: (2,9,53): [2953][2954]
+scan_along_z: (3,9,53): [3953][3954]
+scan_along_z: (4,9,53): [4953][4954]
+scan_along_z: (5,9,53): [5953][5954]
+
+scan_zx_planes: (1,6,13): [1613][1614] [2613][2614] [3613][3614] [4613][4614] [5613][5614] 
+scan_zx_planes: (1,7,13): [1713][1714] [2713][2714] [3713][3714] [4713][4714] [5713][5714] 
+scan_zx_planes: (1,8,13): [1813][1814] [2813][2814] [3813][3814] [4813][4814] [5813][5814] 
+scan_zx_planes: (1,9,13): [1913][1914] [2913][2914] [3913][3914] [4913][4914] [5913][5914] 
+scan_zx_planes: (1,6,23): [1623][1624] [2623][2624] [3623][3624] [4623][4624] [5623][5624] 
+scan_zx_planes: (1,7,23): [1723][1724] [2723][2724] [3723][3724] [4723][4724] [5723][5724] 
+scan_zx_planes: (1,8,23): [1823][1824] [2823][2824] [3823][3824] [4823][4824] [5823][5824] 
+scan_zx_planes: (1,9,23): [1923][1924] [2923][2924] [3923][3924] [4923][4924] [5923][5924] 
+scan_zx_planes: (1,6,43): [1643][1644] [2643][2644] [3643][3644] [4643][4644] [5643][5644] 
+scan_zx_planes: (1,7,43): [1743][1744] [2743][2744] [3743][3744] [4743][4744] [5743][5744] 
+scan_zx_planes: (1,8,43): [1843][1844] [2843][2844] [3843][3844] [4843][4844] [5843][5844] 
+scan_zx_planes: (1,9,43): [1943][1944] [2943][2944] [3943][3944] [4943][4944] [5943][5944] 
+scan_zx_planes: (1,6,53): [1653][1654] [2653][2654] [3653][3654] [4653][4654] [5653][5654] 
+scan_zx_planes: (1,7,53): [1753][1754] [2753][2754] [3753][3754] [4753][4754] [5753][5754] 
+scan_zx_planes: (1,8,53): [1853][1854] [2853][2854] [3853][3854] [4853][4854] [5853][5854] 
+scan_zx_planes: (1,9,53): [1953][1954] [2953][2954] [3953][3954] [4953][4954] [5953][5954] 
+
+scan_a_cube: (1,6,13): 
+[1613][2613][3613][4613][5613] [1713][2713][3713][4713][5713] [1813][2813][3813][4813][5813] [1913][2913][3913][4913][5913] 
+[1614][2614][3614][4614][5614] [1714][2714][3714][4714][5714] [1814][2814][3814][4814][5814] [1914][2914][3914][4914][5914] 
+scan_a_cube: (1,6,23): 
+[1623][2623][3623][4623][5623] [1723][2723][3723][4723][5723] [1823][2823][3823][4823][5823] [1923][2923][3923][4923][5923] 
+[1624][2624][3624][4624][5624] [1724][2724][3724][4724][5724] [1824][2824][3824][4824][5824] [1924][2924][3924][4924][5924] 
+scan_a_cube: (1,6,43): 
+[1643][2643][3643][4643][5643] [1743][2743][3743][4743][5743] [1843][2843][3843][4843][5843] [1943][2943][3943][4943][5943] 
+[1644][2644][3644][4644][5644] [1744][2744][3744][4744][5744] [1844][2844][3844][4844][5844] [1944][2944][3944][4944][5944] 
+scan_a_cube: (1,6,53): 
+[1653][2653][3653][4653][5653] [1753][2753][3753][4753][5753] [1853][2853][3853][4853][5853] [1953][2953][3953][4953][5953] 
+[1654][2654][3654][4654][5654] [1754][2754][3754][4754][5754] [1854][2854][3854][4854][5854] [1954][2954][3954][4954][5954] 
+
+*** END: 63_scan_cols_sample ***
+
+
+64_flip_sample
+*** BEGIN: 64_flip_sample ***
+010 110 410 310 210 510 610 710 
+000 100 400 300 200 500 600 700 
+020 120 420 320 220 520 620 720 
+030 130 430 330 230 530 630 730 
+040 140 440 340 240 540 640 740 
+050 150 450 350 250 550 650 750 
+060 160 460 360 260 560 660 760 
+070 170 470 370 270 570 670 770 
+
+011 111 411 311 211 511 611 711 
+001 101 401 301 201 501 601 701 
+021 121 421 321 221 521 621 721 
+031 131 431 331 231 531 631 731 
+041 141 441 341 241 541 641 741 
+051 151 451 351 251 551 651 751 
+061 161 461 361 261 561 661 761 
+071 171 471 371 271 571 671 771 
+
+012 112 412 312 212 512 612 712 
+002 102 402 302 202 502 602 702 
+022 122 422 322 222 522 622 722 
+032 132 432 332 232 532 632 732 
+042 142 442 342 242 542 642 742 
+052 152 452 352 252 552 652 752 
+062 162 462 362 262 562 662 762 
+072 172 472 372 272 572 672 772 
+
+013 113 413 313 213 513 613 713 
+003 103 403 303 203 503 603 703 
+023 123 423 323 223 523 623 723 
+033 133 433 333 233 533 633 733 
+043 143 443 343 243 543 643 743 
+053 153 453 353 253 553 653 753 
+063 163 463 363 263 563 663 763 
+073 173 473 373 273 573 673 773 
+
+014 114 414 314 214 514 614 714 
+004 104 404 304 204 504 604 704 
+024 124 424 324 224 524 624 724 
+034 134 434 334 234 534 634 734 
+044 144 444 344 244 544 644 744 
+054 154 454 354 254 554 654 754 
+064 164 464 364 264 564 664 764 
+074 174 474 374 274 574 674 774 
+
+017 117 417 317 217 517 617 717 
+007 107 407 307 207 507 607 707 
+027 127 427 327 227 527 627 727 
+037 137 437 337 237 537 637 737 
+047 147 447 347 247 547 647 747 
+057 157 457 357 257 557 657 757 
+067 167 467 367 267 567 667 767 
+077 177 477 377 277 577 677 777 
+
+016 116 416 316 216 516 616 716 
+006 106 406 306 206 506 606 706 
+026 126 426 326 226 526 626 726 
+036 136 436 336 236 536 636 736 
+046 146 446 346 246 546 646 746 
+056 156 456 356 256 556 656 756 
+066 166 466 366 266 566 666 766 
+076 176 476 376 276 576 676 776 
+
+015 115 415 315 215 515 615 715 
+005 105 405 305 205 505 605 705 
+025 125 425 325 225 525 625 725 
+035 135 435 335 235 535 635 735 
+045 145 445 345 245 545 645 745 
+055 155 455 355 255 555 655 755 
+065 165 465 365 265 565 665 765 
+075 175 475 375 275 575 675 775 
+
+*** END: 64_flip_sample ***
+
+
+65_reallocate_sample
+*** BEGIN: 65_reallocate_sample ***
+before:
+000 100 200 300 
+010 110 210 310 
+020 120 220 320 
+
+001 101 201 301 
+011 111 211 311 
+021 121 221 321 
+
+after:
+000 100 200 300 010 110 210 
+310 020 120 220 320 001 101 
+201 301 011 111 211 311 021 
+
+121 221 321 999 999 999 999 
+999 999 999 999 999 999 999 
+999 999 999 999 999 999 999 
+
+*** END: 65_reallocate_sample ***
+
+
+66_trim_sample
+*** BEGIN: 66_trim_sample ***
+before:
+dim_length = 4 3 2 1 
+000 100 200 300 
+010 110 210 310 
+020 120 220 320 
+
+001 101 201 301 
+011 111 211 311 
+021 121 221 321 
+
+after (1):
+dim_length = 3 3 2 1 
+100 200 300 
+110 210 310 
+120 220 320 
+
+101 201 301 
+111 211 311 
+121 221 321 
+
+after (2):
+dim_length = 3 2 1 
+101 201 301 
+111 211 311 
+
+*** END: 66_trim_sample ***
+
+
+67_flip_cols_sample
+*** BEGIN: 67_flip_cols_sample ***
+before:
+000 100 200 300 
+010 110 210 310 
+020 120 220 320 
+
+001 101 201 301 
+011 111 211 311 
+021 121 221 321 
+
+after:
+000 300 200 100 
+010 310 210 110 
+020 120 220 320 
+
+001 111 211 311 
+011 101 201 301 
+021 121 221 321 
+
+*** END: 67_flip_cols_sample ***
+
+
+68_resize_sample
+*** BEGIN: 68_resize_sample ***
+before:
+000 100 200 300 
+010 110 210 310 
+020 120 220 320 
+
+001 101 201 301 
+011 111 211 311 
+021 121 221 321 
+
+after:
+000 100 200 300 999 
+010 110 210 310 999 
+
+001 101 201 301 999 
+011 111 211 311 999 
+
+999 999 999 999 999 
+999 999 999 999 999 
+
+*** END: 68_resize_sample ***
+
+
+69_transpose_sample
+*** BEGIN: 69_transpose_sample ***
+before:
+dimmension : 5 4 3 2 
+000 100 200 300 400 
+010 110 210 310 410 
+020 120 220 320 420 
+030 130 230 330 430 
+
+001 101 201 301 401 
+011 111 211 311 411 
+021 121 221 321 421 
+031 131 231 331 431 
+
+002 102 202 302 402 
+012 112 212 312 412 
+022 122 222 322 422 
+032 132 232 332 432 
+
+003 103 203 303 403 
+013 113 213 313 413 
+023 123 223 323 423 
+033 133 233 333 433 
+
+004 104 204 304 404 
+014 114 214 314 414 
+024 124 224 324 424 
+034 134 234 334 434 
+
+005 105 205 305 405 
+015 115 215 315 415 
+025 125 225 325 425 
+035 135 235 335 435 
+
+after:
+dimmension : 4 5 3 2 
+000 010 020 030 
+100 110 120 130 
+200 210 220 230 
+300 310 320 330 
+400 410 420 430 
+
+001 011 021 031 
+101 111 121 131 
+201 211 221 231 
+301 311 321 331 
+401 411 421 431 
+
+002 012 022 032 
+102 112 122 132 
+202 212 222 232 
+302 312 322 332 
+402 412 422 432 
+
+003 013 023 033 
+103 113 123 133 
+203 213 223 233 
+303 313 323 333 
+403 413 423 433 
+
+004 014 024 034 
+104 114 124 134 
+204 214 224 234 
+304 314 324 334 
+404 414 424 434 
+
+005 015 025 035 
+105 115 125 135 
+205 215 225 235 
+305 315 325 335 
+405 415 425 435 
+
+copied:
+dimmension : 2 3 1 
+210 310 
+220 320 
+230 330 
+
+*** END: 69_transpose_sample ***
+
+
+70_rotate_sample
+*** BEGIN: 70_rotate_sample ***
+before:
+020 120 220 320 
+010 110 210 310 
+000 100 200 300 
+
+021 121 221 321 
+011 111 211 311 
+001 101 201 301 
+
+copied (left 90deg):
+210 200 
+110 100 
+010 000 
+
+copied (right 90deg):
+000 010 
+100 110 
+
+copied (180deg):
+200 100 000 
+210 110 010 
+
+self (left 90deg):
+320 310 300 
+220 210 200 
+120 110 100 
+020 010 000 
+
+321 311 301 
+221 211 201 
+121 111 101 
+021 011 001 
+
+*** END: 70_rotate_sample ***
+
+
+71_array_ptr_2d_sample
+*** BEGIN: 71_array_ptr_2d_sample ***
+normal access:
+000 100 200 300 400 
+010 110 210 310 410 
+020 120 220 320 420 
+030 130 230 330 430 
+
+001 101 201 301 401 
+011 111 211 311 411 
+021 121 221 321 421 
+031 131 231 331 431 
+
+002 102 202 302 402 
+012 112 212 312 412 
+022 122 222 322 422 
+032 132 232 332 432 
+
+direct access via ptr_2d:
+000 100 200 300 400 
+010 110 210 310 410 
+020 120 220 320 420 
+030 130 230 330 430 
+001 101 201 301 401 
+011 111 211 311 411 
+021 121 221 321 421 
+031 131 231 331 431 
+002 102 202 302 402 
+012 112 212 312 412 
+022 122 222 322 422 
+032 132 232 332 432 
+
+direct access via ptr_3d:
+000 100 200 300 400 
+010 110 210 310 410 
+020 120 220 320 420 
+030 130 230 330 430 
+
+001 101 201 301 401 
+011 111 211 311 411 
+021 121 221 321 421 
+031 131 231 331 431 
+
+002 102 202 302 402 
+012 112 212 312 412 
+022 122 222 322 422 
+032 132 232 332 432 
+
+direct access via ptr_2d (after resize):
+000 100 200 300 400 000 000 
+010 110 210 310 410 000 000 
+020 120 220 320 420 000 000 
+030 130 230 330 430 000 000 
+000 000 000 000 000 000 000 
+001 101 201 301 401 000 000 
+011 111 211 311 411 000 000 
+021 121 221 321 421 000 000 
+031 131 231 331 431 000 000 
+000 000 000 000 000 000 000 
+
+direct access via ptr_3d (after resize):
+000 100 200 300 400 000 000 
+010 110 210 310 410 000 000 
+020 120 220 320 420 000 000 
+030 130 230 330 430 000 000 
+000 000 000 000 000 000 000 
+
+001 101 201 301 401 000 000 
+011 111 211 311 411 000 000 
+021 121 221 321 421 000 000 
+031 131 231 331 431 000 000 
+000 000 000 000 000 000 000 
+
+*** END: 71_array_ptr_2d_sample ***
+
+
+72_move_to_sample
+*** BEGIN: 72_move_to_sample ***
+before:
+000 100 200 300 
+010 110 210 310 
+020 120 220 320 
+
+001 101 201 301 
+011 111 211 311 
+021 121 221 321 
+
+copied:
+000 100 200 300 
+010 110 210 310 
+020 120 220 320 
+
+001 101 201 301 
+100 200 211 311 
+110 210 221 321 
+
+*** END: 72_move_to_sample ***
+
+
+73_math_sample
+*** BEGIN: 73_math_sample ***
+before:
+0 1 2 3 4 5 
+10 11 12 13 14 15 
+
+myarr = pow(myarr,2.0)
+0 1 4 9 16 25 
+100 121 144 169 196 225 
+
+myarr = sqrt(myarr)
+0 1 2 3 4 5 
+10 11 12 13 14 15 
+
+reference: hypot(myarr, myarr1)
+0 1.414213562 2.828427125 4.242640687 5.656854249 7.071067812 
+14.14213562 15.55634919 16.97056275 18.38477631 19.79898987 21.21320344 
+
+myarr = hypot(myarr, myarr1)
+0 1.414213562 2.828427125 4.242640687 5.656854249 7.071067812 6 7 
+14.14213562 15.55634919 16.97056275 18.38477631 19.79898987 21.21320344 16 17 
+20 21 22 23 24 25 26 27 
+
+*** END: 73_math_sample ***
+
+
+74_complex_sample
+*** BEGIN: 74_complex_sample ***
+before:
+(1,1i) (2,1i) (3,1i) (4,1i) (5,1i) 
+(1,2i) (2,2i) (3,2i) (4,2i) (5,2i) 
+(1,3i) (2,3i) (3,3i) (4,3i) (5,3i) 
+(1,4i) (2,4i) (3,4i) (4,4i) (5,4i) 
+
+myarr1 = cabs(myarr)
+1.414213562 2.236067977 3.16227766 4.123105626 5.099019514 
+2.236067977 2.828427125 3.605551275 4.472135955 5.385164807 
+3.16227766 3.605551275 4.242640687 5 5.830951895 
+4.123105626 4.472135955 5 5.656854249 6.403124237 
+
+reference: csin(myarr)
+(1.298457581,0.6349639148i) (1.403119251,-0.489056259i) (0.2177595516,-1.163440364i) (-1.167807275,-0.7681627635i) (-1.479697478,0.3333601389i) 
+(3.165778513,1.959601041i) (3.420954861,-1.509306485i) (0.5309210862,-3.59056459i) (-2.847239087,-2.370674169i) (-3.607660774,1.02880315i) 
+(8.471645454,5.412680923i) (9.154499147,-4.16890696i) (1.420748542,-9.91762101i) (-7.61923172,-6.548120041i) (-9.654125477,2.841692296i) 
+(22.97908558,14.74480519i) (24.83130585,-11.35661271i) (3.853738038,-27.01681326i) (-20.66693875,-17.83788029i) (-26.18652736,7.741117553i) 
+
+myarr = csin(myarr)
+(1.298457581,0.6349639148i) (1.403119251,-0.489056259i) (0.2177595516,-1.163440364i) (-1.167807275,-0.7681627635i) (-1.479697478,0.3333601389i) 
+(3.165778513,1.959601041i) (3.420954861,-1.509306485i) (0.5309210862,-3.59056459i) (-2.847239087,-2.370674169i) (-3.607660774,1.02880315i) 
+(8.471645454,5.412680923i) (9.154499147,-4.16890696i) (1.420748542,-9.91762101i) (-7.61923172,-6.548120041i) (-9.654125477,2.841692296i) 
+(22.97908558,14.74480519i) (24.83130585,-11.35661271i) (3.853738038,-27.01681326i) (-20.66693875,-17.83788029i) (-26.18652736,7.741117553i) 
+
+*** END: 74_complex_sample ***
+
+
+75_complex_cproj_sample
+*** BEGIN: 75_complex_cproj_sample ***
+val = (2,3)  =>  cproj: (2,3)
+val = (2,inf)  =>  cproj: (inf,0)
+val = (inf,3)  =>  cproj: (inf,0)
+val = (2,-inf)  =>  cproj: (inf,-0)
+val = (inf,-3)  =>  cproj: (inf,-0)
+val = (inf,0)  =>  cproj: (inf,0)
+val = (inf,-0)  =>  cproj: (inf,-0)
+*** END: 75_complex_cproj_sample ***
+
+
+76_statistics_sample
+*** BEGIN: 76_statistics_sample ***
+length = 15
+array = [65][63][67][64][68][62][70][66][68][67][69][71][66][65][70]
+result of md_moment(arr0, false, ...):
+arr2[0] = 66.73333333
+arr2[1] = 7.066666667
+arr2[2] = -0.09428882511
+arr2[3] = -1.182575056
+mdev = 2.151111111
+sdev = 2.658320272
+
+result of md_moment(arr0, true, ...):
+arr2[0] = 66.73333333
+arr2[1] = 7.066666667
+arr2[2] = -0.1010237412
+arr2[3] = -1.052758989
+mdev = 2.151111111
+sdev = 2.658320272
+
+length of x,y,z = 5,4,2
+(?,0,0) ... [111][211][311][411][511]
+(?,1,0) ... [121][221][321][421][521]
+(?,2,0) ... [131][231][331][431][531]
+(?,3,0) ... [141][241][341][441][541]
+(?,0,1) ... [112][212][312][412][512]
+(?,1,1) ... [122][222][322][422][522]
+(?,2,1) ... [132][232][332][432][532]
+(?,3,1) ... [142][242][342][442][542]
+total(ref) = 13060
+total = 13060
+mean(ref) = 326.5
+mean = 326.5
+variance = 20641.28205
+skewness = 0
+kurtosis = -1.368653021
+meanabsdev = 122
+stddev = 143.6707418
+min = 111
+max = 542
+median = 326.5
+
+result of md_moment():
+arr2[0] = 326.5
+arr2[1] = 20641.28205
+arr2[2] = 0
+arr2[3] = -1.368653021
+mdev = 122
+sdev = 143.6707418
+
+result of md_min_x(arr0): 
+(?,0,0) ... [111]
+(?,1,0) ... [121]
+(?,2,0) ... [131]
+(?,3,0) ... [141]
+(?,0,1) ... [112]
+(?,1,1) ... [122]
+(?,2,1) ... [132]
+(?,3,1) ... [142]
+result of md_max_y(arr0): 
+(?,0,0) ... [141][241][341][441][541]
+(?,0,1) ... [142][242][342][442][542]
+result of md_mean_z(arr0): 
+(?,0,0) ... [111.5][211.5][311.5][411.5][511.5]
+(?,1,0) ... [121.5][221.5][321.5][421.5][521.5]
+(?,2,0) ... [131.5][231.5][331.5][431.5][531.5]
+(?,3,0) ... [141.5][241.5][341.5][441.5][541.5]
+result of md_mean_small_z(arr0): 
+(?,0,0) ... [111.5][211.5][311.5][411.5][511.5]
+(?,1,0) ... [121.5][221.5][321.5][421.5][521.5]
+(?,2,0) ... [131.5][231.5][331.5][431.5][531.5]
+(?,3,0) ... [141.5][241.5][341.5][441.5][541.5]
+*** END: 76_statistics_sample ***
+
+
+77_pastef_sample
+*** BEGIN: 77_pastef_sample ***
+after .pastef(arr1, ...)
+ Z,z = 0,0
+ [90000][90001][90002][90003][90004]
+ [90010][90011][90012][90013][90014]
+ [90020][90021][90022][90023][90024]
+ [90030][90031][90032][90033][90034]
+ Z,z = 0,1
+ [90100][90101][40000][40001][40002]
+ [90110][90111][40010][40011][40012]
+ [90120][90121][40020][40021][40022]
+ [90130][90131][90132][90133][90134]
+ Z,z = 0,2
+ [90200][90201][40100][40101][40102]
+ [90210][90211][40110][40111][40112]
+ [90220][90221][40120][40121][40122]
+ [90230][90231][90232][90233][90234]
+ Z,z = 1,0
+ [91000][91001][91002][91003][91004]
+ [91010][91011][91012][91013][91014]
+ [91020][91021][91022][91023][91024]
+ [91030][91031][91032][91033][91034]
+ Z,z = 1,1
+ [91100][91101][0][0][0]
+ [91110][91111][0][0][0]
+ [91120][91121][0][0][0]
+ [91130][91131][91132][91133][91134]
+ Z,z = 1,2
+ [91200][91201][0][0][0]
+ [91210][91211][0][0][0]
+ [91220][91221][0][0][0]
+ [91230][91231][91232][91233][91234]
+x,y,z = 0,0,1
+x,y,z = 0,1,1
+x,y,z = 0,2,1
+x,y,z = 0,0,2
+x,y,z = 0,1,2
+x,y,z = 0,2,2
+x,y,z = 0,0,4
+x,y,z = 0,1,4
+x,y,z = 0,2,4
+x,y,z = 0,0,5
+x,y,z = 0,1,5
+x,y,z = 0,2,5
+after .pastef(arr1, &my_func, ...)
+ Z,z = 0,0
+ [90000][90001][90002][90003][90004]
+ [90010][90011][90012][90013][90014]
+ [90020][90021][90022][90023][90024]
+ [90030][90031][90032][90033][90034]
+ Z,z = 0,1
+ [50099][50099][50099][90103][90104]
+ [50099][50099][50099][90113][90114]
+ [50099][50099][50099][90123][90124]
+ [90130][90131][90132][90133][90134]
+ Z,z = 0,2
+ [50099][50099][50099][90203][90204]
+ [50099][50099][50099][90213][90214]
+ [50099][50099][50099][90223][90224]
+ [90230][90231][90232][90233][90234]
+ Z,z = 1,0
+ [91000][91001][91002][91003][91004]
+ [91010][91011][91012][91013][91014]
+ [91020][91021][91022][91023][91024]
+ [91030][91031][91032][91033][91034]
+ Z,z = 1,1
+ [91100][91101][91102][91103][91104]
+ [91110][91111][91112][91113][91114]
+ [91120][91121][91122][91123][91124]
+ [91130][91131][91132][91133][91134]
+ Z,z = 1,2
+ [91200][91201][91202][91203][91204]
+ [91210][91211][91212][91213][91214]
+ [91220][91221][91222][91223][91224]
+ [91230][91231][91232][91233][91234]
+*** END: 77_pastef_sample ***
+
+78_flipf_sample
+*** BEGIN: 78_flipf_sample ***
+before
+ Z,z = 0,0
+ [90000][90001][90002][90003][90004]
+ [90010][90011][90012][90013][90014]
+ [90020][90021][90022][90023][90024]
+ [90030][90031][90032][90033][90034]
+ Z,z = 0,1
+ [90100][90101][90102][90103][90104]
+ [90110][90111][90112][90113][90114]
+ [90120][90121][90122][90123][90124]
+ [90130][90131][90132][90133][90134]
+ Z,z = 0,2
+ [90200][90201][90202][90203][90204]
+ [90210][90211][90212][90213][90214]
+ [90220][90221][90222][90223][90224]
+ [90230][90231][90232][90233][90234]
+ Z,z = 1,0
+ [91000][91001][91002][91003][91004]
+ [91010][91011][91012][91013][91014]
+ [91020][91021][91022][91023][91024]
+ [91030][91031][91032][91033][91034]
+ Z,z = 1,1
+ [91100][91101][91102][91103][91104]
+ [91110][91111][91112][91113][91114]
+ [91120][91121][91122][91123][91124]
+ [91130][91131][91132][91133][91134]
+ Z,z = 1,2
+ [91200][91201][91202][91203][91204]
+ [91210][91211][91212][91213][91214]
+ [91220][91221][91222][91223][91224]
+ [91230][91231][91232][91233][91234]
+after
+ Z,z = 0,0
+ [90202][90201][90200][90003][90004]
+ [90212][90211][90210][90013][90014]
+ [90222][90221][90220][90023][90024]
+ [90232][90231][90230][90033][90034]
+ Z,z = 0,1
+ [90102][90101][90100][90103][90104]
+ [90112][90111][90110][90113][90114]
+ [90122][90121][90120][90123][90124]
+ [90132][90131][90130][90133][90134]
+ Z,z = 0,2
+ [90002][90001][90000][90203][90204]
+ [90012][90011][90010][90213][90214]
+ [90022][90021][90020][90223][90224]
+ [90032][90031][90030][90233][90234]
+ Z,z = 1,0
+ [91202][91201][91200][91003][91004]
+ [91212][91211][91210][91013][91014]
+ [91222][91221][91220][91023][91024]
+ [91232][91231][91230][91033][91034]
+ Z,z = 1,1
+ [91102][91101][91100][91103][91104]
+ [91112][91111][91110][91113][91114]
+ [91122][91121][91120][91123][91124]
+ [91132][91131][91130][91133][91134]
+ Z,z = 1,2
+ [91002][91001][91000][91203][91204]
+ [91012][91011][91010][91213][91214]
+ [91022][91021][91020][91223][91224]
+ [91032][91031][91030][91233][91234]
+*** END: 78_flipf_sample ***
+
+79_transposef_sample
+*** BEGIN: 79_transposef_sample ***
+before:
+dimmension : 5 4 3 2 
+000 100 200 300 400 
+010 110 210 310 410 
+020 120 220 320 420 
+030 130 230 330 430 
+
+001 101 201 301 401 
+011 111 211 311 411 
+021 121 221 321 421 
+031 131 231 331 431 
+
+002 102 202 302 402 
+012 112 212 312 412 
+022 122 222 322 422 
+032 132 232 332 432 
+
+003 103 203 303 403 
+013 113 213 313 413 
+023 123 223 323 423 
+033 133 233 333 433 
+
+004 104 204 304 404 
+014 114 214 314 414 
+024 124 224 324 424 
+034 134 234 334 434 
+
+005 105 205 305 405 
+015 115 215 315 415 
+025 125 225 325 425 
+035 135 235 335 435 
+
+after:
+dimmension : 4 5 3 2 
+000 010 020 030 
+100 110 120 130 
+200 210 220 230 
+300 310 320 330 
+400 410 420 430 
+
+001 011 021 031 
+101 111 121 131 
+201 211 221 231 
+301 311 321 331 
+401 411 421 431 
+
+002 012 022 032 
+102 112 122 132 
+202 212 222 232 
+302 312 322 332 
+402 412 422 432 
+
+003 013 023 033 
+103 113 123 133 
+203 213 223 233 
+303 313 323 333 
+403 413 423 433 
+
+004 014 024 034 
+104 114 124 134 
+204 214 224 234 
+304 314 324 334 
+404 414 424 434 
+
+005 015 025 035 
+105 115 125 135 
+205 215 225 235 
+305 315 325 335 
+405 415 425 435 
+
+copied:
+dimmension : 2 3 1 2 
+210 310 
+220 320 
+230 330 
+
+213 313 
+223 323 
+233 333 
+
+*** END: 79_transposef_sample ***
+
+
+80_transpose_xyz2zxy_sample
+*** BEGIN: 80_transpose_xyz2zxy_sample ***
+before:
+dimmension : 5 4 3 2 
+000 100 200 300 400 
+010 110 210 310 410 
+020 120 220 320 420 
+030 130 230 330 430 
+
+001 101 201 301 401 
+011 111 211 311 411 
+021 121 221 321 421 
+031 131 231 331 431 
+
+002 102 202 302 402 
+012 112 212 312 412 
+022 122 222 322 422 
+032 132 232 332 432 
+
+003 103 203 303 403 
+013 113 213 313 413 
+023 123 223 323 423 
+033 133 233 333 433 
+
+004 104 204 304 404 
+014 114 214 314 414 
+024 124 224 324 424 
+034 134 234 334 434 
+
+005 105 205 305 405 
+015 115 215 315 415 
+025 125 225 325 425 
+035 135 235 335 435 
+
+after:
+dimmension : 3 5 4 2 
+000 001 002 
+100 101 102 
+200 201 202 
+300 301 302 
+400 401 402 
+
+010 011 012 
+110 111 112 
+210 211 212 
+310 311 312 
+410 411 412 
+
+020 021 022 
+120 121 122 
+220 221 222 
+320 321 322 
+420 421 422 
+
+030 031 032 
+130 131 132 
+230 231 232 
+330 331 332 
+430 431 432 
+
+003 004 005 
+103 104 105 
+203 204 205 
+303 304 305 
+403 404 405 
+
+013 014 015 
+113 114 115 
+213 214 215 
+313 314 315 
+413 414 415 
+
+023 024 025 
+123 124 125 
+223 224 225 
+323 324 325 
+423 424 425 
+
+033 034 035 
+133 134 135 
+233 234 235 
+333 334 335 
+433 434 435 
+
+copied:
+dimmension : 2 2 3 
+211 221 
+212 222 
+
+311 321 
+312 322 
+
+411 421 
+412 422 
+
+*** END: 80_transpose_xyz2zxy_sample ***
+
+
+81_transposef_xyz2zxy_sample
+*** BEGIN: 81_transposef_xyz2zxy_sample ***
+before:
+dimmension : 5 4 3 2 
+000 100 200 300 400 
+010 110 210 310 410 
+020 120 220 320 420 
+030 130 230 330 430 
+
+001 101 201 301 401 
+011 111 211 311 411 
+021 121 221 321 421 
+031 131 231 331 431 
+
+002 102 202 302 402 
+012 112 212 312 412 
+022 122 222 322 422 
+032 132 232 332 432 
+
+003 103 203 303 403 
+013 113 213 313 413 
+023 123 223 323 423 
+033 133 233 333 433 
+
+004 104 204 304 404 
+014 114 214 314 414 
+024 124 224 324 424 
+034 134 234 334 434 
+
+005 105 205 305 405 
+015 115 215 315 415 
+025 125 225 325 425 
+035 135 235 335 435 
+
+after:
+dimmension : 3 5 4 2 
+000 001 002 
+100 101 102 
+200 201 202 
+300 301 302 
+400 401 402 
+
+010 011 012 
+110 111 112 
+210 211 212 
+310 311 312 
+410 411 412 
+
+020 021 022 
+120 121 122 
+220 221 222 
+320 321 322 
+420 421 422 
+
+030 031 032 
+130 131 132 
+230 231 232 
+330 331 332 
+430 431 432 
+
+003 004 005 
+103 104 105 
+203 204 205 
+303 304 305 
+403 404 405 
+
+013 014 015 
+113 114 115 
+213 214 215 
+313 314 315 
+413 414 415 
+
+023 024 025 
+123 124 125 
+223 224 225 
+323 324 325 
+423 424 425 
+
+033 034 035 
+133 134 135 
+233 234 235 
+333 334 335 
+433 434 435 
+
+copied:
+dimmension : 2 2 3 2 
+211 221 
+212 222 
+
+311 321 
+312 322 
+
+411 421 
+412 422 
+
+214 224 
+215 225 
+
+314 324 
+315 325 
+
+414 424 
+415 425 
+
+*** END: 81_transposef_xyz2zxy_sample ***
+
+
+82_scan_f_sample
+*** BEGIN: 82_scan_f_sample ***
+scan_along_x: (1,6,13): [1613][2613][3613][4613][5613]
+scan_along_x: (1,7,13): [1713][2713][3713][4713][5713]
+scan_along_x: (1,8,13): [1813][2813][3813][4813][5813]
+scan_along_x: (1,9,13): [1913][2913][3913][4913][5913]
+scan_along_x: (1,6,14): [1614][2614][3614][4614][5614]
+scan_along_x: (1,7,14): [1714][2714][3714][4714][5714]
+scan_along_x: (1,8,14): [1814][2814][3814][4814][5814]
+scan_along_x: (1,9,14): [1914][2914][3914][4914][5914]
+scan_along_x: (1,6,23): [1623][2623][3623][4623][5623]
+scan_along_x: (1,7,23): [1723][2723][3723][4723][5723]
+scan_along_x: (1,8,23): [1823][2823][3823][4823][5823]
+scan_along_x: (1,9,23): [1923][2923][3923][4923][5923]
+scan_along_x: (1,6,24): [1624][2624][3624][4624][5624]
+scan_along_x: (1,7,24): [1724][2724][3724][4724][5724]
+scan_along_x: (1,8,24): [1824][2824][3824][4824][5824]
+scan_along_x: (1,9,24): [1924][2924][3924][4924][5924]
+scan_along_x: (1,6,43): [1643][2643][3643][4643][5643]
+scan_along_x: (1,7,43): [1743][2743][3743][4743][5743]
+scan_along_x: (1,8,43): [1843][2843][3843][4843][5843]
+scan_along_x: (1,9,43): [1943][2943][3943][4943][5943]
+scan_along_x: (1,6,44): [1644][2644][3644][4644][5644]
+scan_along_x: (1,7,44): [1744][2744][3744][4744][5744]
+scan_along_x: (1,8,44): [1844][2844][3844][4844][5844]
+scan_along_x: (1,9,44): [1944][2944][3944][4944][5944]
+scan_along_x: (1,6,53): [1653][2653][3653][4653][5653]
+scan_along_x: (1,7,53): [1753][2753][3753][4753][5753]
+scan_along_x: (1,8,53): [1853][2853][3853][4853][5853]
+scan_along_x: (1,9,53): [1953][2953][3953][4953][5953]
+scan_along_x: (1,6,54): [1654][2654][3654][4654][5654]
+scan_along_x: (1,7,54): [1754][2754][3754][4754][5754]
+scan_along_x: (1,8,54): [1854][2854][3854][4854][5854]
+scan_along_x: (1,9,54): [1954][2954][3954][4954][5954]
+
+scan_along_y: (1,6,13): [1613][1713][1813][1913]
+scan_along_y: (2,6,13): [2613][2713][2813][2913]
+scan_along_y: (3,6,13): [3613][3713][3813][3913]
+scan_along_y: (4,6,13): [4613][4713][4813][4913]
+scan_along_y: (5,6,13): [5613][5713][5813][5913]
+scan_along_y: (1,6,14): [1614][1714][1814][1914]
+scan_along_y: (2,6,14): [2614][2714][2814][2914]
+scan_along_y: (3,6,14): [3614][3714][3814][3914]
+scan_along_y: (4,6,14): [4614][4714][4814][4914]
+scan_along_y: (5,6,14): [5614][5714][5814][5914]
+scan_along_y: (1,6,23): [1623][1723][1823][1923]
+scan_along_y: (2,6,23): [2623][2723][2823][2923]
+scan_along_y: (3,6,23): [3623][3723][3823][3923]
+scan_along_y: (4,6,23): [4623][4723][4823][4923]
+scan_along_y: (5,6,23): [5623][5723][5823][5923]
+scan_along_y: (1,6,24): [1624][1724][1824][1924]
+scan_along_y: (2,6,24): [2624][2724][2824][2924]
+scan_along_y: (3,6,24): [3624][3724][3824][3924]
+scan_along_y: (4,6,24): [4624][4724][4824][4924]
+scan_along_y: (5,6,24): [5624][5724][5824][5924]
+scan_along_y: (1,6,43): [1643][1743][1843][1943]
+scan_along_y: (2,6,43): [2643][2743][2843][2943]
+scan_along_y: (3,6,43): [3643][3743][3843][3943]
+scan_along_y: (4,6,43): [4643][4743][4843][4943]
+scan_along_y: (5,6,43): [5643][5743][5843][5943]
+scan_along_y: (1,6,44): [1644][1744][1844][1944]
+scan_along_y: (2,6,44): [2644][2744][2844][2944]
+scan_along_y: (3,6,44): [3644][3744][3844][3944]
+scan_along_y: (4,6,44): [4644][4744][4844][4944]
+scan_along_y: (5,6,44): [5644][5744][5844][5944]
+scan_along_y: (1,6,53): [1653][1753][1853][1953]
+scan_along_y: (2,6,53): [2653][2753][2853][2953]
+scan_along_y: (3,6,53): [3653][3753][3853][3953]
+scan_along_y: (4,6,53): [4653][4753][4853][4953]
+scan_along_y: (5,6,53): [5653][5753][5853][5953]
+scan_along_y: (1,6,54): [1654][1754][1854][1954]
+scan_along_y: (2,6,54): [2654][2754][2854][2954]
+scan_along_y: (3,6,54): [3654][3754][3854][3954]
+scan_along_y: (4,6,54): [4654][4754][4854][4954]
+scan_along_y: (5,6,54): [5654][5754][5854][5954]
+
+scan_along_z: (1,6,13): [1613][1614]
+scan_along_z: (2,6,13): [2613][2614]
+scan_along_z: (3,6,13): [3613][3614]
+scan_along_z: (4,6,13): [4613][4614]
+scan_along_z: (5,6,13): [5613][5614]
+scan_along_z: (1,7,13): [1713][1714]
+scan_along_z: (2,7,13): [2713][2714]
+scan_along_z: (3,7,13): [3713][3714]
+scan_along_z: (4,7,13): [4713][4714]
+scan_along_z: (5,7,13): [5713][5714]
+scan_along_z: (1,8,13): [1813][1814]
+scan_along_z: (2,8,13): [2813][2814]
+scan_along_z: (3,8,13): [3813][3814]
+scan_along_z: (4,8,13): [4813][4814]
+scan_along_z: (5,8,13): [5813][5814]
+scan_along_z: (1,9,13): [1913][1914]
+scan_along_z: (2,9,13): [2913][2914]
+scan_along_z: (3,9,13): [3913][3914]
+scan_along_z: (4,9,13): [4913][4914]
+scan_along_z: (5,9,13): [5913][5914]
+scan_along_z: (1,6,23): [1623][1624]
+scan_along_z: (2,6,23): [2623][2624]
+scan_along_z: (3,6,23): [3623][3624]
+scan_along_z: (4,6,23): [4623][4624]
+scan_along_z: (5,6,23): [5623][5624]
+scan_along_z: (1,7,23): [1723][1724]
+scan_along_z: (2,7,23): [2723][2724]
+scan_along_z: (3,7,23): [3723][3724]
+scan_along_z: (4,7,23): [4723][4724]
+scan_along_z: (5,7,23): [5723][5724]
+scan_along_z: (1,8,23): [1823][1824]
+scan_along_z: (2,8,23): [2823][2824]
+scan_along_z: (3,8,23): [3823][3824]
+scan_along_z: (4,8,23): [4823][4824]
+scan_along_z: (5,8,23): [5823][5824]
+scan_along_z: (1,9,23): [1923][1924]
+scan_along_z: (2,9,23): [2923][2924]
+scan_along_z: (3,9,23): [3923][3924]
+scan_along_z: (4,9,23): [4923][4924]
+scan_along_z: (5,9,23): [5923][5924]
+scan_along_z: (1,6,43): [1643][1644]
+scan_along_z: (2,6,43): [2643][2644]
+scan_along_z: (3,6,43): [3643][3644]
+scan_along_z: (4,6,43): [4643][4644]
+scan_along_z: (5,6,43): [5643][5644]
+scan_along_z: (1,7,43): [1743][1744]
+scan_along_z: (2,7,43): [2743][2744]
+scan_along_z: (3,7,43): [3743][3744]
+scan_along_z: (4,7,43): [4743][4744]
+scan_along_z: (5,7,43): [5743][5744]
+scan_along_z: (1,8,43): [1843][1844]
+scan_along_z: (2,8,43): [2843][2844]
+scan_along_z: (3,8,43): [3843][3844]
+scan_along_z: (4,8,43): [4843][4844]
+scan_along_z: (5,8,43): [5843][5844]
+scan_along_z: (1,9,43): [1943][1944]
+scan_along_z: (2,9,43): [2943][2944]
+scan_along_z: (3,9,43): [3943][3944]
+scan_along_z: (4,9,43): [4943][4944]
+scan_along_z: (5,9,43): [5943][5944]
+scan_along_z: (1,6,53): [1653][1654]
+scan_along_z: (2,6,53): [2653][2654]
+scan_along_z: (3,6,53): [3653][3654]
+scan_along_z: (4,6,53): [4653][4654]
+scan_along_z: (5,6,53): [5653][5654]
+scan_along_z: (1,7,53): [1753][1754]
+scan_along_z: (2,7,53): [2753][2754]
+scan_along_z: (3,7,53): [3753][3754]
+scan_along_z: (4,7,53): [4753][4754]
+scan_along_z: (5,7,53): [5753][5754]
+scan_along_z: (1,8,53): [1853][1854]
+scan_along_z: (2,8,53): [2853][2854]
+scan_along_z: (3,8,53): [3853][3854]
+scan_along_z: (4,8,53): [4853][4854]
+scan_along_z: (5,8,53): [5853][5854]
+scan_along_z: (1,9,53): [1953][1954]
+scan_along_z: (2,9,53): [2953][2954]
+scan_along_z: (3,9,53): [3953][3954]
+scan_along_z: (4,9,53): [4953][4954]
+scan_along_z: (5,9,53): [5953][5954]
+
+scan_zx_planes: (1,6,13): [1613][1614] [2613][2614] [3613][3614] [4613][4614] [5613][5614] 
+scan_zx_planes: (1,7,13): [1713][1714] [2713][2714] [3713][3714] [4713][4714] [5713][5714] 
+scan_zx_planes: (1,8,13): [1813][1814] [2813][2814] [3813][3814] [4813][4814] [5813][5814] 
+scan_zx_planes: (1,9,13): [1913][1914] [2913][2914] [3913][3914] [4913][4914] [5913][5914] 
+scan_zx_planes: (1,6,23): [1623][1624] [2623][2624] [3623][3624] [4623][4624] [5623][5624] 
+scan_zx_planes: (1,7,23): [1723][1724] [2723][2724] [3723][3724] [4723][4724] [5723][5724] 
+scan_zx_planes: (1,8,23): [1823][1824] [2823][2824] [3823][3824] [4823][4824] [5823][5824] 
+scan_zx_planes: (1,9,23): [1923][1924] [2923][2924] [3923][3924] [4923][4924] [5923][5924] 
+scan_zx_planes: (1,6,43): [1643][1644] [2643][2644] [3643][3644] [4643][4644] [5643][5644] 
+scan_zx_planes: (1,7,43): [1743][1744] [2743][2744] [3743][3744] [4743][4744] [5743][5744] 
+scan_zx_planes: (1,8,43): [1843][1844] [2843][2844] [3843][3844] [4843][4844] [5843][5844] 
+scan_zx_planes: (1,9,43): [1943][1944] [2943][2944] [3943][3944] [4943][4944] [5943][5944] 
+scan_zx_planes: (1,6,53): [1653][1654] [2653][2654] [3653][3654] [4653][4654] [5653][5654] 
+scan_zx_planes: (1,7,53): [1753][1754] [2753][2754] [3753][3754] [4753][4754] [5753][5754] 
+scan_zx_planes: (1,8,53): [1853][1854] [2853][2854] [3853][3854] [4853][4854] [5853][5854] 
+scan_zx_planes: (1,9,53): [1953][1954] [2953][2954] [3953][3954] [4953][4954] [5953][5954] 
+
+scan_a_cube: (1,6,13): 
+[1613][2613][3613][4613][5613] [1713][2713][3713][4713][5713] [1813][2813][3813][4813][5813] [1913][2913][3913][4913][5913] 
+[1614][2614][3614][4614][5614] [1714][2714][3714][4714][5714] [1814][2814][3814][4814][5814] [1914][2914][3914][4914][5914] 
+scan_a_cube: (1,6,23): 
+[1623][2623][3623][4623][5623] [1723][2723][3723][4723][5723] [1823][2823][3823][4823][5823] [1923][2923][3923][4923][5923] 
+[1624][2624][3624][4624][5624] [1724][2724][3724][4724][5724] [1824][2824][3824][4824][5824] [1924][2924][3924][4924][5924] 
+scan_a_cube: (1,6,43): 
+[1643][2643][3643][4643][5643] [1743][2743][3743][4743][5743] [1843][2843][3843][4843][5843] [1943][2943][3943][4943][5943] 
+[1644][2644][3644][4644][5644] [1744][2744][3744][4744][5744] [1844][2844][3844][4844][5844] [1944][2944][3944][4944][5944] 
+scan_a_cube: (1,6,53): 
+[1653][2653][3653][4653][5653] [1753][2753][3753][4753][5753] [1853][2853][3853][4853][5853] [1953][2953][3953][4953][5953] 
+[1654][2654][3654][4654][5654] [1754][2754][3754][4754][5754] [1854][2854][3854][4854][5854] [1954][2954][3954][4954][5954] 
+
+*** END: 82_scan_f_sample ***
+
+
+start
+*** output big-endian data ***
+85f8e44138a0f89a61ebb3bbef33d2bb  62_binary.dat

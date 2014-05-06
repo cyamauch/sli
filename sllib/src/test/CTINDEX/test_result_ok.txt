@@ -1,0 +1,37 @@
+01_opeEqu_sample
+my_idx1.index... [0]
+my_idx1.index... [1]
+my_idx.index... [0]
+my_idx.index... [1]
+
+02_init_sample
+my_idx1.index... [0]
+my_idx1.index... [1]
+my_idx.index... [0]
+my_idx.index... [1]
+
+03_append_sample
+my_idx.index... [2]
+my_idx.index... [4]
+
+04_update_sample
+my_idx.index... [2]
+my_idx.index... [4]
+my_idx.index... [1]
+my_idx.index... [4]
+ret... [-1]
+
+05_erase_sample
+my_idx.index... [2]
+my_idx.index... [4]
+my_idx.index... [6]
+ret... [1]
+ret... [1]
+ret... [0]
+
+06_index_sample
+my_idx.index[Pansy]... [2]
+my_idx.index[Pansy]... [6]
+my_idx.index... [2]
+my_idx.index... [6]
+

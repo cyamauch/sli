@@ -1,0 +1,66 @@
+
+                    SLLIB -- Script-Like C-language library 
+
+                                Version 1.4.2f
+
+                                                                  Jun. 24, 2013
+                                                 (C) 2009-2013 Chisato Yamauchi
+
+- What is SLLIB?
+
+  SLLIB appends APIs like script-languages (e.g., Python, IDL, PHP, etc.) to
+  C-language, and minimizes your efforts on daily programming.
+
+  + Stream
+    Various streams (standard stream, compressed stream, network, etc.) can be
+    handled by using the same APIs.  APIs for endian conversion are provided.
+
+  + String, Array and Associative array
+    SLLIB frees you from memory management to handle string, array and
+    associative array.  There are many intelligent and well-chosen APIs
+    including POSIX regular expression.
+
+  + Multidimensional array
+    You can handle multidimensional array like IDL.
+    Mathematical operators (e.g., +, -, *, /, etc.) and expression including
+    ':' and '*' (e.g. "0:99,*", etc.) can be used against array objects,
+    and mathematical functions for both scalar and array are provided.  APIs
+    for imaging data are also supported.  Functions for statistics of mdarray 
+    objects are added in version 1.4.0.
+    Using Intel/AMD CPUs enables enhancements of SIMD instructions in SLLIB.
+
+
+- Requirements
+
+  + OS
+    Linux, FreeBSD, MacOSX, Solaris or Cygwin.  Both 32-bit and 64-bit.
+
+  + Compiler
+    GCC g++ 3.3.2 or later,  Intel(R) C++ Compiler 11.1 or later.
+    GCC g++ 4.x is required to enable enhancements using SIMD instructions.
+
+  + Libraries
+    zlib, bzip2, ncurses, and readline
+
+  + Multi-threaded compression utilities (optional)
+    digeststreamio class automatically detects following programs and calls
+    them to perform very fast compression on the local disk:
+     pigz:   http://www.zlib.net/pigz/
+     lbzip2: http://lacos.hu/
+
+
+- Install
+
+  See INSTALL file.
+
+
+- To get latest version
+
+  Visit this Web page:  http://www.ir.isas.jaxa.jp/~cyamauch/sli/
+
+
+- Contact
+
+  Please send email to cyamauch@ir.isas.jaxa.jp.  Any bug reports and requests
+  are welcome.
+

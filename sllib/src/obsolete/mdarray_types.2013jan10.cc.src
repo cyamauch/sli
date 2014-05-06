@@ -1,0 +1,83 @@
+
+/* horizontally scans the specified section using a user-defined function. */
+ssize_t @CLASS_NAME_L@::scan_along_x(
+	ssize_t (*func)(double[],size_t,ssize_t,ssize_t,ssize_t,const @CLASS_NAME_L@ *,void *),
+	void *user_ptr,
+	ssize_t col_idx, size_t col_len,
+	ssize_t row_idx, size_t row_len,
+	ssize_t layer_idx, size_t layer_len ) const
+{
+    return this->mdarray::scan_along_x(
+	(ssize_t (*)(double[],size_t,ssize_t,ssize_t,ssize_t,const mdarray *,void *))func,
+	user_ptr, col_idx, col_len, row_idx, row_len, layer_idx, layer_len);
+}
+
+/* vertically scans the specified section using a user-defined function. */
+ssize_t @CLASS_NAME_L@::scan_along_y(
+	ssize_t (*func)(double[],size_t,ssize_t,ssize_t,ssize_t,const @CLASS_NAME_L@ *,void *),
+	void *user_ptr,
+	ssize_t col_idx, size_t col_len,
+	ssize_t row_idx, size_t row_len,
+	ssize_t layer_idx, size_t layer_len ) const
+{
+    return this->mdarray::scan_along_y(
+	(ssize_t (*)(double[],size_t,ssize_t,ssize_t,ssize_t,const mdarray *,void *))func,
+	user_ptr, col_idx, col_len, row_idx, row_len, layer_idx, layer_len);
+}
+
+/* scan the specified section along z-axis using a user-defined function. */
+/* a temporary buffer of 1-D array is prepared.                           */
+ssize_t @CLASS_NAME_L@::scan_along_z(
+	ssize_t (*func)(double [],size_t,ssize_t,ssize_t,ssize_t,const @CLASS_NAME_L@ *,void *),
+	void *user_ptr,
+	ssize_t col_idx, size_t col_len,
+	ssize_t row_idx, size_t row_len,
+	ssize_t layer_idx, size_t layer_len ) const
+{
+    return this->mdarray::scan_along_z(
+	(ssize_t (*)(double[],size_t,ssize_t,ssize_t,ssize_t,const mdarray *,void *))func,
+	user_ptr, col_idx, col_len, row_idx, row_len, layer_idx, layer_len);
+}
+
+/* scan the specified 3-D section with plane by plane (xy plane) using a */
+/* user-defined function.  a temporary buffer of 2-D array is prepared.  */
+ssize_t @CLASS_NAME_L@::scan_xy_planes(
+	ssize_t (*func)(double [],size_t,size_t,ssize_t,ssize_t,ssize_t,const @CLASS_NAME_L@ *,void *),
+	void *user_ptr,
+	ssize_t col_idx, size_t col_len,
+	ssize_t row_idx, size_t row_len,
+	ssize_t layer_idx, size_t layer_len ) const
+{
+    return this->mdarray::scan_xy_planes(
+	(ssize_t (*)(double[],size_t,size_t,ssize_t,ssize_t,ssize_t,const mdarray *,void *))func,
+	user_ptr, col_idx, col_len, row_idx, row_len, layer_idx, layer_len);
+}
+
+/* scan the specified 3-D section with plane by plane (zx plane) using a */
+/* user-defined function.  a temporary buffer of 2-D array is prepared.  */
+ssize_t @CLASS_NAME_L@::scan_zx_planes(
+	ssize_t (*func)(double [],size_t,size_t,ssize_t,ssize_t,ssize_t,const @CLASS_NAME_L@ *,void *),
+	void *user_ptr,
+	ssize_t col_idx, size_t col_len,
+	ssize_t row_idx, size_t row_len,
+	ssize_t layer_idx, size_t layer_len ) const
+{
+    return this->mdarray::scan_zx_planes(
+	(ssize_t (*)(double[],size_t,size_t,ssize_t,ssize_t,ssize_t,const mdarray *,void *))func,
+	user_ptr, col_idx, col_len, row_idx, row_len, layer_idx, layer_len);
+}
+
+/* scan the specified 3-D section using a user-defined function.         */
+/* a temporary buffer of 3-D array is prepared.                          */
+ssize_t @CLASS_NAME_L@::scan_a_cube(
+	ssize_t (*func)(double [],size_t,size_t,size_t,ssize_t,ssize_t,ssize_t,const @CLASS_NAME_L@ *,void *),
+	void *user_ptr,
+	ssize_t col_idx, size_t col_len,
+	ssize_t row_idx, size_t row_len,
+	ssize_t layer_idx, size_t layer_len ) const
+{
+    return this->mdarray::scan_a_cube(
+	(ssize_t (*)(double[],size_t,size_t,size_t,ssize_t,ssize_t,ssize_t,const mdarray *,void *))func,
+	user_ptr, col_idx, col_len, row_idx, row_len, layer_idx, layer_len);
+}
+

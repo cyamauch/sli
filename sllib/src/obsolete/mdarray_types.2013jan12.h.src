@@ -1,0 +1,13 @@
+
+    /* copy a region to another mdarray object and clear */
+    /* <overloaded>                                      */
+    virtual @CLASS_NAME_L@ &cut( @CLASS_NAME_L@ *dest, 
+			  ssize_t col_idx, size_t col_len=MDARRAY_ALL,
+			  ssize_t row_idx=0, size_t row_len=MDARRAY_ALL, 
+			  ssize_t layer_idx=0, size_t layer_len=MDARRAY_ALL );
+    /* not recommended */
+    virtual @CLASS_NAME_L@ &cut( @CLASS_NAME_L@ &dest, 
+			  ssize_t col_idx, size_t col_len=MDARRAY_ALL,
+			  ssize_t row_idx=0, size_t row_len=MDARRAY_ALL, 
+			  ssize_t layer_idx=0, size_t layer_len=MDARRAY_ALL );
+

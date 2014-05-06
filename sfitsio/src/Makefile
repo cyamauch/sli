@@ -1,0 +1,142 @@
+
+#
+# Directories for installation
+#
+
+DESTDIR  =
+PREFIX   = /usr/local
+
+INCDIR   = $(PREFIX)/include
+LIBDIR   = $(PREFIX)/lib
+L32DIR   = $(PREFIX)/lib32
+L64DIR   = $(PREFIX)/lib64
+L_64DIR  = $(PREFIX)/lib/64
+
+DOCDIR   = $(PREFIX)/share/doc/sfitsio
+
+#
+# Settings for `make'
+#
+
+# You can build 32-bit or 64-bit library by ...
+#  $ make CCFLAGS=-m32
+# or
+#  $ make CCFLAGS=-m64
+
+CCFLAGS =
+# for 32-bit library on 64-bit Linux
+#CCFLAGS = -m32
+# for 64-bit library on MacOSX
+#CCFLAGS = -m64
+
+# DO NOT CHANGE
+SLIINCDIR = $(INCDIR)
+IINC      = -I. -I$(SLIINCDIR)
+ALL_CCFLAGS = -O2 -Wall $(CCFLAGS)
+SINCDIR   = $(INCDIR)/sli
+
+.cc.o:   ; sh s++.sh $(ALL_CCFLAGS) $(IINC) -c $*.cc
+
+all::	libsllib s++.sh static
+
+s++.sh:
+	if [ -d sli ]; then \
+	  while [ 1 ]; do if [ -f sli/libsllib.a ]; then break; fi; sleep 1; done ; \
+	  while [ 1 ]; do if [ -f sli/s++ ]; then break; fi; sleep 1; done ; \
+	  cat sli/s++ | sed -e 's|^XARG_IINC=[^=]*|XARG_IINC=|' \
+			    -e 's|^XARG_LLIB=[^=]*|XARG_LLIB=|' > s++.src ; \
+	else \
+	  echo '#!/bin/sh__exec s++ $$@' | tr '_' '\n' > s++.src ; \
+	fi
+	ln -s s++.src s++.sh
+
+libsllib::
+	if [ ! -f $(SLIINCDIR)/sli/cstreamio.h -a ! -d sli ]; then \
+	  echo "[INFO] If ERROR is reported, edit Makefile and set SLIINCDIR variable";\
+	  exit -1; \
+	fi
+	if [ -d sli ]; then (cd sli ; make) ; fi
+	if [ -f sli/libsllib.a ]; then rm -f libsllib.a ; ln -s sli/libsllib.a . ; fi
+
+fits_header_record.o:	s++.sh
+
+fits_header.o:	s++.sh
+
+fits_hdu.o:	s++.sh
+
+fits_table_col.o:	s++.sh
+
+fits_table.o:	s++.sh
+
+fits_image.o:	s++.sh
+
+fitscc.o:	s++.sh
+
+
+
+static::	 fits_header_record.o fits_header.o fits_hdu.o fits_table_col.o fits_table.o fits_image.o fitscc.o
+	ar cru libsfitsio.a $?
+	ranlib libsfitsio.a
+
+shared::	 fits_header_record.o fits_header.o fits_hdu.o fits_table_col.o fits_table.o fits_image.o fitscc.o
+	sh s++.sh -shared -o libsfitsio.so $? -lsllib
+
+clean::
+	if [ -d sli ]; then (cd sli ; make clean) ; fi
+	rm -f s++.src s++.sh *.o *.lo *.a *.la *.so *.dylib *.dll
+	rm -f config.status config.log libtool sfitsio.pc
+	rm -rf .deps .libs
+
+install::
+	sh install_help.sh $(LIBDIR) $(L32DIR) $(L64DIR) $(L_64DIR)
+
+install32::	install_common install_lib_32
+
+install64::	install_common install_lib_64
+
+installany::	install_common install_lib_64
+
+install_common::
+	if [ ! -d $(DESTDIR)$(SINCDIR) ];then sh install-sh -d $(DESTDIR)$(SINCDIR); fi
+	sh install-sh -m 644 `echo ' ' *.h | sed -e 's/ config[.]h//'` $(DESTDIR)$(SINCDIR)
+	if [ ! -d $(DESTDIR)$(DOCDIR)/examples ];then sh install-sh -d $(DESTDIR)$(DOCDIR)/examples; fi
+	if [ ! -d $(DESTDIR)$(DOCDIR)/tools ];then sh install-sh -d $(DESTDIR)$(DOCDIR)/tools; fi
+	sh install-sh -m 644 README $(DESTDIR)$(DOCDIR)
+	sh install-sh -m 644 examples/*.cc $(DESTDIR)$(DOCDIR)/examples
+	sh install-sh -m 644 tools/*.cc $(DESTDIR)$(DOCDIR)/tools
+
+install_lib_32::
+	if [ -d /usr/lib32 ]; then \
+	 if [ ! -d $(DESTDIR)$(L32DIR) ];then sh install-sh -d $(DESTDIR)$(L32DIR); fi ; \
+	 if [ -f libsfitsio.a ];then sh install-sh -m 644 *.a $(DESTDIR)$(L32DIR); fi ; \
+	 if [ -f libsfitsio.so ];then sh install-sh -m 755 *.so $(DESTDIR)$(L32DIR); fi ; \
+	 if [ -f libsfitsio.dylib ];then sh install-sh -m 755 *.dylib $(DESTDIR)$(L32DIR); fi ; \
+	 if [ -f libsfitsio.dll ];then sh install-sh -m 755 *.dll $(DESTDIR)$(L32DIR); fi ; \
+	else \
+	 if [ ! -d $(DESTDIR)$(LIBDIR) ];then sh install-sh -d $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsfitsio.a ];then sh install-sh -m 644 *.a $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsfitsio.so ];then sh install-sh -m 755 *.so $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsfitsio.dylib ];then sh install-sh -m 755 *.dylib $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsfitsio.dll ];then sh install-sh -m 755 *.dll $(DESTDIR)$(LIBDIR); fi ; \
+	fi
+
+install_lib_64::
+	if [ -d /lib64 ]; then \
+	 if [ ! -d $(DESTDIR)$(L64DIR) ];then sh install-sh -d $(DESTDIR)$(L64DIR); fi ; \
+	 if [ -f libsfitsio.a ];then sh install-sh -m 644 *.a $(DESTDIR)$(L64DIR); fi ; \
+	 if [ -f libsfitsio.so ];then sh install-sh -m 755 *.so $(DESTDIR)$(L64DIR); fi ; \
+	 if [ -f libsfitsio.dylib ];then sh install-sh -m 755 *.dylib $(DESTDIR)$(L64DIR); fi ; \
+	 if [ -f libsfitsio.dll ];then sh install-sh -m 755 *.dll $(DESTDIR)$(L64DIR); fi ; \
+	elif [ -d /usr/lib/64 ]; then \
+	 if [ ! -d $(DESTDIR)$(L_64DIR) ];then sh install-sh -d $(DESTDIR)$(L_64DIR); fi ; \
+	 if [ -f libsfitsio.a ];then sh install-sh -m 644 *.a $(DESTDIR)$(L_64DIR); fi ; \
+	 if [ -f libsfitsio.so ];then sh install-sh -m 755 *.so $(DESTDIR)$(L_64DIR); fi ; \
+	 if [ -f libsfitsio.dylib ];then sh install-sh -m 755 *.dylib $(DESTDIR)$(L_64DIR); fi ; \
+	 if [ -f libsfitsio.dll ];then sh install-sh -m 755 *.dll $(DESTDIR)$(L_64DIR); fi ; \
+	else \
+	 if [ ! -d $(DESTDIR)$(LIBDIR) ];then sh install-sh -d $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsfitsio.a ];then sh install-sh -m 644 *.a $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsfitsio.so ];then sh install-sh -m 755 *.so $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsfitsio.dylib ];then sh install-sh -m 755 *.dylib $(DESTDIR)$(LIBDIR); fi ; \
+	 if [ -f libsfitsio.dll ];then sh install-sh -m 755 *.dll $(DESTDIR)$(LIBDIR); fi ; \
+	fi

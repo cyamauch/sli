@@ -1,0 +1,8 @@
+#define HAVE_LIBBZ2 1
+#define HAVE_LIBCURSES 1
+#define HAVE_LIBREADLINE 1
+#define HAVE_LIBZ 1
+#define USE_SIMD 1
+#define PACKAGE_NAME "@NAME@"
+#define PACKAGE_VERSION "@VER@"
+#define PACKAGE_BUGREPORT "@MAIL@"

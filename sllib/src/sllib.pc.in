@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: sllib
+Description: Script-Like C-language Library
+Version: @VERSION@
+Libs.private: @LIBS@
+Libs: -L${libdir} -lsllib
+Cflags: -I${includedir}
+
