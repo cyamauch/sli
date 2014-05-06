@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-05-06 21:55:24 cyamauch> */
+/* Time-stamp: <2014-05-06 23:02:05 cyamauch> */
 
 /**
  * @file   fits_header_record.cc
@@ -1161,10 +1161,10 @@ fits_header_record &fits_header_record::assign_any( const fits::header_def &arg_
 	new_keyword.assign(new_keyword.cstr(),
 			   FITS::HEADER_KEYWORD_MAX_LENGTH);
 	new_keyword.assign(new_keyword.cstr()).strtrim(" ");
-	while ( 0 <= (pos=new_keyword.find_first_of(pos," =")) ) {
+	while ( 0 <= (pos=new_keyword.find_first_of(pos,"=")) ) {
 	    if ( disp == false ) {
 		err_report1(__FUNCTION__,"WARNING",
-			    "' ' or '=' in keyword [%s] is replaced with '.'",
+			    "'=' in keyword [%s] is replaced with '.'",
 			    new_keyword.cstr());
 		disp = true;
 	    }

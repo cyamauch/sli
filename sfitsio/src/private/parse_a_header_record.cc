@@ -29,19 +29,37 @@ static int parse_a_header_record( const tstring &rec_str,
     if ( 0 <= sp_idx && 0 <= eq_idx ) {		/* 両方が出現する場合 */
 	if ( sp_idx < eq_idx ) {
 	    ssize_t span_spc;
-	    /* スペースの長さ */
-	    span_spc = rec_str.strspn(sp_idx," ");
-	    /* space が連続して = につながってない場合は無効 */
-	    if ( sp_idx + span_spc != eq_idx ) eq_idx = -1;
+	    bool hie_flag = false;
+	    if ( keyword_igncase == true ) {
+		if ( rec_str.strncasecmp("HIERARCH ",9)==0 ) hie_flag = true;
+	    }
 	    else {
-		/* COMMENT, HISTORY, CONTINUE だけは例外とする */
-		if ( rec_str.strncmp("COMMENT ",8)==0 ) eq_idx = -1;
-		if ( rec_str.strncmp("HISTORY ",8)==0 ) eq_idx = -1;
-		if ( rec_str.strncmp("CONTINUE ",9)==0 ) eq_idx = -1;
-		if ( keyword_igncase == true ) {
+		if ( rec_str.strncmp("HIERARCH ",9)==0 ) hie_flag = true;
+	    }
+	    /* HIERARCH の場合，'=' の1つ前の位置から左方向にスペースを探す */
+	    if ( hie_flag == true ) {
+		span_spc = rec_str.strrspn(eq_idx - 1," ");
+		if ( span_spc == 0 ) sp_idx = -1;
+		else sp_idx = eq_idx - span_spc;
+	    }
+	    /* 通常場合 */
+	    else {
+		/* スペースの長さ */
+		span_spc = rec_str.strspn(sp_idx," ");
+		/* space が連続して = につながってない場合は無効 */
+		if ( sp_idx + span_spc != eq_idx ) eq_idx = -1;
+		else {
+		  /* COMMENT, HISTORY, CONTINUE だけは例外とする */
+		  if ( keyword_igncase == true ) {
 		    if ( rec_str.strncasecmp("COMMENT ",8)==0 ) eq_idx = -1;
 		    if ( rec_str.strncasecmp("HISTORY ",8)==0 ) eq_idx = -1;
 		    if ( rec_str.strncasecmp("CONTINUE ",9)==0 ) eq_idx = -1;
+		  }
+		  else {
+		    if ( rec_str.strncmp("COMMENT ",8)==0 ) eq_idx = -1;
+		    if ( rec_str.strncmp("HISTORY ",8)==0 ) eq_idx = -1;
+		    if ( rec_str.strncmp("CONTINUE ",9)==0 ) eq_idx = -1;
+		  }
 		}
 	    }
 	}
