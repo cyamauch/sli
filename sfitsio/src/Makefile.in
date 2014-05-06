@@ -238,9 +238,11 @@ pkginclude_HEADERS = \
 	fitscc.h \
 	fits_image.h \
 	fits.h \
-	fits_table_col.h
+	fits_table_col.h \
+	fits_image_statistics.h
 
 nobase_dist_doc_DATA = README \
+	LICENSE LICENSE.MIT \
 	examples/combine_fits_images_md.cc \
 	examples/create_fits_asciitable.cc \
 	examples/create_fits_bintable.cc \

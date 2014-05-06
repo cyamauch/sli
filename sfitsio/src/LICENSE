@@ -9,5 +9,6 @@ In the case of software developments (e.g., OS distribution, etc.) using
 SFITSIO, there are no requirements of displaying acknowledgment.
 
 Scientific and technical publications using SFITSIO should include the
-acknowledgment of this software.
+reference to http://adsabs.harvard.edu/abs/2010ASPC..434..469Y or the
+acknowledgment for this software.
 

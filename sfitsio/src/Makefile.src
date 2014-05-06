@@ -88,6 +88,8 @@ install_common::
 	if [ ! -d $(DESTDIR)$(DOCDIR)/examples ];then sh install-sh -d $(DESTDIR)$(DOCDIR)/examples; fi
 	if [ ! -d $(DESTDIR)$(DOCDIR)/tools ];then sh install-sh -d $(DESTDIR)$(DOCDIR)/tools; fi
 	sh install-sh -m 644 README $(DESTDIR)$(DOCDIR)
+	sh install-sh -m 644 LICENSE $(DESTDIR)$(DOCDIR)
+	sh install-sh -m 644 LICENSE.MIT $(DESTDIR)$(DOCDIR)
 	sh install-sh -m 644 examples/*.cc $(DESTDIR)$(DOCDIR)/examples
 	sh install-sh -m 644 tools/*.cc $(DESTDIR)$(DOCDIR)/tools
 

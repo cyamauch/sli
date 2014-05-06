@@ -183,6 +183,9 @@ install_common::
 	sh install-sh -m 644 `echo ' ' *.h | sed -e 's/ config[.]h//'` $(DESTDIR)$(SINCDIR)
 	if [ ! -d $(DESTDIR)$(DOCDIR)/examples ];then sh install-sh -d $(DESTDIR)$(DOCDIR)/examples; fi
 	sh install-sh -m 644 README $(DESTDIR)$(DOCDIR)
+	sh install-sh -m 644 LICENSE $(DESTDIR)$(DOCDIR)
+	sh install-sh -m 644 LICENSE.GPL $(DESTDIR)$(DOCDIR)
+	sh install-sh -m 644 LICENSE.MIT $(DESTDIR)$(DOCDIR)
 	sh install-sh -m 644 examples/*.cc $(DESTDIR)$(DOCDIR)/examples
 
 install_lib_32::

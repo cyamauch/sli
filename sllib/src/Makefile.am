@@ -130,6 +130,7 @@ pkginclude_HEADERS = \
 	xmlparser.h
 
 nobase_dist_doc_DATA = README \
+	LICENSE LICENSE.GPL LICENSE.MIT \
 	examples/array_basic.cc examples/array_digest.cc \
 	examples/array_edit.cc examples/array_edit.cc \
 	examples/array_fast_access.cc examples/array_idl.cc \
