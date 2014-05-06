@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2014-05-06 23:02:05 cyamauch> */
+/* Time-stamp: <2014-05-07 00:30:42 cyamauch> */
 
 /**
  * @file   fits_header_record.cc
@@ -1152,6 +1152,7 @@ fits_header_record &fits_header_record::assign_any( const fits::header_def &arg_
     if ( def.keyword != NULL ) {
 	ssize_t pos = 0;
 	bool disp = false;
+	const char *ch_set;
 	new_keyword.assign(def.keyword).strtrim(" ");
 	if ( FITS::HEADER_KEYWORD_MAX_LENGTH < new_keyword.length() ) {
 	    err_report1(__FUNCTION__,"WARNING",
@@ -1161,10 +1162,13 @@ fits_header_record &fits_header_record::assign_any( const fits::header_def &arg_
 	new_keyword.assign(new_keyword.cstr(),
 			   FITS::HEADER_KEYWORD_MAX_LENGTH);
 	new_keyword.assign(new_keyword.cstr()).strtrim(" ");
-	while ( 0 <= (pos=new_keyword.find_first_of(pos,"=")) ) {
+	/* "HIERARCH " で始まる場合は空白も許可する */
+	if ( new_keyword.strncmp("HIERARCH ",9)==0 ) ch_set = "=";
+	else ch_set = " =";
+	while ( 0 <= (pos=new_keyword.find_first_of(pos,ch_set)) ) {
 	    if ( disp == false ) {
 		err_report1(__FUNCTION__,"WARNING",
-			    "'=' in keyword [%s] is replaced with '.'",
+			    "'=' or ' ' in keyword [%s] is replaced with '.'",
 			    new_keyword.cstr());
 		disp = true;
 	    }
