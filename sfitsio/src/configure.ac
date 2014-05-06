@@ -42,6 +42,9 @@ then
   AC_DEFINE(USE_SIMD, 1, [use optimized code using SIMD])
 fi
 
+CPPFLAGS="$CPPFLAGS -I${prefix}/include"
+LDFLAGS="$LDFLAGS -L${prefix}/$LIBnn"
+
 AC_CHECK_LIB([sllib],[main], ,AC_MSG_ERROR([sllib is not installed!]))
 AC_CHECK_HEADER([sli/cstreamio.h],[],[AC_MSG_ERROR([sllib is not installed!])])
 
