@@ -18670,6 +18670,9 @@ _ACEOF
 
 fi
 
+CPPFLAGS="$CPPFLAGS -I${prefix}/include"
+LDFLAGS="$LDFLAGS -L${prefix}/$LIBnn"
+
 
 echo "$as_me:$LINENO: checking for main in -lsllib" >&5
 echo $ECHO_N "checking for main in -lsllib... $ECHO_C" >&6
