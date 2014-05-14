@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-05-07 00:14:29 cyamauch> */
+/* Time-stamp: <2014-05-08 03:14:18 cyamauch> */
 
 /**
  * @file   fits_header.cc
@@ -622,7 +622,7 @@ fits_header &fits_header::update_records( const fits_header &obj )
 	    }
 	}
     }
-    this->append_records(tmp_defs, tmp_formatted, n_new);
+    this->append_header_records(tmp_defs, tmp_formatted, n_new, true);
 
     return *this;
 }
@@ -636,7 +636,7 @@ static long reject_sysheader( const fits::header_def defs[],
 			      const char *formatted_str[], long num_defs,
 			      mdarray *tmp_defs_rec, 
 			      mdarray *tmp_formatted_str,
-			      const char *fncnam )
+			      const char *fncnam, bool warn )
 {
     long i;
     bool ok_all = true;
@@ -661,9 +661,11 @@ static long reject_sysheader( const fits::header_def defs[],
 	for ( i=0, j=0 ; i < num_defs ; i++ ) {
 	    if ( defs[i].value != NULL && defs[i].comment != NULL &&
 		 is_header_reserved_key(defs[i].keyword) == true ) {
-		err_report1(fncnam,"WARNING",
-			    "keyword '%s' cannot be appended by the user",
-			    defs[i].keyword);
+		if ( warn == true ) {
+		    err_report1(fncnam,"WARNING",
+				"keyword '%s' cannot be appended by the user",
+				defs[i].keyword);
+		}
 	    }
 	    else {
 		tmp_defs[j].keyword = defs[i].keyword;
@@ -689,9 +691,9 @@ static long reject_sysheader( const fits::header_def defs[],
  *
  * @note   このメンバ関数は private です．
  */
-fits_header &fits_header::append_records(const fits::header_def defs[], 
- 					 const char *formatted_str[],
-					 long num_defs)
+fits_header &fits_header::append_header_records( const fits::header_def defs[],
+						 const char *formatted_str[],
+						 long num_defs, bool warn )
 {
     long i;
     fits_header_record *tmp_rec_ptr;
@@ -711,7 +713,7 @@ fits_header &fits_header::append_records(const fits::header_def defs[],
     /* システムヘッダが禁止されている場合，入れられないものをリジェクトする */
     if ( this->sysrecords_prohibition_rec == true ) {
 	long n = reject_sysheader(defs, formatted_str, num_defs, 
-			      &tmp_defs_rec, &tmp_formatted_str, __FUNCTION__);
+			&tmp_defs_rec, &tmp_formatted_str, __FUNCTION__, warn);
 	if ( n < num_defs ) {
 	    num_defs = n;
 	    defs_ptr = (fits::header_def *)tmp_defs_rec.data_ptr();
@@ -755,9 +757,12 @@ fits_header &fits_header::append_records(const fits::header_def defs[],
 	}
 	else {
 	    if ( 0 <= this->index(tmp_rec_ptr->keyword()) ) {
-		if ( this->suppress_dupkey_warning_rec == false ) {
-		    err_report1(__FUNCTION__,"WARNING",
-		 "duplicated keyword '%s' is appended",tmp_rec_ptr->keyword());
+		if ( warn == true ) {
+		    if ( this->suppress_dupkey_warning_rec == false ) {
+			err_report1(__FUNCTION__,"WARNING",
+				    "duplicated keyword '%s' is appended",
+				    tmp_rec_ptr->keyword());
+		    }
 		}
 	    }
 	}
@@ -801,14 +806,14 @@ fits_header &fits_header::append_records( const fits::header_def defs[] )
 {
     long num_defs = 0;
     if ( defs == NULL ) {
-	return this->append_records( defs, num_defs );
+	return this->append_records( defs, num_defs, true );
     }
     for ( num_defs=0 ; defs[num_defs].keyword != NULL ; num_defs++ ) {
 	if ( END.strcmp(defs[num_defs].keyword) == 0 &&
 	     defs[num_defs].value == NULL && 
 	     defs[num_defs].comment == NULL ) break;
     }
-    return this->append_records( defs, num_defs );
+    return this->append_records( defs, num_defs, true );
 }
 
 /**
@@ -817,10 +822,10 @@ fits_header &fits_header::append_records( const fits::header_def defs[] )
  * @note  自身が fits_hdu オブジェクトの管理下にある場合，Data Unit に関係する
  *        予約キーワード(BITPIX 等)は指定できません．
  */
-fits_header &fits_header::append_records(const fits::header_def defs[], 
-					 long num_defs)
+fits_header &fits_header::append_records( const fits::header_def defs[], 
+					  long num_defs, bool warn )
 {
-    return this->append_records(defs, NULL, num_defs);
+    return this->append_header_records(defs, NULL, num_defs, warn);
 }
 
 /**
@@ -829,7 +834,7 @@ fits_header &fits_header::append_records(const fits::header_def defs[],
  * @note  自身が fits_hdu オブジェクトの管理下にある場合，Data Unit に関係する
  *        予約キーワード(BITPIX 等)は指定できません．
  */
-fits_header &fits_header::append_records( const fits_header &obj )
+fits_header &fits_header::append_records( const fits_header &obj, bool warn )
 {
     if ( 0 < obj.length() ) {
 	long i;
@@ -849,7 +854,7 @@ fits_header &fits_header::append_records( const fits_header &obj )
 	    tmp_formatted[i] = obj.record_cs(i).a_formatted_rec.cstr();
 	}
 
-	this->append_records(tmp_defs, tmp_formatted, obj.length());
+	this->append_header_records(tmp_defs, tmp_formatted, obj.length(), warn);
     }
 
     return *this;
@@ -863,10 +868,10 @@ fits_header &fits_header::append_records( const fits_header &obj )
  *
  * @note   このメンバ関数は private です．
  */
-fits_header &fits_header::insert_records( long index0, 
-					  const fits::header_def defs[], 
-					  const char *formatted_str[],
-					  long num_defs )
+fits_header &fits_header::insert_header_records( long index0, 
+						 const fits::header_def defs[],
+						 const char *formatted_str[],
+						 long num_defs, bool warn )
 {
     fits_header_record *tmp_rec_ptr;
     long i;
@@ -878,7 +883,7 @@ fits_header &fits_header::insert_records( long index0,
     if ( index0 < 0 ) index0 = 0;
     if ( this->num_records_rec < index0 ) index0 = this->num_records_rec;
     if ( this->num_records_rec == index0 ) {
-	return append_records(defs,num_defs);
+	return append_records(defs,num_defs,warn);
     }
     if ( num_defs < 0 ) goto quit;
     if ( defs == NULL || num_defs == 0 ) {
@@ -888,7 +893,7 @@ fits_header &fits_header::insert_records( long index0,
     /* システムヘッダが禁止されている場合，入れられないものをリジェクトする */
     if ( this->sysrecords_prohibition_rec == true ) {
 	long n = reject_sysheader(defs, formatted_str, num_defs, 
-			      &tmp_defs_rec, &tmp_formatted_str, __FUNCTION__);
+			&tmp_defs_rec, &tmp_formatted_str, __FUNCTION__, warn);
 	if ( n < num_defs ) {
 	    num_defs = n;
 	    defs_ptr = (fits::header_def *)tmp_defs_rec.data_ptr();
@@ -932,9 +937,12 @@ fits_header &fits_header::insert_records( long index0,
 	}
 	else {
 	    if ( 0 <= this->index(tmp_rec_ptr->keyword()) ) {
-		if ( this->suppress_dupkey_warning_rec == false ) {
-		    err_report1(__FUNCTION__,"WARNING",
-		 "duplicated keyword '%s' is inserted",tmp_rec_ptr->keyword());
+		if ( warn == true ) {
+		    if ( this->suppress_dupkey_warning_rec == false ) {
+			err_report1(__FUNCTION__,"WARNING",
+				    "duplicated keyword '%s' is inserted",
+				    tmp_rec_ptr->keyword());
+		    }
 		}
 	    }
 	}
@@ -999,14 +1007,14 @@ fits_header &fits_header::insert_records( long index0,
 {
     long num_defs = 0;
     if ( defs == NULL ) {
-	return this->insert_records( index0, defs, num_defs );
+	return this->insert_records( index0, defs, num_defs, true );
     }
     for ( num_defs=0 ; defs[num_defs].keyword != NULL ; num_defs++ ) {
 	if ( END.strcmp(defs[num_defs].keyword) == 0 &&
 	     defs[num_defs].value == NULL && 
 	     defs[num_defs].comment == NULL ) break;
     }
-    return this->insert_records( index0, defs, num_defs );
+    return this->insert_records( index0, defs, num_defs, true );
 }
 
 /**
@@ -1017,9 +1025,9 @@ fits_header &fits_header::insert_records( long index0,
  */
 fits_header &fits_header::insert_records( long index0, 
 					  const fits::header_def defs[], 
-					  long num_defs )
+					  long num_defs, bool warn )
 {
-    return this->insert_records( index0, defs, NULL, num_defs);
+    return this->insert_header_records( index0, defs, NULL, num_defs, warn );
 }
 
 /**
@@ -1041,9 +1049,9 @@ fits_header &fits_header::insert_records( const char *keyword0,
  *        予約キーワード(BITPIX 等)は指定できません．
  */
 fits_header &fits_header::insert_records( const char *keyword0, 
-				 const fits::header_def defs[], long num_defs )
+		      const fits::header_def defs[], long num_defs, bool warn )
 {
-    return this->insert_records( this->index(keyword0), defs, num_defs );
+    return this->insert_records( this->index(keyword0), defs, num_defs, warn );
 }
 
 /**
@@ -1052,7 +1060,8 @@ fits_header &fits_header::insert_records( const char *keyword0,
  * @note  自身が fits_hdu オブジェクトの管理下にある場合，Data Unit に関係する
  *        予約キーワード(BITPIX 等)は指定できません．
  */
-fits_header &fits_header::insert_records( long index0, const fits_header &obj )
+fits_header &fits_header::insert_records( long index0, const fits_header &obj,
+					  bool warn )
 {
     if ( 0 < obj.length() ) {
 	long i;
@@ -1072,7 +1081,9 @@ fits_header &fits_header::insert_records( long index0, const fits_header &obj )
 	    tmp_formatted[i] = obj.record_cs(i).a_formatted_rec.cstr();
 	}
 
-	this->insert_records(index0, tmp_defs, tmp_formatted, obj.length());
+	this->insert_header_records( index0, 
+				     tmp_defs, tmp_formatted, obj.length(),
+				     warn);
     }
 
     return *this;
@@ -1085,9 +1096,9 @@ fits_header &fits_header::insert_records( long index0, const fits_header &obj )
  *        予約キーワード(BITPIX 等)は指定できません．
  */
 fits_header &fits_header::insert_records( const char *keyword0,
-					  const fits_header &obj )
+					  const fits_header &obj, bool warn )
 {
-    return this->insert_records( this->index(keyword0), obj );
+    return this->insert_records( this->index(keyword0), obj, warn );
 }
 
 /* protected */
@@ -1394,7 +1405,7 @@ fits_header &fits_header::append( const fits_header_record &obj )
     const fits::header_def &def = obj.raw_record();
     const char *formatted = obj.a_formatted_rec.cstr();
     /* use private member function */
-    return this->append_records(&def, &formatted, 1);
+    return this->append_header_records(&def, &formatted, 1, true);
 }
 
 /**
@@ -1545,7 +1556,7 @@ fits_header &fits_header::insert( long index0, const fits_header_record &obj )
     const fits::header_def &def = obj.raw_record();
     const char *formatted = obj.a_formatted_rec.cstr();
     /* use private member function */
-    return this->insert_records(index0, &def, &formatted, 1);
+    return this->insert_header_records( index0, &def, &formatted, 1, true );
 }
 
 /**
@@ -1560,7 +1571,8 @@ fits_header &fits_header::insert( const char *keyword0,
     const fits::header_def &def = obj.raw_record();
     const char *formatted = obj.a_formatted_rec.cstr();
     /* use private member function */
-    return this->insert_records(this->index(keyword0), &def, &formatted, 1);
+    return this->insert_header_records( this->index(keyword0), 
+					&def, &formatted, 1, true );
 }
 
 /**

@@ -111,3 +111,12 @@ Version 1.4.2f
 		- Added missing 'static' of inline functions.
 		  (fits_image_statistics.h)
 		(Jun.24,2013)
+
+Version 1.4.3
+		- Supported r/w of header records using HIERARCH keyword.
+		- Improved configure script for use of --prefix arg.
+		- Added an warn arg of fits_header::append_records() and
+		  fits_header::insert_records().
+		- Added some fits_hdu::header_append_records() and
+		  fits_hdu::header_insert_records().
+		(May.15,2014)

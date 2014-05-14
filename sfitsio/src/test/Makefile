@@ -12,7 +12,7 @@ LLIB      = -L..
 all::	s++.sh libsfitsio.a \
 	continue_header create_from_template read_header_only access_bte_heap \
 	edit_bintable tzerotscale_bintable rename_header \
-	image_copy_paste
+	image_copy_paste edit_header
 
 s++.sh:
 	if [ ! -f $(SLIINCDIR)/sli/cstreamio.h -a ! -d ../sli ]; then \
@@ -53,8 +53,11 @@ rename_header:	rename_header.o
 image_copy_paste:	image_copy_paste.o
 	sh s++.sh $(CPPC) $(LLIB) -o $@ $@.o libsfitsio.a
 
+edit_header:		edit_header.o
+	sh s++.sh $(CPPC) $(LLIB) -o $@ $@.o libsfitsio.a
+
 clean::
 	rm -f *.o *.exe continue_header create_from_template read_header_only \
 			access_bte_heap edit_bintable tzerotscale_bintable \
-			rename_header image_copy_paste
+			rename_header image_copy_paste edit_header
 	rm -f s++.sh *.a sli

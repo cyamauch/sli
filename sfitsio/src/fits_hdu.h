@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-04-29 12:03:40 cyamauch> */
+/* Time-stamp: <2014-05-08 02:20:24 cyamauch> */
 
 #ifndef _SLI__FITS_HDU_H
 #define _SLI__FITS_HDU_H 1
@@ -87,7 +87,9 @@ namespace sli
 
     /* append some header records */
     virtual fits_hdu &header_append_records( const fits::header_def defs[] );
-    virtual fits_hdu &header_append_records( const fits_header &obj );
+    virtual fits_hdu &header_append_records( const fits::header_def defs[],
+					     long num_defs, bool warn );
+    virtual fits_hdu &header_append_records(const fits_header &obj, bool warn);
 
     /* insert some header records */
     virtual fits_hdu &header_insert_records( long index0,
@@ -95,9 +97,15 @@ namespace sli
     virtual fits_hdu &header_insert_records( const char *keyword0,
 					     const fits::header_def defs[] );
     virtual fits_hdu &header_insert_records( long index0,
-					     const fits_header &obj );
+					     const fits::header_def defs[],
+					     long num_defs, bool warn );
     virtual fits_hdu &header_insert_records( const char *keyword0,
-					     const fits_header &obj );
+					     const fits::header_def defs[],
+					     long num_defs, bool warn );
+    virtual fits_hdu &header_insert_records( long index0,
+					   const fits_header &obj, bool warn );
+    virtual fits_hdu &header_insert_records( const char *keyword0,
+					   const fits_header &obj, bool warn );
 
     /* erase some header records */
     virtual fits_hdu &header_erase_records( long index0, long num_records );

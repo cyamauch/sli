@@ -22,6 +22,9 @@ PC1_2   = 0.0
 PC2_1   = 0.0
 PC2_2   = 1.0
 COMMENT ----------------------------------------------------------------
+LONG_KEYWORD = 'OK' / Good
+HIERARCH STYLE LONG_KEYWORD = 'OK' / elegant?
+COMMENT ----------------------------------------------------------------
 MESSAGE = 'FITS (Flexible Image Transport System) format is &' / In SFITSIO,
 CONTINUE  'defined in "Astronomy and Astrophysics", volume 376, &' / this 
 CONTINUE  'page 359; bibcode: 2001A&A...376..359H' / message is not written &

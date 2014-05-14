@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-06-05 13:22:10 cyamauch> */
+/* Time-stamp: <2014-05-08 03:08:20 cyamauch> */
 
 #ifndef _SLI__FITS_HEADER_H
 #define _SLI__FITS_HEADER_H 1
@@ -113,23 +113,24 @@ namespace sli
     /* append some header records */
     virtual fits_header &append_records( const fits::header_def defs[] );
     virtual fits_header &append_records( const fits::header_def defs[],
-					 long num_defs);
-    virtual fits_header &append_records( const fits_header &obj );
+					 long num_defs, bool warn );
+    virtual fits_header &append_records( const fits_header &obj, bool warn );
 
     /* insert some header records */
     virtual fits_header &insert_records( long index0,
 					 const fits::header_def defs[] );
-    virtual fits_header &insert_records( long index0,
-					 const fits::header_def defs[],
-					 long num_defs);
     virtual fits_header &insert_records( const char *keyword0,
 					 const fits::header_def defs[] );
+    virtual fits_header &insert_records( long index0,
+					 const fits::header_def defs[],
+					 long num_defs, bool warn );
     virtual fits_header &insert_records( const char *keyword0,
 					 const fits::header_def defs[],
-					 long num_defs);
-    virtual fits_header &insert_records( long index0, const fits_header &obj );
+					 long num_defs, bool warn );
+    virtual fits_header &insert_records( long index0,
+					 const fits_header &obj, bool warn );
     virtual fits_header &insert_records( const char *keyword0,
-					 const fits_header &obj );
+					 const fits_header &obj, bool warn );
 
     /* erase some header records */
     virtual fits_header &erase_records( long index0, long num_records );
@@ -312,13 +313,13 @@ namespace sli
     virtual fits_header &set_sysrecords_prohibition( bool value );
 
   private:
-    fits_header &append_records( const fits::header_def defs[],
-				 const char *formatted_str[],
-				 long num_defs );
-    fits_header &insert_records( long index0, 
-				 const fits::header_def defs[], 
-				 const char *formatted_str[],
-				 long num_defs );
+    fits_header &append_header_records( const fits::header_def defs[],
+					const char *formatted_str[],
+					long num_defs, bool warn );
+    fits_header &insert_header_records( long index0, 
+					const fits::header_def defs[], 
+					const char *formatted_str[],
+					long num_defs, bool warn );
     ssize_t data_skip( cstreamio &sref, const size_t *max_bytes_ptr );
     ssize_t header_load( cstreamio &sref, const size_t *max_bytes_ptr );
     ssize_t header_load( const char *header_all );

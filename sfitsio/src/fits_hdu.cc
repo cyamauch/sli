@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-05-30 17:30:03 cyamauch> */
+/* Time-stamp: <2014-05-08 02:22:08 cyamauch> */
 
 /**
  * @file   fits_hdu.cc
@@ -318,13 +318,25 @@ fits_hdu &fits_hdu::header_append_records( const fits::header_def defs[] )
 }
 
 /**
+ * @brief  複数のヘッダレコードの追加 (fits::header_def 構造体で指定)
+ *
+ * @note   Data Unit に関係する予約キーワード(BITPIX 等)は指定できません．
+ */
+fits_hdu &fits_hdu::header_append_records( const fits::header_def defs[],
+					   long num_defs, bool warn )
+{
+    this->header_rec.append_records(defs, num_defs, warn);
+    return *this;
+}
+
+/**
  * @brief  複数のヘッダレコードの追加 (fits_header オブジェクトで指定)
  *
  * @note   Data Unit に関係する予約キーワード(BITPIX 等)は指定できません．
  */
-fits_hdu &fits_hdu::header_append_records( const fits_header &obj )
+fits_hdu &fits_hdu::header_append_records( const fits_header &obj, bool warn )
 {
-    this->header_rec.append_records(obj);
+    this->header_rec.append_records(obj, warn);
     return *this;
 }
 
@@ -353,14 +365,40 @@ fits_hdu &fits_hdu::header_insert_records( const char *keyword0,
 }
 
 /**
+ * @brief  複数のヘッダレコードの挿入 (fits::header_def 構造体で指定)
+ *
+ * @note   Data Unit に関係する予約キーワード(BITPIX 等)は指定できません．
+ */
+fits_hdu &fits_hdu::header_insert_records( long index0,
+					   const fits::header_def defs[],
+					   long num_defs, bool warn )
+{
+    this->header_rec.insert_records(index0,defs,num_defs,warn);
+    return *this;
+}
+
+/**
+ * @brief  複数のヘッダレコードの挿入 (fits::header_def 構造体で指定)
+ *
+ * @note   Data Unit に関係する予約キーワード(BITPIX 等)は指定できません．
+ */
+fits_hdu &fits_hdu::header_insert_records( const char *keyword0,
+					   const fits::header_def defs[],
+					   long num_defs, bool warn )
+{
+    this->header_rec.insert_records(keyword0,defs,num_defs,warn);
+    return *this;
+}
+
+/**
  * @brief  複数のヘッダレコードの挿入 (fits_header オブジェクトで指定)
  *
  * @note   Data Unit に関係する予約キーワード(BITPIX 等)は指定できません．
  */
 fits_hdu &fits_hdu::header_insert_records( long index0,
-					   const fits_header &obj )
+					   const fits_header &obj, bool warn )
 {
-    this->header_rec.insert_records(index0,obj);
+    this->header_rec.insert_records(index0,obj,warn);
     return *this;
 }
 
@@ -370,9 +408,9 @@ fits_hdu &fits_hdu::header_insert_records( long index0,
  * @note   Data Unit に関係する予約キーワード(BITPIX 等)は指定できません．
  */
 fits_hdu &fits_hdu::header_insert_records( const char *keyword0,
-					   const fits_header &obj )
+					   const fits_header &obj, bool warn )
 {
-    this->header_rec.insert_records(keyword0,obj);
+    this->header_rec.insert_records(keyword0,obj,warn);
     return *this;
 }
 
