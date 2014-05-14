@@ -1,4 +1,4 @@
-AC_INIT(sfitsio, 1.4.2, cyamauch@ir.isas.jaxa.jp)
+AC_INIT(sfitsio, 1.4.3, cyamauch@ir.isas.jaxa.jp)
 AM_INIT_AUTOMAKE([foreign])
 #LT_INIT([disable-shared])
 
