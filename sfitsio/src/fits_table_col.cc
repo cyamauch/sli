@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-05-06 22:38:01 cyamauch> */
+/* Time-stamp: <2014-07-30 02:37:29 cyamauch> */
 
 /**
  * @file   fits_table_col.cc
@@ -3974,12 +3974,12 @@ const char *fits_table_col::svalue( long row_index )
 	return this->str_buf->cstr();
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v = this->bit_value(row_index);
+	long long v = this->bit_value(row_index);
 	if ( 0 < this->fmt_str.length() ) {
 	    long long ll_v=v; DO_LL(ll_v);
 	}
 	else {
-	    this->str_buf->printf("%ld",v);
+	    this->str_buf->printf("%lld",v);
 	}
 	return this->str_buf->cstr();
     }
@@ -4037,7 +4037,7 @@ const char *fits_table_col::svalue( long row_index,
 {
     long elem_index = this->elem_index_rec.index(elem_name,0);
     if ( this->type_rec == FITS::BIT_T ) {
-	long v;
+	long long v;
 	if ( row_index < 0 || this->row_size_rec <= row_index ) goto ret_null;
 	if ( elem_index < 0 || repetition_idx < 0 ) goto ret_null;
 	v = this->bit_value( row_index, elem_index, repetition_idx, 0 );
@@ -4046,7 +4046,7 @@ const char *fits_table_col::svalue( long row_index,
 	    DO_LL(ll_v);
 	}
 	else {
-	    this->str_buf->printf("%ld",v);
+	    this->str_buf->printf("%lld",v);
 	}
 	return this->str_buf->cstr();
     }
@@ -4310,12 +4310,12 @@ const char *fits_table_col::svalue( long row_index,
 	return this->str_buf->cstr();
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v = this->bit_value(row_index,elem_index,repetition_idx);
+	long long v = this->bit_value(row_index,elem_index,repetition_idx);
 	if ( 0 < this->fmt_str.length() ) {
 	    long long ll_v=v; DO_LL(ll_v);
 	}
 	else {
-	    this->str_buf->printf("%ld",v);
+	    this->str_buf->printf("%lld",v);
 	}
 	return this->str_buf->cstr();
     }
@@ -4559,12 +4559,12 @@ const char *fits_table_col::get_svalue( long row_index,
 	return dest->cstr();
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v = this->bit_value(row_index);
+	long long v = this->bit_value(row_index);
 	if ( 0 < this->fmt_str.length() ) {
 	    long long ll_v=v; DO_LL_TS(ll_v,(*dest));
 	}
 	else {
-	    dest->printf("%ld",v);
+	    dest->printf("%lld",v);
 	}
 	return dest->cstr();
     }
@@ -4671,7 +4671,7 @@ const char *fits_table_col::get_svalue( long row_index,
 
     long elem_index = this->elem_index_rec.index(elem_name,0);
     if ( this->type_rec == FITS::BIT_T ) {
-	long v;
+	long long v;
 	if ( row_index < 0 || this->row_size_rec <= row_index ) goto ret_null;
 	if ( elem_index < 0 || repetition_idx < 0 ) goto ret_null;
 	v = this->bit_value( row_index, elem_index, repetition_idx, 0 );
@@ -4680,7 +4680,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    DO_LL_TS(ll_v,(*dest));
 	}
 	else {
-	    dest->printf("%ld",v);
+	    dest->printf("%lld",v);
 	}
 	return dest->cstr();
     }
@@ -4982,12 +4982,12 @@ const char *fits_table_col::get_svalue( long row_index,
 	return dest->cstr();
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v = this->bit_value(row_index,elem_index,repetition_idx);
+	long long v = this->bit_value(row_index,elem_index,repetition_idx);
 	if ( 0 < this->fmt_str.length() ) {
 	    long long ll_v=v; DO_LL_TS(ll_v,(*dest));
 	}
 	else {
-	    dest->printf("%ld",v);
+	    dest->printf("%lld",v);
 	}
 	return dest->cstr();
     }
@@ -5577,7 +5577,7 @@ short fits_table_col::short_value( long row_index ) const
 	else return this->tnull_short_rec;
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v0 = this->bit_value(row_index);
+	long long v0 = this->bit_value(row_index);
 	if ( MIN_SHORT <= v0 && v0 <= MAX_SHORT ) return v0;
 	else return this->tnull_short_rec;
     }
@@ -5624,7 +5624,7 @@ short fits_table_col::short_value( long row_index,
 {
     long elem_index = this->elem_index_rec.index(elem_name,0);
     if ( this->type_rec == FITS::BIT_T ) {
-	long v0 = this->bit_value(row_index,elem_index,repetition_idx,0);
+	long long v0 = this->bit_value(row_index,elem_index,repetition_idx,0);
 	if ( MIN_SHORT <= v0 && v0 <= MAX_SHORT ) return v0;
 	else return this->tnull_short_rec;
     }
@@ -5697,7 +5697,7 @@ short fits_table_col::short_value( long row_index,
 	else return this->tnull_short_rec;
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v0 = this->bit_value(row_index,elem_index,repetition_idx);
+	long long v0 = this->bit_value(row_index,elem_index,repetition_idx);
 	if ( MIN_SHORT <= v0 && v0 <= MAX_SHORT ) return v0;
 	else return this->tnull_short_rec;
     }
@@ -5779,7 +5779,9 @@ long fits_table_col::long_value( long row_index ) const
 	else return this->tnull_long_rec;
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	return this->bit_value(row_index);
+	long long v0 = this->bit_value(row_index);
+	if ( MIN_LONG <= v0 && v0 <= MAX_LONG ) return v0;
+	else return this->tnull_long_rec;
     }
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
@@ -5826,7 +5828,9 @@ long fits_table_col::long_value( long row_index,
 {
     long elem_index = this->elem_index_rec.index(elem_name,0);
     if ( this->type_rec == FITS::BIT_T ) {
-	return this->bit_value(row_index,elem_index,repetition_idx,0);
+	long long v0 = this->bit_value(row_index,elem_index,repetition_idx,0);
+	if ( MIN_LONG <= v0 && v0 <= MAX_LONG ) return v0;
+	else return this->tnull_long_rec;
     }
     else {
 	return this->long_value( row_index, elem_index, repetition_idx );
@@ -5897,7 +5901,9 @@ long fits_table_col::long_value( long row_index,
 	else return this->tnull_long_rec;
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	return this->bit_value(row_index,elem_index,repetition_idx);
+	long long v0 = this->bit_value(row_index,elem_index,repetition_idx);
+	if ( MIN_LONG <= v0 && v0 <= MAX_LONG ) return v0;
+	else return this->tnull_long_rec;
     }
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
@@ -6546,7 +6552,7 @@ unsigned char fits_table_col::byte_value( long row_index ) const
 	else return this->tnull_byte_rec;
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v0 = this->bit_value(row_index);
+	long long v0 = this->bit_value(row_index);
 	if ( MIN_UCHAR <= v0 && v0 <= MAX_UCHAR ) return v0;
 	else return this->tnull_byte_rec;
     }
@@ -6594,7 +6600,7 @@ unsigned char fits_table_col::byte_value( long row_index,
 {
     long elem_index = this->elem_index_rec.index(elem_name,0);
     if ( this->type_rec == FITS::BIT_T ) {
-	long v0 = this->bit_value(row_index,elem_index,repetition_idx,0);
+	long long v0 = this->bit_value(row_index,elem_index,repetition_idx,0);
 	if ( MIN_UCHAR <= v0 && v0 <= MAX_UCHAR ) return v0;
 	else return this->tnull_byte_rec;
     }
@@ -6669,7 +6675,7 @@ unsigned char fits_table_col::byte_value( long row_index,
 	else return this->tnull_byte_rec;
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v0 = this->bit_value(row_index,elem_index,repetition_idx);
+	long long v0 = this->bit_value(row_index,elem_index,repetition_idx);
 	if ( MIN_UCHAR <= v0 && v0 <= MAX_UCHAR ) return v0;
 	else return this->tnull_byte_rec;
     }
@@ -6710,7 +6716,7 @@ unsigned char fits_table_col::byte_value( long row_index,
  *          NULL値: 引数が不正な場合
  * @attention  可変長配列はサポートされていません．
  */
-long fits_table_col::bit_value( long row_index ) const
+long long fits_table_col::bit_value( long row_index ) const
 {
     if ( row_index < 0 || this->row_size_rec <= row_index ) goto invalid;
 
@@ -6728,7 +6734,7 @@ long fits_table_col::bit_value( long row_index ) const
 	int v = this->logical_value(row_index);
 	if ( v == 'T' ) return 1;
 	else if ( v == 'F' ) return 0;
-	else return this->tnull_long_rec;
+	else return this->tnull_longlong_rec;
     }
     else if ( this->type_rec == FITS::SHORT_T ) {
 	return this->short_value(row_index);
@@ -6737,41 +6743,39 @@ long fits_table_col::bit_value( long row_index ) const
 	return this->long_value(row_index);
     }
     else if ( this->type_rec == FITS::LONGLONG_T ) {
-	long long v0 = this->longlong_value(row_index);
-	if ( MIN_LONG <= v0 && v0 <= MAX_LONG ) return v0;
-	else return this->tnull_long_rec;
+	return this->longlong_value(row_index);
     }
     else if ( this->type_rec == FITS::FLOAT_T ) {
 	float v0 = this->float_value(row_index);
-	if ( isfinite(v0) && MIN_FLOAT_ROUND_LONG <= v0 && v0 <= MAX_FLOAT_ROUND_LONG )
-	    return round_f2l(v0);
-	else return this->tnull_long_rec;
+	if ( isfinite(v0) && MIN_FLOAT_ROUND_LLONG <= v0 && v0 <= MAX_FLOAT_ROUND_LLONG )
+	    return round_f2ll(v0);
+	else return this->tnull_longlong_rec;
     }
     else if ( this->type_rec == FITS::DOUBLE_T ) {
 	double v0 = this->double_value(row_index);
-	if ( isfinite(v0) && MIN_DOUBLE_ROUND_LONG <= v0 && v0 <= MAX_DOUBLE_ROUND_LONG )
-	    return round_d2l(v0);
-	else return this->tnull_long_rec;
+	if ( isfinite(v0) && MIN_DOUBLE_ROUND_LLONG <= v0 && v0 <= MAX_DOUBLE_ROUND_LLONG )
+	    return round_d2ll(v0);
+	else return this->tnull_longlong_rec;
     }
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
 	double v0;
 	this->get_string_value(row_index,sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
-	    return this->tnull_long_rec;
+	    return this->tnull_longlong_rec;
 	}
 	else if ( this->tnull_is_set_rec == true &&
 		  this->tany.at_cs(TNULL_IDX).strcmp(sval.cstr()) == 0 ) {
-	    return this->tnull_long_rec;
+	    return this->tnull_longlong_rec;
 	}
 	REMOVE_SPC(sval);
 	v0 = sval.atof();
-	if ( isfinite(v0) && MIN_DOUBLE_ROUND_LONG <= v0 && v0 <= MAX_DOUBLE_ROUND_LONG )
-	    return round_d2l(v0);
-	else return this->tnull_long_rec;
+	if ( isfinite(v0) && MIN_DOUBLE_ROUND_LLONG <= v0 && v0 <= MAX_DOUBLE_ROUND_LLONG )
+	    return round_d2ll(v0);
+	else return this->tnull_longlong_rec;
     }
  invalid:
-    return this->tnull_long_rec;
+    return this->tnull_longlong_rec;
 }
 
 /**
@@ -6793,8 +6797,8 @@ long fits_table_col::bit_value( long row_index ) const
  * @attention  可変長配列はサポートされていません．
  * @note  ビット演算を行なうため，実行コストが大きいかもしれません．
  */
-long fits_table_col::bit_value( long row_index, const char *elem_name,
-				long repetition_idx, int nbit ) const
+long long fits_table_col::bit_value( long row_index, const char *elem_name,
+				     long repetition_idx, int nbit ) const
 {
     long elem_index = this->elem_index_rec.index(elem_name,0);
     return this->bit_value( row_index, elem_index, repetition_idx, nbit );
@@ -6819,9 +6823,9 @@ long fits_table_col::bit_value( long row_index, const char *elem_name,
  * @attention  可変長配列はサポートされていません．
  * @note  ビット演算を行なうため，実行コストが大きいかもしれません．
  */
-long fits_table_col::bit_value( long row_index,
-				long elem_index, long repetition_idx,
-				int nbit ) const
+long long fits_table_col::bit_value( long row_index,
+				     long elem_index, long repetition_idx,
+				     int nbit ) const
 {
     if ( row_index < 0 || this->row_size_rec <= row_index ) goto invalid;
     if ( elem_index < 0 || repetition_idx < 0 ) goto invalid;
@@ -6832,7 +6836,7 @@ long fits_table_col::bit_value( long row_index,
 	    + elem_index;
 	int n_bit;
 	long e_mod, e_div, e_align;
-	long ret_val = 0;
+	long long ret_val = 0;
 	int i;
 	if ( nbit < 1 ) 
 	    n_bit = this->bit_size_telem.i_cs(elem_index % this->dcol_size_rec);
@@ -6879,7 +6883,7 @@ long fits_table_col::bit_value( long row_index,
 	    int n_shift = 7 - (e_mod + e_align);	/* シフトするbit数 */
 	    unsigned char mask;
 	    i = n_bit;					/* 未登録bit数 */
-	    mask = 0xff >> e_mod;
+	    mask = (unsigned char)0xff >> e_mod;
 	    ret_val = (d_ptr[e_div] & mask) >> n_shift;	i -= 1 + e_align;
 	    while ( 0 < i ) {
 		ret_val <<= 8;
@@ -6892,7 +6896,7 @@ long fits_table_col::bit_value( long row_index,
 	    int n_shift = e_mod + e_align - 7;		/* シフトするbit数 */
 	    unsigned char mask;
 	    i = n_bit;
-	    mask = 0xff >> e_mod;
+	    mask = (unsigned char)0xff >> e_mod;
 	    ret_val= (d_ptr[e_div] & mask) << n_shift;	i -= 8 - e_mod;
 	    e_div ++;
 	    ret_val |= d_ptr[e_div] >> (8-n_shift);	i -= n_shift;
@@ -6912,7 +6916,7 @@ long fits_table_col::bit_value( long row_index,
 	int v = this->logical_value(row_index,elem_index,repetition_idx);
 	if ( v == 'T' ) return 1;
 	else if ( v == 'F' ) return 0;
-	else return this->tnull_long_rec;
+	else return this->tnull_longlong_rec;
     }
     else if ( this->type_rec == FITS::SHORT_T ) {
 	return this->short_value(row_index,elem_index,repetition_idx);
@@ -6921,41 +6925,39 @@ long fits_table_col::bit_value( long row_index,
 	return this->long_value(row_index,elem_index,repetition_idx);
     }
     else if ( this->type_rec == FITS::LONGLONG_T ) {
-	long long v0 = this->longlong_value(row_index,elem_index,repetition_idx);
-	if ( MIN_LONG <= v0 && v0 <= MAX_LONG ) return v0;
-	else return this->tnull_long_rec;
+	return this->longlong_value(row_index,elem_index,repetition_idx);
     }
     else if ( this->type_rec == FITS::FLOAT_T ) {
 	float v0 = this->float_value(row_index,elem_index,repetition_idx);
-	if ( isfinite(v0) && MIN_FLOAT_ROUND_LONG <= v0 && v0 <= MAX_FLOAT_ROUND_LONG )
-	    return round_f2l(v0);
-	else return this->tnull_long_rec;
+	if ( isfinite(v0) && MIN_FLOAT_ROUND_LLONG <= v0 && v0 <= MAX_FLOAT_ROUND_LLONG )
+	    return round_f2ll(v0);
+	else return this->tnull_longlong_rec;
     }
     else if ( this->type_rec == FITS::DOUBLE_T ) {
 	double v0 = this->double_value(row_index,elem_index,repetition_idx);
-	if ( isfinite(v0) && MIN_DOUBLE_ROUND_LONG <= v0 && v0 <= MAX_DOUBLE_ROUND_LONG )
-	    return round_d2l(v0);
-	else return this->tnull_long_rec;
+	if ( isfinite(v0) && MIN_DOUBLE_ROUND_LLONG <= v0 && v0 <= MAX_DOUBLE_ROUND_LLONG )
+	    return round_d2ll(v0);
+	else return this->tnull_longlong_rec;
     }
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
 	double v0;
 	this->get_string_value(row_index,elem_index,repetition_idx,sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
-	    return this->tnull_long_rec;
+	    return this->tnull_longlong_rec;
 	}
 	else if ( this->tnull_is_set_rec == true &&
 		  this->tany.at_cs(TNULL_IDX).strcmp(sval.cstr()) == 0 ) {
-	    return this->tnull_long_rec;
+	    return this->tnull_longlong_rec;
 	}
 	REMOVE_SPC(sval);
 	v0 = sval.atof();
-	if ( isfinite(v0) && MIN_DOUBLE_ROUND_LONG <= v0 && v0 <= MAX_DOUBLE_ROUND_LONG )
-	    return round_d2l(v0);
-	else return this->tnull_long_rec;
+	if ( isfinite(v0) && MIN_DOUBLE_ROUND_LLONG <= v0 && v0 <= MAX_DOUBLE_ROUND_LLONG )
+	    return round_d2ll(v0);
+	else return this->tnull_longlong_rec;
     }
  invalid:
-    return this->tnull_long_rec;
+    return this->tnull_longlong_rec;
 }
 
 
@@ -7038,8 +7040,8 @@ const char *fits_table_col::string_value( long row_index )
 	return this->str_buf->cstr();
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v = this->bit_value(row_index);
-	this->str_buf->printf("%ld",v);
+	long long v = this->bit_value(row_index);
+	this->str_buf->printf("%lld",v);
 	return this->str_buf->cstr();
     }
  invalid:
@@ -7073,11 +7075,11 @@ const char *fits_table_col::string_value( long row_index,
 {
     long elem_index = this->elem_index_rec.index(elem_name,0);
     if ( this->type_rec == FITS::BIT_T ) {
-	long v;
+	long long v;
 	if ( row_index < 0 || this->row_size_rec <= row_index ) return "";
 	if ( elem_index < 0 || repetition_idx < 0 ) return "";
 	v = this->bit_value(row_index,elem_index,repetition_idx,0);
-	this->str_buf->printf("%ld",v);
+	this->str_buf->printf("%lld",v);
 	return this->str_buf->cstr();
     }
     else {
@@ -7172,8 +7174,8 @@ const char *fits_table_col::string_value( long row_index,
 	return this->str_buf->cstr();
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v = this->bit_value(row_index,elem_index,repetition_idx);
-	this->str_buf->printf("%ld",v);
+	long long v = this->bit_value(row_index,elem_index,repetition_idx);
+	this->str_buf->printf("%lld",v);
 	return this->str_buf->cstr();
     }
  invalid:
@@ -7263,8 +7265,8 @@ const char *fits_table_col::get_string_value( long row_index,
 	return dest->cstr();
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v = this->bit_value(row_index);
-	dest->printf("%ld",v);
+	long long v = this->bit_value(row_index);
+	dest->printf("%lld",v);
 	return dest->cstr();
     }
  invalid:
@@ -7393,8 +7395,8 @@ const char *fits_table_col::get_string_value( long row_index,
 	return dest->cstr();
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v = this->bit_value(row_index,elem_index,repetition_idx);
-	dest->printf("%ld",v);
+	long long v = this->bit_value(row_index,elem_index,repetition_idx);
+	dest->printf("%lld",v);
 	return dest->cstr();
     }
  invalid:
@@ -7465,7 +7467,7 @@ const char *fits_table_col::get_string_value( long row_index,
 
     long elem_index = this->elem_index_rec.index(elem_name,0);
     if ( this->type_rec == FITS::BIT_T ) {
-	long v;
+	long long v;
 	if ( row_index < 0 || this->row_size_rec <= row_index ) {
 	    dest->assign("");
 	    return dest->cstr();
@@ -7475,7 +7477,7 @@ const char *fits_table_col::get_string_value( long row_index,
 	    return dest->cstr();
 	}
 	v = this->bit_value(row_index,elem_index,repetition_idx,0);
-	dest->printf("%ld",v);
+	dest->printf("%lld",v);
 	return dest->cstr();
     }
     else {
@@ -9118,9 +9120,9 @@ fits_table_col &fits_table_col::assign( const char *value, long row_index )
     else if ( this->type_rec == FITS::BIT_T ) {
 	REMOVE_SPC(sval);
 	double dval = sval.atof();
-	long v;
-	if ( isfinite(dval) && MIN_DOUBLE_ROUND_LONG <= dval && dval <= MAX_DOUBLE_ROUND_LONG )
-	    v = round_d2l(dval);
+	long long v;
+	if ( isfinite(dval) && MIN_DOUBLE_ROUND_LLONG <= dval && dval <= MAX_DOUBLE_ROUND_LLONG )
+	    v = round_d2ll(dval);
 	else v = this->tnull_w_rec;
 	return this->assign_bit(v, row_index);
     }
@@ -9240,9 +9242,9 @@ fits_table_col &fits_table_col::assign( const char *value, long row_index,
     else if ( this->type_rec == FITS::BIT_T ) {
 	REMOVE_SPC(sval);
 	double dval = sval.atof();
-	long v;
-	if ( isfinite(dval) && MIN_DOUBLE_ROUND_LONG <= dval && dval <= MAX_DOUBLE_ROUND_LONG )
-	    v = round_d2l(dval);
+	long long v;
+	if ( isfinite(dval) && MIN_DOUBLE_ROUND_LLONG <= dval && dval <= MAX_DOUBLE_ROUND_LLONG )
+	    v = round_d2ll(dval);
 	else v = this->tnull_w_rec;
 	return this->assign_bit(v, row_index,
 				elem_name, repetition_idx);
@@ -9364,9 +9366,9 @@ fits_table_col &fits_table_col::assign( const char *value, long row_index,
     else if ( this->type_rec == FITS::BIT_T ) {
 	REMOVE_SPC(sval);
 	double dval = sval.atof();
-	long v;
-	if ( isfinite(dval) && MIN_DOUBLE_ROUND_LONG <= dval && dval <= MAX_DOUBLE_ROUND_LONG )
-	    v = round_d2l(dval);
+	long long v;
+	if ( isfinite(dval) && MIN_DOUBLE_ROUND_LLONG <= dval && dval <= MAX_DOUBLE_ROUND_LLONG )
+	    v = round_d2ll(dval);
 	else v = this->tnull_w_rec;
 	return this->assign_bit(v, row_index,
 				elem_index, repetition_idx);
@@ -10393,9 +10395,9 @@ fits_table_col &fits_table_col::assign_float( float value, long row_index )
 	return this->assign_logical(v, row_index);
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v;
-	if ( isfinite(value) && MIN_FLOAT_ROUND_LONG <= value && value <= MAX_FLOAT_ROUND_LONG )
-	    v = round_f2l(value);
+	long long v;
+	if ( isfinite(value) && MIN_FLOAT_ROUND_LLONG <= value && value <= MAX_FLOAT_ROUND_LLONG )
+	    v = round_f2ll(value);
 	else v = this->tnull_w_rec;
 	return this->assign_bit(v,row_index);
     }
@@ -10431,9 +10433,9 @@ fits_table_col &fits_table_col::assign_float( float value, long row_index,
 {
     long elem_index = this->elem_index_rec.index(elem_name,0);
     if ( this->type_rec == FITS::BIT_T ) {
-	long v;
-	if ( isfinite(value) && MIN_FLOAT_ROUND_LONG <= value && value <= MAX_FLOAT_ROUND_LONG )
-	    v = round_f2l(value);
+	long long v;
+	if ( isfinite(value) && MIN_FLOAT_ROUND_LLONG <= value && value <= MAX_FLOAT_ROUND_LLONG )
+	    v = round_f2ll(value);
 	else v = this->tnull_w_rec;
 	return this->assign_bit(v,row_index,elem_index,repetition_idx,0);
     }
@@ -10515,9 +10517,9 @@ fits_table_col &fits_table_col::assign_float( float value, long row_index,
 	return this->assign_logical(v,row_index,elem_index,repetition_idx);
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v;
-	if ( isfinite(value) && MIN_FLOAT_ROUND_LONG <= value && value <= MAX_FLOAT_ROUND_LONG )
-	    v = round_f2l(value);
+	long long v;
+	if ( isfinite(value) && MIN_FLOAT_ROUND_LLONG <= value && value <= MAX_FLOAT_ROUND_LLONG )
+	    v = round_f2ll(value);
 	else v = this->tnull_w_rec;
 	return this->assign_bit(v,row_index,elem_index,repetition_idx);
     }
@@ -10598,9 +10600,9 @@ fits_table_col &fits_table_col::assign_double( double value, long row_index )
 	return this->assign_logical(v,row_index);
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v;
-	if ( isfinite(value) && MIN_DOUBLE_ROUND_LONG <= value && value <= MAX_DOUBLE_ROUND_LONG )
-	    v = round_d2l(value);
+	long long v;
+	if ( isfinite(value) && MIN_DOUBLE_ROUND_LLONG <= value && value <= MAX_DOUBLE_ROUND_LLONG )
+	    v = round_d2ll(value);
 	else v = this->tnull_w_rec;
 	return this->assign_bit(v,row_index);
     }
@@ -10635,9 +10637,9 @@ fits_table_col &fits_table_col::assign_double( double value, long row_index,
 {
     long elem_index = this->elem_index_rec.index(elem_name,0);
     if ( this->type_rec == FITS::BIT_T ) {
-	long v;
-	if ( isfinite(value) && MIN_DOUBLE_ROUND_LONG <= value && value <= MAX_DOUBLE_ROUND_LONG )
-	    v = round_d2l(value);
+	long long v;
+	if ( isfinite(value) && MIN_DOUBLE_ROUND_LLONG <= value && value <= MAX_DOUBLE_ROUND_LLONG )
+	    v = round_d2ll(value);
 	else v = this->tnull_w_rec;
 	return this->assign_bit(v,row_index,elem_index,repetition_idx,0);
     }
@@ -10719,9 +10721,9 @@ fits_table_col &fits_table_col::assign_double( double value, long row_index,
 	return this->assign_logical(v,row_index,elem_index,repetition_idx);
     }
     else if ( this->type_rec == FITS::BIT_T ) {
-	long v;
-	if ( isfinite(value) && MIN_DOUBLE_ROUND_LONG <= value && value <= MAX_DOUBLE_ROUND_LONG )
-	    v = round_d2l(value);
+	long long v;
+	if ( isfinite(value) && MIN_DOUBLE_ROUND_LLONG <= value && value <= MAX_DOUBLE_ROUND_LLONG )
+	    v = round_d2ll(value);
 	else v = this->tnull_w_rec;
 	return this->assign_bit(v,row_index,elem_index,repetition_idx);
     }
@@ -10807,9 +10809,9 @@ fits_table_col &fits_table_col::assign_string( const char *value,
 	}
 	else if ( this->type_rec == FITS::BIT_T ) {
 	    double dv = sval.atof();
-	    long v;
-	    if ( isfinite(dv) && MIN_DOUBLE_ROUND_LONG <= dv && dv <= MAX_DOUBLE_ROUND_LONG )
-		v = round_d2l(dv);
+	    long long v;
+	    if ( isfinite(dv) && MIN_DOUBLE_ROUND_LLONG <= dv && dv <= MAX_DOUBLE_ROUND_LLONG )
+		v = round_d2ll(dv);
 	    else v = this->tnull_w_rec;
 	    return this->assign_bit(v,row_index);
 	}
@@ -10855,9 +10857,9 @@ fits_table_col &fits_table_col::assign_string( const char *value,
 	sval.assign(value);
 	REMOVE_SPC(sval);
 	double dv = sval.atof();
-	long v;
-	if ( isfinite(dv) && MIN_DOUBLE_ROUND_LONG <= dv && dv <= MAX_DOUBLE_ROUND_LONG )
-	    v = round_d2l(dv);
+	long long v;
+	if ( isfinite(dv) && MIN_DOUBLE_ROUND_LLONG <= dv && dv <= MAX_DOUBLE_ROUND_LLONG )
+	    v = round_d2ll(dv);
 	else v = this->tnull_w_rec;
 	return this->assign_bit(v,row_index,elem_index,repetition_idx,0);
     }
@@ -10944,9 +10946,9 @@ fits_table_col &fits_table_col::assign_string( const char *value,
 	}
 	else if ( this->type_rec == FITS::BIT_T ) {
 	    double dv = sval.atof();
-	    long v;
-	    if ( isfinite(dv) && MIN_DOUBLE_ROUND_LONG <= dv && dv <= MAX_DOUBLE_ROUND_LONG )
-		v = round_d2l(dv);
+	    long long v;
+	    if ( isfinite(dv) && MIN_DOUBLE_ROUND_LLONG <= dv && dv <= MAX_DOUBLE_ROUND_LLONG )
+		v = round_d2ll(dv);
 	    else v = this->tnull_w_rec;
 	    return this->assign_bit(v,row_index,elem_index,repetition_idx);
 	}
@@ -10974,7 +10976,7 @@ fits_table_col &fits_table_col::assign_string( const char *value,
  * @return  自身の参照
  * @attention  可変長配列はサポートされていません．
  */
-fits_table_col &fits_table_col::assign_bit( long value, long row_index )
+fits_table_col &fits_table_col::assign_bit( long long value, long row_index )
 {
     if ( row_index < 0 || this->row_size_rec <= row_index ) {
 	return *this;	/* invalid */
@@ -11006,7 +11008,10 @@ fits_table_col &fits_table_col::assign_bit( long value, long row_index )
 	return this->assign_short(v,row_index);
     }
     else if ( this->type_rec == FITS::LONG_T ) {
-	return this->assign_long(value,row_index);
+	long v;
+	if ( MIN_LONG <= value && value <= MAX_LONG ) v = value;
+	else v = this->tnull_w_rec;
+	return this->assign_long(v,row_index);
     }
     else if ( this->type_rec == FITS::LONGLONG_T ) {
 	return this->assign_longlong(value,row_index);
@@ -11019,7 +11024,7 @@ fits_table_col &fits_table_col::assign_bit( long value, long row_index )
     }
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring buf(64);
-	buf.printf("%ld",value);
+	buf.printf("%lld",value);
 	return this->assign_string(buf.cstr(), row_index);
     }
     else return *this;	/* invalid */
@@ -11042,7 +11047,7 @@ fits_table_col &fits_table_col::assign_bit( long value, long row_index )
  * @attention  可変長配列はサポートされていません．
  * @note  ビット演算を行なうため，実行コストが大きいかもしれません．
  */
-fits_table_col &fits_table_col::assign_bit( long value, long row_index,
+fits_table_col &fits_table_col::assign_bit( long long value, long row_index,
 			 const char *elem_name, long repetition_idx, int nbit )
 {
     long elem_index = this->elem_index_rec.index(elem_name,0);
@@ -11067,7 +11072,7 @@ fits_table_col &fits_table_col::assign_bit( long value, long row_index,
  * @attention  可変長配列はサポートされていません．
  * @note  ビット演算を行なうため，実行コストが大きいかもしれません．
  */
-fits_table_col &fits_table_col::assign_bit( long value, long row_index,
+fits_table_col &fits_table_col::assign_bit( long long value, long row_index,
 			       long elem_index, long repetition_idx, int nbit )
 {
     if ( row_index < 0 || this->row_size_rec <= row_index ) {
@@ -11096,38 +11101,41 @@ fits_table_col &fits_table_col::assign_bit( long value, long row_index,
 	e_div = e_idx / 8;
 	/* */
 	j = (n_bit - 1) / 8;
-	//printf("debug: e_align=%ld e_mod=%ld e_div=%ld j=%d n_bit=%d\n",
-	//       e_align,e_mod,e_div,j,n_bit);
+	//sli__eprintf("debug: e_align=%ld e_mod=%ld e_div=%ld j=%d n_bit=%d\n",
+	//		       e_align,e_mod,e_div,j,n_bit);
 	/* */
 	if ( e_mod + e_align < 8 ) {		/* case A : 右へシフトする */
 	    int n_shift = 7 - (e_mod + e_align);	/* シフトするbit数 */
 	    unsigned char mask;
 	    int sft;
 	    i = n_bit;					/* 未処理bit数 */
-	    mask = 0xff >> (e_mod + n_shift);
+	    mask = (unsigned char)0xff >> (e_mod + n_shift);
 	    mask <<= n_shift;
-	    //printf("debug0: n_shift=%d mask = [%hhx]\n",n_shift,mask);
 	    d_ptr[e_div] &= ~mask;	/* clear */
 	    sft = 8 * j - n_shift;
+	    //sli__eprintf("debug0: n_shift=%d mask=[%hhx] sft=%d\n",n_shift,mask,sft);
+	    //sli__eprintf("debug0a: i=%d\n",i);
 	    if ( 0 <= sft )
 		d_ptr[e_div] |= ((value >> sft) & mask);
 	    else 
 		d_ptr[e_div] |= ((value << -sft) & mask);
 	    i -= 1 + e_align;
+	    //sli__eprintf("debug0b: i=%d\n",i);
 	    while ( 0 < i && 0 < j ) {
 		j--;
-		mask = 0xff >> (8 - n_shift);
+		mask = (unsigned char)0xff >> (8 - n_shift);
 		d_ptr[e_div] &= ~mask;	/* clear */
-		sft = 8 * j - (8 - n_shift);
+		//sli__eprintf("debug0L1: mask=[%hhx] sft=%d\n",mask,sft);
 		if ( 0 <= sft )
 		    d_ptr[e_div] |= ((value >> sft) & mask);
 		else
 		    d_ptr[e_div] |= ((value << -sft) & mask);
 		i -= n_shift;
 		e_div ++;
-		mask = 0xff << n_shift;
+		mask = (unsigned char)0xff << n_shift;
 		d_ptr[e_div] &= ~mask;	/* clear */
 		sft = 8 * j - n_shift;
+		//sli__eprintf("debug0L2:  mask=[%hhx] sft=%d\n",mask,sft);
 		if ( 0 <= sft )
 		    d_ptr[e_div] |= ((value >> sft) & mask);
 		else
@@ -11140,8 +11148,8 @@ fits_table_col &fits_table_col::assign_bit( long value, long row_index,
 	    unsigned char mask;
 	    int sft;
 	    i = n_bit;
-	    mask = 0xff >> e_mod;
-	    //printf("debug1: mask = [%hhx]\n",mask);
+	    mask = (unsigned char)0xff >> e_mod;
+	    //sli__eprintf("debug1: mask = [%hhx]\n",mask);
 	    d_ptr[e_div] &= ~mask;	/* clear */
 	    sft = 8 * j + n_shift;
 	    if ( 0 <= sft ) 
@@ -11150,7 +11158,7 @@ fits_table_col &fits_table_col::assign_bit( long value, long row_index,
 		d_ptr[e_div] |= ((value << -sft) & mask);
 	    i -= 8 - e_mod;
 	    e_div ++;
-	    mask = 0xff << (8 - n_shift);
+	    mask = (unsigned char)0xff << (8 - n_shift);
 	    d_ptr[e_div] &= ~mask;	/* clear */
 	    sft = 8 * j - (8 - n_shift);
 	    if ( 0 <= sft )
@@ -11160,7 +11168,7 @@ fits_table_col &fits_table_col::assign_bit( long value, long row_index,
 	    i -= n_shift;
 	    while ( 0 < i && 0 < j ) {
 		j--;
-		mask = 0xff >> n_shift;
+		mask = (unsigned char)0xff >> n_shift;
 		d_ptr[e_div] &= ~mask;	/* clear */
 		sft = 8 * j + n_shift;
 		if ( 0 <= sft )
@@ -11169,7 +11177,7 @@ fits_table_col &fits_table_col::assign_bit( long value, long row_index,
 		    d_ptr[e_div] |= ((value << -sft) & mask);
 		i -= 8 - n_shift;
 		e_div ++;
-		mask = 0xff << (8 - n_shift);
+		mask = (unsigned char)0xff << (8 - n_shift);
 		d_ptr[e_div] &= ~mask;	/* clear */
 		sft = 8 * j - (8 - n_shift);
 		if ( 0 <= sft )
@@ -11198,7 +11206,10 @@ fits_table_col &fits_table_col::assign_bit( long value, long row_index,
 	return this->assign_short(v,row_index,elem_index,repetition_idx);
     }
     else if ( this->type_rec == FITS::LONG_T ) {
-	return this->assign_long(value,row_index,elem_index,repetition_idx);
+	long v;
+	if ( MIN_LONG <= value && value <= MAX_LONG ) v = value;
+	else v = this->tnull_w_rec;
+	return this->assign_long(v,row_index,elem_index,repetition_idx);
     }
     else if ( this->type_rec == FITS::LONGLONG_T ) {
 	return this->assign_longlong(value,row_index,elem_index,repetition_idx);
@@ -11211,7 +11222,7 @@ fits_table_col &fits_table_col::assign_bit( long value, long row_index,
     }
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring buf(64);
-	buf.printf("%ld",value);
+	buf.printf("%lld",value);
 	return this->assign_string(buf.cstr(), row_index, elem_index,
 				   repetition_idx);
     }
@@ -11259,7 +11270,29 @@ fits_table_col &fits_table_col::assign_arrdesc( long length, long offset,
     return *this;
 }
 
+
+/**
+ * @brief  row用メモリ確保方法の設定を変更 (カラム毎の設定)
+ *
+ *  row用メモリを確保する時に，どのような方法で行なうかを決定します．
+ *  次の 3 つから選択します．<br>
+ *    "min", "auto"  ... 最小限を確保．リサイズ時に必ずrealloc()が呼ばれる<br>
+ *    "pow"  ... 2のn乗で確保<br>
+ *    NULL，他 ... 現在の方法を維持
+ *
+ * @param   strategy メモリ確保方法の設定
+ * @return  自身の参照
+ *
+ */
+fits_table_col &fits_table_col::set_alloc_strategy( const char *strategy )
+{
+    this->data_rec.set_alloc_strategy(strategy);
+    return *this;
+}
+
+
 /* */
+
 
 /**
  * @brief  shallow copy を許可する場合に使用 (未実装)

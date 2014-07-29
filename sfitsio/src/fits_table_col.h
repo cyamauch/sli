@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-05-06 17:42:11 cyamauch> */
+/* Time-stamp: <2014-07-30 00:38:45 cyamauch> */
 
 #ifndef _SLI__FITS_TABLE_COL_H
 #define _SLI__FITS_TABLE_COL_H 1
@@ -584,10 +584,10 @@ namespace sli
     virtual unsigned char byte_value( long row_index,
 				long elem_idx, long repetition_idx = 0 ) const;
     /* BIT_T */
-    virtual long bit_value( long row_index ) const;
-    virtual long bit_value( long row_index,
+    virtual long long bit_value( long row_index ) const;
+    virtual long long bit_value( long row_index,
 	  const char *elem_name, long repetition_idx = 0, int nbit = 0 ) const;
-    virtual long bit_value( long row_index,
+    virtual long long bit_value( long row_index,
 			    long elem_index, long repetition_idx = 0, 
 			    int nbit = 1 ) const;
     /* STRING_T */
@@ -745,10 +745,10 @@ namespace sli
     virtual fits_table_col &assign_string( const char *value, long row_index,
 			       long elem_index, long repetition_idx = 0 );
     /* BIT_T */
-    virtual fits_table_col &assign_bit( long value, long row_index );
-    virtual fits_table_col &assign_bit( long value, long row_index,
+    virtual fits_table_col &assign_bit( long long value, long row_index );
+    virtual fits_table_col &assign_bit( long long value, long row_index,
 		const char *elem_name, long repetition_idx = 0, int nbit = 0 );
-    virtual fits_table_col &assign_bit( long value, long row_index,
+    virtual fits_table_col &assign_bit( long long value, long row_index,
 		      long elem_index, long repetition_idx = 0, int nbit = 1 );
     /* LONGARRDESC_T or LLONGARRDESC_T */
     virtual fits_table_col &assign_arrdesc( long length, long offset,
@@ -782,6 +782,10 @@ namespace sli
 
     /* insert blank rows */
     virtual fits_table_col &insert( long index, long num_rows );
+
+    /* setting of strategy of memory allocation for rows */
+    /* "auto" (default), "min" and "pow" can be set.     */
+    virtual fits_table_col &set_alloc_strategy( const char *strategy );
 
     /* shallow copy を許可する場合に使用 (未実装)  */
     /* (一時オブジェクトの return の直前で使用)    */

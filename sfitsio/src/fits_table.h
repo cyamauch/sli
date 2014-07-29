@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-06-05 13:21:24 cyamauch> */
+/* Time-stamp: <2014-07-30 00:49:32 cyamauch> */
 
 #ifndef _SLI__FITS_TABLE_H
 #define _SLI__FITS_TABLE_H 1
@@ -176,6 +176,11 @@ namespace sli
 
     /* fill a row using default value */
     virtual fits_table &clean_a_row( long index );
+
+    /* setting of strategy of memory allocation for rows of all columns */
+    /* "auto" (default), "min" and "pow" can be set.                    */
+    virtual fits_table &set_alloc_strategy_of_rows( const char *strategy );
+
 
     /* append columns */
     virtual fits_table &append_cols( const fits::table_def defs[] );
@@ -417,6 +422,10 @@ namespace sli
     /* set length of reserved area before heap       */
     /* This will change the value of THEAP on header */
     virtual fits_table &resize_reserved_area( long long val );
+
+    /* setting of strategy of memory allocation for heap */
+    /* "auto" (default), "min" and "pow" can be set.     */
+    virtual fits_table &set_alloc_strategy_of_heap( const char *strategy );
 
     /* shallow copy を許可する場合に使用 (未実装)  */
     /* (一時オブジェクトの return の直前で使用)    */

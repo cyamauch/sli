@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-05-30 17:31:18 cyamauch> */
+/* Time-stamp: <2014-07-30 00:56:44 cyamauch> */
 
 /**
  * @file   fits_table.cc
@@ -1097,6 +1097,29 @@ fits_table &fits_table::clean_a_row( long index )
 {
     return this->clean_rows(index,1);
 }
+
+/**
+ * @brief  メインテーブル用メモリ確保方法の設定を変更 (カラム毎の設定)
+ *
+ *  メインテーブル用メモリを確保する時に，どのような方法で行なうかを決定します．
+ *  次の 3 つから選択します．<br>
+ *    "min", "auto"  ... 最小限を確保．リサイズ時に必ずrealloc()が呼ばれる<br>
+ *    "pow"  ... 2のn乗で確保<br>
+ *    NULL，他 ... 現在の方法を維持
+ *
+ * @param   strategy メモリ確保方法の設定
+ * @return  自身の参照
+ *
+ */
+fits_table &fits_table::set_alloc_strategy_of_rows( const char *strategy )
+{
+    long i;
+    for ( i=0 ; i < this->col_length() ; i++ ) {
+	this->col(i).set_alloc_strategy(strategy);
+    }
+    return *this;
+}
+
 
 /* protected */
 /**
@@ -3260,6 +3283,26 @@ fits_table &fits_table::resize_reserved_area( long long val )
     }
     return *this;
 }
+
+/**
+ * @brief  heap用メモリ確保方法の設定を変更 (カラム毎の設定)
+ *
+ *  heap用メモリを確保する時に，どのような方法で行なうかを決定します．
+ *  次の 3 つから選択します．<br>
+ *    "min", "auto"  ... 最小限を確保．リサイズ時に必ずrealloc()が呼ばれる<br>
+ *    "pow"  ... 2のn乗で確保<br>
+ *    NULL，他 ... 現在の方法を維持
+ *
+ * @param   strategy メモリ確保方法の設定
+ * @return  自身の参照
+ *
+ */
+fits_table &fits_table::set_alloc_strategy_of_heap( const char *strategy )
+{
+    this->heap_rec.set_alloc_strategy(strategy);
+    return *this;
+}
+
 
 /**
  * @brief  shallow copy を許可する場合に使用 (未実装)
