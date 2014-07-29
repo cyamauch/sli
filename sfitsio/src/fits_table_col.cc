@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2014-07-30 02:37:29 cyamauch> */
+/* Time-stamp: <2014-07-30 03:53:13 cyamauch> */
 
 /**
  * @file   fits_table_col.cc

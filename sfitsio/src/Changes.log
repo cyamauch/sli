@@ -120,3 +120,14 @@ Version 1.4.3
 		- Added some fits_hdu::header_append_records() and
 		  fits_hdu::header_insert_records().
 		(May.15,2014)
+
+Version 1.4.4
+		- Fixed a bug of fits_table_col::assign_bit().
+		- Changed type of 1st arg of fits_table_col::assign_bit():
+		  long => long long.
+		- Changed type of return of fits_table_col::bit_value():
+		  long => long long.
+		- Added fits_table_col::set_alloc_strategy().
+		- Added fits_table::set_alloc_strategy_of_rows().
+		- Added fits_table::set_alloc_strategy_of_heap().
+		(Aug.6,2014)

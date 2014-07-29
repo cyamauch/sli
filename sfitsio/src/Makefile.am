@@ -9,7 +9,7 @@ docdir = $(datadir)/doc/@PACKAGE@
 #bin_PROGRAMS=
 
 lib_LTLIBRARIES = libsfitsio.la
-libsfitsio_la_LDFLAGS = -version-info 4:0
+libsfitsio_la_LDFLAGS = -version-info 5:0
 libsfitsio_la_SOURCES = \
 	fits_header_record.cc fits_header.cc fits_hdu.cc \
 	fits_table_col.cc fits_table.cc fits_image.cc fitscc.cc \
