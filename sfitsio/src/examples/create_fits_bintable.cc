@@ -30,6 +30,7 @@ int main( int argc, char *argv[] )
         { "STATUS","status",       "","SAA,TEMP", "", "", "",  "8J", "" },
         { "NAME","",                 "",  "", "", "", "",  "128A16", "(4,2)" },
         { "SWITCH","test for bool",  "","", "", "", "L5",  "1L", "" },
+        { "BIT","test for bit",  "","", "", "", "",  "63X", "" },
         { NULL }
     };
 
@@ -62,6 +63,26 @@ int main( int argc, char *argv[] )
     tbl.col("NAME").assign(NAN,0,1);
     tbl.col("SWITCH").assign(false,0);
     tbl.col("SWITCH").assign(true,1);
+
+    /* Put bit patterns */
+    const long e_idx = 0L;
+    const long n_bit = 63;
+    tbl.col("BIT").assign_bit(0x7fffffffffffffffLL,
+			      0L, e_idx,0L, n_bit);
+    tbl.col("BIT").assign_bit(0x000f000000000000LL,
+			      1L, e_idx,0L, n_bit);
+    tbl.col("BIT").assign_bit(0x00000f0000000000LL,
+			      2L, e_idx,0L, n_bit);
+    tbl.col("BIT").assign_bit(0x0000000f00000000LL,
+			      3L, e_idx,0L, n_bit);
+    tbl.col("BIT").assign_bit(0x000000000f000000LL,
+			      4L, e_idx,0L, n_bit);
+    tbl.col("BIT").assign_bit(0x00000000000f0000LL,
+			      5L, e_idx,0L, n_bit);
+    tbl.col("BIT").assign_bit(0x0000000000000f00LL,
+			      6L, e_idx,0L, n_bit);
+    tbl.col("BIT").assign_bit(0x000000000000000fLL,
+			      7L, e_idx,0L, n_bit);
 
     /* Save to file... */
     if ( 1 < argc ) {
