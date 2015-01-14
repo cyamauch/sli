@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-05-14 18:06:20 cyamauch> */
+/* Time-stamp: <2014-11-28 20:25:11 cyamauch> */
 
 /**
  * @file   fitscc.cc
@@ -603,12 +603,18 @@ ssize_t fitscc::read_template( int flags, const char *path )
     if ( path == NULL ) goto quit;
 
     try {
+	int status;
 	/* initialize buffer */
 	this->template_buffer.init();
 	this->template_buffer.resize(10000);
 	this->template_buffer_idx = 0;
 	/* load */
-	this->template_load_recursively(flags, path, NULL);
+	status = this->template_load_recursively(flags, path, NULL);
+	if ( status < 0 ) {
+	    err_report(__FUNCTION__,"ERROR",
+		       "this->template_load_recursively() failed");
+	    goto quit;
+	}
 	/* resize and parse template */
 	this->template_buffer.resize(this->template_buffer_idx);
 	return_val = this->template_load( flags, 
