@@ -131,3 +131,11 @@ Version 1.4.4
 		- Added fits_table::set_alloc_strategy_of_rows().
 		- Added fits_table::set_alloc_strategy_of_heap().
 		(Aug.6,2014)
+
+Version 1.4.4a
+		- Fixed a bug of error handling in fitscc::read_template().
+		- Added a hint message for opening a file with extra zero 
+		  padding at the end.
+		(Jan.29.2015)
+
+

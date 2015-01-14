@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2014-11-28 20:25:11 cyamauch> */
+/* Time-stamp: <2015-01-14 11:22:02 cyamauch> */
 
 /**
  * @file   fitscc.cc
@@ -2693,6 +2693,8 @@ ssize_t fitscc::fits_load( cstreamio &sref, const size_t *max_bytes_ptr )
 	  sz = tmp_hdu.read_stream(sref);
       if ( sz < 0 ) {
 	  err_report(__FUNCTION__,"ERROR","tmp_hdu.read_stream() failed");
+	  sli__eprintf("HINT: When opening a file with extra zero padding at the end,\n");
+	  sli__eprintf("      append '[0]' at the end of file name. (e.g., 'COMAxxx.fits[0]')\n");
 	  goto quit;
       }
       header_cnt ++;				/* number of read header */
