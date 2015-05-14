@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2015-01-14 11:22:02 cyamauch> */
+/* Time-stamp: <2015-05-15 02:34:44 cyamauch> */
 
 /**
  * @file   fitscc.cc
@@ -3395,9 +3395,14 @@ int fitscc::interpolate_templhdr_and_append_hdu( fits_header *templhdr )
 		    }
 		}
 		else new_kw.printf("%s%d", kw_base.cstr(), sh_cnt);
+#if 1		/* Improved code by K. Matsuzaki (ISAS/JAXA). 2015.06.05 */
+		templhdr->assign(i, new_kw.cstr(), templhdr->record(i).value(),
+				 templhdr->record(i).comment());
+#else		/* Slower code :-( */
 		templhdr->insert(i, new_kw.cstr(), templhdr->record(i).value(),
 				 templhdr->record(i).comment());
 		templhdr->erase(i+1);
+#endif
 		/* */
 		colkwd[kw_base.cstr()] = "1";
 	    }
