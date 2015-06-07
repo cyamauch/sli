@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2015-05-15 02:34:44 cyamauch> */
+/* Time-stamp: <2015-06-08 01:14:56 cyamauch> */
 
 /**
  * @file   fitscc.cc
@@ -3049,6 +3049,9 @@ int fitscc::template_load( int flags, const char *templ )
     fits_header templhdr;
     templhdr.suppress_dupkey_warning() = true;
 
+    tstring line;
+    fits_header_record a_record;
+
     this->_init();
 
     if ( templ == NULL ) {
@@ -3059,8 +3062,6 @@ int fitscc::template_load( int flags, const char *templ )
     buf_idx = 0;
     while ( templ[buf_idx] != '\0' ) {
 	size_t line_spn, buf_idx0;
-	tstring line;
-	fits_header_record a_record;
 	/*
 	 * 1行ずつ取り出し，line にいれる
 	 */
