@@ -217,10 +217,14 @@ namespace sli
     /* comment を書くと，description ではなくなる */
     /* low-level member functions */
     virtual fits_header_record &assign_any( const fits::header_def &def );
+#if 1
+    virtual fits_header_record &update_value_recs();
+#else
     virtual fits_header_record &update_svalue_rec();
     virtual fits_header_record &update_bvalue_rec();
     virtual fits_header_record &update_dvalue_rec();
     virtual fits_header_record &update_llvalue_rec();
+#endif
     virtual fits_header_record &vassignf_keyword( const char *format, va_list ap );
     virtual fits_header_record &assignf_keyword( const char *format, ... );
     /* */

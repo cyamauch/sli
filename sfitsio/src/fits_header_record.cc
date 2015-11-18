@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2014-05-07 00:30:42 cyamauch> */
+/* Time-stamp: <2015-11-18 22:06:44 cyamauch> */
 
 /**
  * @file   fits_header_record.cc
@@ -1319,10 +1319,14 @@ fits_header_record &fits_header_record::assign_any( const fits::header_def &arg_
 		    this->rec.keyword = this->arr_rec.cstr(KEYWORD_IDX);
 		    this->rec.value = this->arr_rec.cstr(VALUE_IDX);
 		    this->rec.comment = this->arr_rec.cstr(COMMENT_IDX);
+#if 1
+		    this->update_value_recs();
+#else
 		    this->update_svalue_rec();
 		    this->update_bvalue_rec();
 		    this->update_dvalue_rec();
 		    this->update_llvalue_rec();
+#endif
 		    is_updated = true;
 
 		}
@@ -1349,6 +1353,85 @@ fits_header_record &fits_header_record::assign_any( const fits::header_def &arg_
 
     return *this;
 }
+
+#if 1		/* Improved code by K. Matsuzaki (ISAS/JAXA). 2015.06.07 */
+
+/**
+ * @brief  double型値，文字列(高レベル)等 全ての内部キャッシュを更新
+ *
+ * @note   このメンバ関数は protected です．
+ */
+fits_header_record &fits_header_record::update_value_recs()
+{
+    int type;
+
+    bool bool_value = false;
+    double double_value = NAN;
+    long long longlong_value = INDEF_LLONG;
+    bool new_bool_value;
+    double new_double_value;
+    long long new_longlong_value;
+    const char *str_begin;
+    size_t str_len;
+
+    type = get_type_and_values( this->rec.value,
+				&bool_value, &longlong_value, &double_value,
+				&str_begin, &str_len,
+				true );
+
+    /* bool */
+    new_bool_value = bool_value;
+    if ( type != FITS::LOGICAL_T && type != FITS::ANY_T ) {
+	if ( type == FITS::DOUBLE_T || type == FITS::DOUBLECOMPLEX_T ) 
+	    new_bool_value = (round(double_value) == 0.0) ? false : true;
+	else if ( type == FITS::LONGLONG_T ) 
+	    new_bool_value = (longlong_value == 0) ? false : true;
+    }
+    this->bvalue_rec = new_bool_value;
+
+    /* double */
+    new_double_value = double_value;
+    if ( type != FITS::DOUBLE_T && type != FITS::DOUBLECOMPLEX_T &&
+	 type != FITS::ANY_T ) {
+	if ( type == FITS::LONGLONG_T ) new_double_value = (double)longlong_value;
+	else if ( type == FITS::LOGICAL_T ) 
+	    new_double_value = (double)bool_value;
+    }
+    this->dvalue_rec = new_double_value;
+
+    /* longlong */
+    new_longlong_value = longlong_value;
+    if ( type != FITS::LONGLONG_T && type != FITS::ANY_T ) {
+	if ( type == FITS::DOUBLE_T || type == FITS::DOUBLECOMPLEX_T ) {
+	    if ( isfinite(double_value) &&
+		 MIN_DOUBLE_ROUND_LLONG <= double_value &&
+		 double_value <= MAX_DOUBLE_ROUND_LLONG ) {
+		new_longlong_value = c_llround(double_value);
+	    }
+	    else {
+		new_longlong_value = INDEF_LLONG;
+	    }
+	} else if ( type == FITS::LOGICAL_T ) 
+	    new_longlong_value = (long long)bool_value;
+    }
+    this->llvalue_rec = new_longlong_value;
+
+    /* string */
+    if ( str_len != 0 ) {
+	ssize_t pos = 0;
+	this->svalue_rec.assign(str_begin,str_len);
+	/* 「''」→「'」の変換 */
+	while ( 0 <= (pos = this->svalue_rec.find(pos,"''")) ) {
+	    this->svalue_rec.replace(pos,2,"'");
+	    pos++;
+	}
+    }
+    else this->svalue_rec.assign("");
+
+    return *this;
+}
+
+#else
 
 /**
  * @brief  文字列(高レベル)の内部キャッシュを更新
@@ -1467,6 +1550,8 @@ fits_header_record &fits_header_record::update_llvalue_rec()
 
     return *this;
 }
+
+#endif
 
 /* public (low-level) */
 
