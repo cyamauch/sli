@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2015-11-18 22:06:44 cyamauch> */
+/* Time-stamp: <2015-11-18 23:35:43 cyamauch> */
 
 /**
  * @file   fits_header_record.cc
@@ -810,6 +810,7 @@ static int get_type_and_values( const char *value,
     int return_value = FITS::ANY_T;
     size_t endpos;
     const char *p0;
+    const char *p00;
     const char *p1;
     size_t len_value;
     tstring sval;
@@ -821,16 +822,34 @@ static int get_type_and_values( const char *value,
     }
 
     /* value の左右の空白を除去した部分の情報を取得 */
-    /* p0    v    */
-    /*    "  T  " */
-    /* p1    A    */
+    /* p0    v    */    /* p0    v       */
+    /*    "  T  " */    /*    "  TUVW  " */
+    /* p1    A    */    /* p1       A    */
+#if 1		/* Improved code by K. Matsuzaki (ISAS/JAXA). 2015.06.16 */
+    len_value = 0;
+    for ( p0 = value ; *p0 != '\0' ; p0++ ) {
+	if ( *p0 != ' ' ) break;
+	len_value ++;
+    }
+    p1 = p0;
+    for ( p00 = p0 ; *p00 != '\0' ; p00++ ) {
+	if ( *p00 != ' ' ) p1 = p00;
+	len_value ++;
+    }
+    sval.assign(p0, p1 - p0 + 1);
+#else
     len_value = sval.assign(value).length();
     p0 = value + (len_value - sval.ltrim().length());
     p1 = p0 + sval.rtrim().length();
     if ( p0 < p1 ) p1--;
+#endif
 
+    //sli__eprintf("fits_header_record:: value = [%s]\n", value);
+    //sli__eprintf("fits_header_record:: sval = [%s]\n", sval.cstr());
     //sli__eprintf("fits_header_record:: p0 = %llx p1 = %llx\n",
-    //(long long)p0,(long long)p1);
+    //		 (long long)p0,(long long)p1);
+    //sli__eprintf("fits_header_record:: len_value = %zd\n",
+    //		 len_value);
 
     //for ( p0=value ; *p0 == ' ' ; p0++ );	/* skipping ' ' */
     //for ( p1=value+len_value ; (*p1 == ' ' || *p1 == '\0') && p0 < p1 ; p1-- );
