@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2014-07-30 03:53:13 cyamauch> */
+/* Time-stamp: <2015-11-19 00:15:11 cyamauch> */
 
 /**
  * @file   fits_table_col.cc
@@ -16,6 +16,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <sli/numeric_minmax.h>
+#include <sli/heap_mem.h>
 
 #include "private/err_report.h"
 
@@ -914,11 +915,23 @@ fits_table_col &fits_table_col::assign_default( double value )
     fits_table_col dummy;
     if ( this->heap_is_used() == true ) goto quit;
 
-    dummy.define(this->definition());
-    dummy.resize(1);
-    dummy.assign(value, 0);
+    if ( this->length() == 0 ) {
+	dummy.define(this->definition());
+	dummy.resize(1);
+	dummy.assign(value, 0);
+	this->data_rec.assign_default((const void *)(dummy.data_ptr_cs()));
+    }
+    else {	/* Improved code by K. Matsuzaki (ISAS/JAXA). 2015.06.16 */
+	heap_mem<char> saved_area;
+	size_t n = this->data_rec.bytes();
+	char *arr_area = (char *)this->data_ptr();
 
-    this->data_rec.assign_default((const void *)(dummy.data_ptr_cs()));
+	saved_area.allocate(n);
+	saved_area.copyfrom(arr_area, n);
+	this->assign(value, 0);
+	this->data_rec.assign_default((const void *)arr_area);
+	saved_area.copyto(arr_area, n);
+    }
 
  quit:
     return *this;
@@ -943,11 +956,23 @@ fits_table_col &fits_table_col::assign_default( float value )
     fits_table_col dummy;
     if ( this->heap_is_used() == true ) goto quit;
 
-    dummy.define(this->definition());
-    dummy.resize(1);
-    dummy.assign(value, 0);
+    if ( this->length() == 0 ) {
+	dummy.define(this->definition());
+	dummy.resize(1);
+	dummy.assign(value, 0);
+	this->data_rec.assign_default((const void *)(dummy.data_ptr_cs()));
+    }
+    else {	/* Improved code by K. Matsuzaki (ISAS/JAXA). 2015.06.16 */
+	heap_mem<char> saved_area;
+	size_t n = this->data_rec.bytes();
+	char *arr_area = (char *)this->data_ptr();
 
-    this->data_rec.assign_default((const void *)(dummy.data_ptr_cs()));
+	saved_area.allocate(n);
+	saved_area.copyfrom(arr_area, n);
+	this->assign(value, 0);
+	this->data_rec.assign_default((const void *)arr_area);
+	saved_area.copyto(arr_area, n);
+    }
 
  quit:
     return *this;
@@ -973,11 +998,23 @@ fits_table_col &fits_table_col::assign_default( long long value )
     fits_table_col dummy;
     if ( this->heap_is_used() == true ) goto quit;
 
-    dummy.define(this->definition());
-    dummy.resize(1);
-    dummy.assign(value, 0);
+    if ( this->length() == 0 ) {
+	dummy.define(this->definition());
+	dummy.resize(1);
+	dummy.assign(value, 0);
+	this->data_rec.assign_default((const void *)(dummy.data_ptr_cs()));
+    }
+    else {	/* Improved code by K. Matsuzaki (ISAS/JAXA). 2015.06.16 */
+	heap_mem<char> saved_area;
+	size_t n = this->data_rec.bytes();
+	char *arr_area = (char *)this->data_ptr();
 
-    this->data_rec.assign_default((const void *)(dummy.data_ptr_cs()));
+	saved_area.allocate(n);
+	saved_area.copyfrom(arr_area, n);
+	this->assign(value, 0);
+	this->data_rec.assign_default((const void *)arr_area);
+	saved_area.copyto(arr_area, n);
+    }
 
  quit:
     return *this;
@@ -1003,11 +1040,23 @@ fits_table_col &fits_table_col::assign_default( long value )
     fits_table_col dummy;
     if ( this->heap_is_used() == true ) goto quit;
 
-    dummy.define(this->definition());
-    dummy.resize(1);
-    dummy.assign(value, 0);
+    if ( this->length() == 0 ) {
+	dummy.define(this->definition());
+	dummy.resize(1);
+	dummy.assign(value, 0);
+	this->data_rec.assign_default((const void *)(dummy.data_ptr_cs()));
+    }
+    else {	/* Improved code by K. Matsuzaki (ISAS/JAXA). 2015.06.16 */
+	heap_mem<char> saved_area;
+	size_t n = this->data_rec.bytes();
+	char *arr_area = (char *)this->data_ptr();
 
-    this->data_rec.assign_default((const void *)(dummy.data_ptr_cs()));
+	saved_area.allocate(n);
+	saved_area.copyfrom(arr_area, n);
+	this->assign(value, 0);
+	this->data_rec.assign_default((const void *)arr_area);
+	saved_area.copyto(arr_area, n);
+    }
 
  quit:
     return *this;
@@ -1033,11 +1082,23 @@ fits_table_col &fits_table_col::assign_default( int value )
     fits_table_col dummy;
     if ( this->heap_is_used() == true ) goto quit;
 
-    dummy.define(this->definition());
-    dummy.resize(1);
-    dummy.assign(value, 0);
+    if ( this->length() == 0 ) {
+	dummy.define(this->definition());
+	dummy.resize(1);
+	dummy.assign(value, 0);
+	this->data_rec.assign_default((const void *)(dummy.data_ptr_cs()));
+    }
+    else {	/* Improved code by K. Matsuzaki (ISAS/JAXA). 2015.06.16 */
+	heap_mem<char> saved_area;
+	size_t n = this->data_rec.bytes();
+	char *arr_area = (char *)this->data_ptr();
 
-    this->data_rec.assign_default((const void *)(dummy.data_ptr_cs()));
+	saved_area.allocate(n);
+	saved_area.copyfrom(arr_area, n);
+	this->assign(value, 0);
+	this->data_rec.assign_default((const void *)arr_area);
+	saved_area.copyto(arr_area, n);
+    }
 
  quit:
     return *this;
@@ -1063,11 +1124,23 @@ fits_table_col &fits_table_col::assign_default( const char *value )
     fits_table_col dummy;
     if ( this->heap_is_used() == true ) goto quit;
 
-    dummy.define(this->definition());
-    dummy.resize(1);
-    dummy.assign(value, 0);
+    if ( this->length() == 0 ) {
+	dummy.define(this->definition());
+	dummy.resize(1);
+	dummy.assign(value, 0);
+	this->data_rec.assign_default((const void *)(dummy.data_ptr_cs()));
+    }
+    else {	/* Improved code by K. Matsuzaki (ISAS/JAXA). 2015.06.16 */
+	heap_mem<char> saved_area;
+	size_t n = this->data_rec.bytes();
+	char *arr_area = (char *)this->data_ptr();
 
-    this->data_rec.assign_default((const void *)(dummy.data_ptr_cs()));
+	saved_area.allocate(n);
+	saved_area.copyfrom(arr_area, n);
+	this->assign(value, 0);
+	this->data_rec.assign_default((const void *)arr_area);
+	saved_area.copyto(arr_area, n);
+    }
 
  quit:
     return *this;
