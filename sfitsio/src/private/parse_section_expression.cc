@@ -10,10 +10,10 @@ typedef struct _section_exp_info {
     bool zero_indexed;
 } section_exp_info;
 
-static const tregex Pat_iraf_section_ex0("^[-]?[0-9]+[ ]*+[:][ ]*[-]?[0-9]+$");
+static const tregex Pat_iraf_section_ex0("^[-]?[0-9]+[ ]*[:][ ]*[-]?[0-9]+$");
 static const tregex Pat_iraf_section_ex1("^[-]?[0-9]+$");
 static const tregex Pat_iraf_section_ex2("^[-][ ]*[*]$");
-static const tregex Pat_iraf_section_ex3("^[-]?[0-9]+[ ]*+[:][ ]*[*]?$");
+static const tregex Pat_iraf_section_ex3("^[-]?[0-9]+[ ]*[:][ ]*[*]?$");
 
 /*
  * [1:100, ...]

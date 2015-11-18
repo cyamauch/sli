@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2015-06-08 01:14:56 cyamauch> */
+/* Time-stamp: <2015-11-18 19:14:56 cyamauch> */
 
 /**
  * @file   fitscc.cc
@@ -79,10 +79,10 @@ inline static void parse_path( const char *path_in, tstring *real_path,
 	    size_t junk;
 	    /* image section => [*,1] [*,2:100] [1:10,2:100] [1:10,1] [-*,1] */
 	    /* not image section => [1,1]                                    */
-	    rex0.compile("^[-]?[0-9]+[ ]*+[:][ ]*[-]?[0-9]+$");
+	    rex0.compile("^[-]?[0-9]+[ ]*[:][ ]*[-]?[0-9]+$");
 	    rex1.compile("^[-]?[0-9]+$");
 	    rex2.compile("^[-][ ]*[*]$");
-	    rex3.compile("^[-]?[0-9]+[ ]*+[:][ ]*[*]?$");
+	    rex3.compile("^[-]?[0-9]+[ ]*[:][ ]*[*]?$");
 	    /* すべて数字だけの場合はHDUの表記とみなす */
 	    for ( i=0 ; i < arr.length() ; i++ ) {
 		if ( arr[i].regmatch(rex1,&junk) != 0 ) break;
@@ -90,6 +90,7 @@ inline static void parse_path( const char *path_in, tstring *real_path,
 	    if ( i != arr.length() ) {
 		for ( i=0 ; i < arr.length() ; i++ ) {
 		    if ( arr[i].strcmp("*") != 0 &&
+			 /* check all reg-exp. */
 			 arr[i].regmatch(rex0,&junk) != 0 &&
 			 arr[i].regmatch(rex1,&junk) != 0 &&
 			 arr[i].regmatch(rex2,&junk) != 0 &&
