@@ -1,7 +1,7 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2015-01-14 11:29:00 cyamauch> */
+/* Time-stamp: <2015-11-20 14:38:41 cyamauch> */
 
-/* SFITSIO version 1.4.4a [STABLE] */
+/* SFITSIO version 1.4.5 [STABLE] */
 
 #ifndef _SLI__FITSCC_H
 #define _SLI__FITSCC_H 1
