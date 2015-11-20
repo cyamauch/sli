@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-06-05 11:35:21 cyamauch> */
+/* Time-stamp: <2015-11-20 13:21:44 cyamauch> */
 
 #ifndef _SLI__MDARRAY_H
 #define _SLI__MDARRAY_H 1
@@ -1520,14 +1520,17 @@ namespace sli
     /* private なアクセッサー */
     void *default_rec_ptr();
     size_t *size_rec_ptr();
-    /* */
+
+  protected:
+    int realloc_arr_rec( size_t len_bytes );
+    void free_arr_rec();
+
+  private:
     int realloc_default_rec( size_t len_bytes );
     int realloc_size_rec( size_t len_elements );
-    int realloc_arr_rec( size_t len_bytes );
     /* */
     void free_default_rec();
     void free_size_rec();
-    void free_arr_rec();
     /* _arr_ptr_2d_rec, _arr_ptr_3d_rec を更新する */
     /* update_length_info() の直後に呼ぶ事       */
     void update_arr_ptr_2d( bool on_2d = false );

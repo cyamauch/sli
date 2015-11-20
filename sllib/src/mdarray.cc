@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-05-30 16:55:26 cyamauch> */
+/* Time-stamp: <2015-11-20 12:46:04 cyamauch> */
 
 #define CLASS_NAME "mdarray"
 
@@ -895,8 +895,8 @@ static size_t *dup_size_rec( const size_t *size_rec, size_t dim_len )
  */
 void mdarray::__force_init( ssize_t sz_type, bool is_constructor )
 {
-    if ( sz_type != 0 ) this->sz_type_rec = sz_type;
-    else this->sz_type_rec = this->default_size_type();
+    /* FITSバイナリテーブルでカラム長0を許すため，sz_type=0 もOKとする */
+    this->sz_type_rec = sz_type;
     this->set_auto_resize(true);
     this->set_auto_init(true);
     this->set_rounding(false);
@@ -4203,9 +4203,6 @@ mdarray &mdarray::init()
  */
 mdarray &mdarray::init( ssize_t sz_type )
 {
-    if ( sz_type == 0 ) {
-	err_throw(__FUNCTION__,"ERROR","invalid sz_type: 0");
-    }
     if ( this->is_acceptable_size_type(sz_type) == false ) {
     	err_throw1(__FUNCTION__,"ERROR","prohibited sz_type: %d",(int)sz_type);
     }
@@ -4239,9 +4236,6 @@ mdarray &mdarray::init( ssize_t sz_type )
  */
 mdarray &mdarray::init( ssize_t sz_type, bool auto_resize )
 {
-    if ( sz_type == 0 ) {
-	err_throw(__FUNCTION__,"ERROR","invalid sz_type: 0");
-    }
     if ( this->is_acceptable_size_type(sz_type) == false ) {
     	err_throw1(__FUNCTION__,"ERROR","prohibited sz_type: %d",(int)sz_type);
     }
@@ -4283,9 +4277,6 @@ mdarray &mdarray::init( ssize_t sz_type, bool auto_resize,
 {
     size_t i, len = 1;
 
-    if ( sz_type == 0 ) {
-	err_throw(__FUNCTION__,"ERROR","invalid sz_type: 0");
-    }
     if ( 0 < ndim && naxisx == NULL ) {
 	err_throw(__FUNCTION__,"ERROR","0 < ndim, but NULL naxisx arg");
     }
@@ -17553,45 +17544,6 @@ bool mdarray::is_my_buffer( const void *ptr ) const
 }
 
 /**
- * @brief  _default_rec で使用するメモリの再確保
- * @note   このメンバ関数は private です．
- */
-int mdarray::realloc_default_rec( size_t len_bytes )
-{
-    this->cleanup_shallow_copy(true);	/* バッファを直接操作するため呼ぶ */
-
-    void *tmp_ptr;
-
-    if ( this->_default_rec == NULL && len_bytes == 0 ) return 0;
-
-    tmp_ptr = realloc(this->_default_rec, len_bytes);
-    if ( tmp_ptr == NULL && 0 < len_bytes ) return -1;
-    else {
-	this->_default_rec = tmp_ptr;
-	return 0;
-    }
-}
-
-/**
- * @brief  _size_rec で使用するメモリの再確保
- * @note   このメンバ関数は private です．
- */
-int mdarray::realloc_size_rec( size_t len_elements )
-{
-    this->cleanup_shallow_copy(true);	/* バッファを直接操作するため呼ぶ */
-
-    void *tmp_ptr;
-
-    if ( this->_size_rec == NULL && len_elements == 0 ) return 0;
-    tmp_ptr = realloc(this->_size_rec, sizeof(size_t)*len_elements);
-    if ( tmp_ptr == NULL && 0 < len_elements ) return -1;
-    else {
-	this->_size_rec = (size_t *)tmp_ptr;
-	return 0;
-    }
-}
-
-/**
  * @brief  _arr_rec で使用するメモリの再確保
  * @note   このメンバ関数は private です．
  */
@@ -17664,6 +17616,61 @@ int mdarray::realloc_arr_rec( size_t len_bytes )
 }
 
 /**
+ * @brief  _arr_rec で使用しているメモリを開放して NULL 値をセット
+ * @note   このメンバ関数は protected です．
+ */
+void mdarray::free_arr_rec()
+{
+    this->cleanup_shallow_copy(true);	/* バッファを直接操作するため呼ぶ */
+
+    if ( this->_arr_rec != NULL ) {
+	free(this->_arr_rec);
+	this->_arr_rec = NULL;
+	this->arr_alloc_blen_rec = 0;
+    }
+    return;
+}
+
+/**
+ * @brief  _default_rec で使用するメモリの再確保
+ * @note   このメンバ関数は private です．
+ */
+int mdarray::realloc_default_rec( size_t len_bytes )
+{
+    this->cleanup_shallow_copy(true);	/* バッファを直接操作するため呼ぶ */
+
+    void *tmp_ptr;
+
+    if ( this->_default_rec == NULL && len_bytes == 0 ) return 0;
+
+    tmp_ptr = realloc(this->_default_rec, len_bytes);
+    if ( tmp_ptr == NULL && 0 < len_bytes ) return -1;
+    else {
+	this->_default_rec = tmp_ptr;
+	return 0;
+    }
+}
+
+/**
+ * @brief  _size_rec で使用するメモリの再確保
+ * @note   このメンバ関数は private です．
+ */
+int mdarray::realloc_size_rec( size_t len_elements )
+{
+    this->cleanup_shallow_copy(true);	/* バッファを直接操作するため呼ぶ */
+
+    void *tmp_ptr;
+
+    if ( this->_size_rec == NULL && len_elements == 0 ) return 0;
+    tmp_ptr = realloc(this->_size_rec, sizeof(size_t)*len_elements);
+    if ( tmp_ptr == NULL && 0 < len_elements ) return -1;
+    else {
+	this->_size_rec = (size_t *)tmp_ptr;
+	return 0;
+    }
+}
+
+/**
  * @brief  _default_rec で使用しているメモリを開放して NULL 値をセット
  * @note   このメンバ関数は private です．
  */
@@ -17690,22 +17697,6 @@ void mdarray::free_size_rec()
     if ( this->_size_rec != NULL ) {
 	free(this->_size_rec);
 	this->_size_rec = NULL;
-    }
-    return;
-}
-
-/**
- * @brief  _arr_rec で使用しているメモリを開放して NULL 値をセット
- * @note   このメンバ関数は private です．
- */
-void mdarray::free_arr_rec()
-{
-    this->cleanup_shallow_copy(true);	/* バッファを直接操作するため呼ぶ */
-
-    if ( this->_arr_rec != NULL ) {
-	free(this->_arr_rec);
-	this->_arr_rec = NULL;
-	this->arr_alloc_blen_rec = 0;
     }
     return;
 }
