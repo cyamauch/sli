@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2015-11-19 00:15:11 cyamauch> */
+/* Time-stamp: <2015-11-19 19:37:39 cyamauch> */
 
 /**
  * @file   fits_table_col.cc
@@ -774,19 +774,19 @@ long fits_table_col::array_length( long row_idx, long elem_idx ) const
 {
     long elem_len = this->elem_size_rec;
     if ( this->type_rec == FITS::LONGARRDESC_T ) {
-      if ( this->data_ptr_rec == NULL ) return -1;
+      if ( this->data_ptr() == NULL ) return -1;
       else {
 	  long ix = (elem_len * row_idx) + (elem_idx % elem_len);
 	  return 
-	      ((const fits::longarrdesc_t *)(this->data_ptr_rec))[ix].length;
+	      ((const fits::longarrdesc_t *)(this->data_ptr()))[ix].length;
       }
     }
     else if ( this->type_rec == FITS::LLONGARRDESC_T ) {
-      if ( this->data_ptr_rec == NULL ) return -1;
+      if ( this->data_ptr() == NULL ) return -1;
       else {
 	  long ix = (elem_len * row_idx) + (elem_idx % elem_len);
 	  return 
-	      ((const fits::llongarrdesc_t *)(this->data_ptr_rec))[ix].length;
+	      ((const fits::llongarrdesc_t *)(this->data_ptr()))[ix].length;
       }
     }
     else return elem_len;
@@ -807,19 +807,19 @@ long fits_table_col::array_heap_offset( long row_idx, long elem_idx ) const
 {
     long elem_len = this->elem_size_rec;
     if ( this->type_rec == FITS::LONGARRDESC_T ) {
-      if ( this->data_ptr_rec == NULL ) return -1;
+      if ( this->data_ptr() == NULL ) return -1;
       else {
 	  long ix = (elem_len * row_idx) + (elem_idx % elem_len);
 	  return 
-	      ((const fits::longarrdesc_t *)(this->data_ptr_rec))[ix].offset;
+	      ((const fits::longarrdesc_t *)(this->data_ptr()))[ix].offset;
       }
     }
     else if ( this->type_rec == FITS::LLONGARRDESC_T ) {
-      if ( this->data_ptr_rec == NULL ) return -1;
+      if ( this->data_ptr() == NULL ) return -1;
       else {
 	  long ix = (elem_len * row_idx) + (elem_idx % elem_len);
 	  return 
-	      ((const fits::llongarrdesc_t *)(this->data_ptr_rec))[ix].offset;
+	      ((const fits::llongarrdesc_t *)(this->data_ptr()))[ix].offset;
       }
     }
     else return -1;
@@ -915,7 +915,7 @@ fits_table_col &fits_table_col::assign_default( double value )
     fits_table_col dummy;
     if ( this->heap_is_used() == true ) goto quit;
 
-    if ( this->length() == 0 ) {
+    if ( this->data_ptr() == NULL ) {
 	dummy.define(this->definition());
 	dummy.resize(1);
 	dummy.assign(value, 0);
@@ -956,7 +956,7 @@ fits_table_col &fits_table_col::assign_default( float value )
     fits_table_col dummy;
     if ( this->heap_is_used() == true ) goto quit;
 
-    if ( this->length() == 0 ) {
+    if ( this->data_ptr() == NULL ) {
 	dummy.define(this->definition());
 	dummy.resize(1);
 	dummy.assign(value, 0);
@@ -998,7 +998,7 @@ fits_table_col &fits_table_col::assign_default( long long value )
     fits_table_col dummy;
     if ( this->heap_is_used() == true ) goto quit;
 
-    if ( this->length() == 0 ) {
+    if ( this->data_ptr() == NULL ) {
 	dummy.define(this->definition());
 	dummy.resize(1);
 	dummy.assign(value, 0);
@@ -1040,7 +1040,7 @@ fits_table_col &fits_table_col::assign_default( long value )
     fits_table_col dummy;
     if ( this->heap_is_used() == true ) goto quit;
 
-    if ( this->length() == 0 ) {
+    if ( this->data_ptr() == NULL ) {
 	dummy.define(this->definition());
 	dummy.resize(1);
 	dummy.assign(value, 0);
@@ -1082,7 +1082,7 @@ fits_table_col &fits_table_col::assign_default( int value )
     fits_table_col dummy;
     if ( this->heap_is_used() == true ) goto quit;
 
-    if ( this->length() == 0 ) {
+    if ( this->data_ptr() == NULL ) {
 	dummy.define(this->definition());
 	dummy.resize(1);
 	dummy.assign(value, 0);
@@ -1124,7 +1124,7 @@ fits_table_col &fits_table_col::assign_default( const char *value )
     fits_table_col dummy;
     if ( this->heap_is_used() == true ) goto quit;
 
-    if ( this->length() == 0 ) {
+    if ( this->data_ptr() == NULL ) {
 	dummy.define(this->definition());
 	dummy.resize(1);
 	dummy.assign(value, 0);
@@ -1397,9 +1397,12 @@ static int parse_tform_and_tdim( const char *tform_in, const char *tdim_in,
     else {
 	size_t endpos;
 	new_elem_size = tform.strtol(p0,10,&endpos);
-	if ( new_elem_size < 1 ) {
+	if ( new_elem_size < 0 ) {
 	    new_elem_size = 1;
 	    status = 1;					/* for WARNING */
+	}
+	else if ( new_elem_size == 0 ) {
+	    //status = 1;				/* for WARNING */
 	}
     }
 
@@ -1520,12 +1523,29 @@ static int parse_tform_and_tdim( const char *tform_in, const char *tdim_in,
 	ssize_t t_pos, d_pos = -1;
 	size_t t_endpos, d_endpos;
 	long sz, dx, d0=new_elem_size, d1=1, d2=1;
+	if ( new_elem_size == 0 ) {
+	    d1 = 0;
+	    d2 = 0;
+	}
 	t_pos = tform.strpbrk(p1+1,"[0-9]");	/* e.g., 120A10 */
 	if ( 0 <= t_pos ) {
 	    dx = tform.strtol(t_pos,10,&t_endpos);
-	    if ( 0 < dx ) {
-		d1 = d0 / dx;
-		d0 = dx;
+	    if ( d0 < dx ) {
+		status = 1;			/* for WARNING */
+	    }
+	    else {
+		if ( 0 < dx ) {			/* 通常はここ */
+		    d1 = d0 / dx;
+		    d0 = dx;
+		}
+		else if ( dx == 0 ) {
+		    if ( d0 == 0 ) {
+			d1 = 0;
+		    }
+		    else {
+			status = 1;		/* for WARNING */
+		    }
+		}
 	    }
 	    if ( 0 < tdim.length() ) {
 		d_pos = tdim.strpbrk("[0-9]");
@@ -1538,13 +1558,26 @@ static int parse_tform_and_tdim( const char *tform_in, const char *tdim_in,
 		d_pos = -1;
 	    }
 	}
-	else if ( 0 < tdim.length() ) {
+	else if ( 0 < tdim.length() ) {		/* TDIMによる文字列長の指定 */
 	    d_pos = tdim.strpbrk("[0-9]");
 	    if ( 0 <= d_pos ) {
 		dx = tdim.strtol(d_pos,10,&d_endpos);
-		if ( 0 < dx ) {
-		    d1 = d0 / dx;
-		    d0 = dx;
+		if ( d0 < dx ) {
+		    status = 1;			/* for WARNING */
+		}
+		else {
+		    if ( 0 < dx ) {		/* 通常はここ */
+			d1 = d0 / dx;
+			d0 = dx;
+		    }
+		    else if ( dx == 0 ) {
+			if ( d0 == 0 ) {
+			    d1 = 0;
+			}
+			else {
+			    status = 1;		/* for WARNING */
+			}
+		    }
 		}
 		d_pos = tdim.strpbrk(d_endpos,"[0-9]");
 	    }
@@ -1558,9 +1591,17 @@ static int parse_tform_and_tdim( const char *tform_in, const char *tdim_in,
 	*ret_elem_size = d1;
 	if ( 0 <= d_pos ) {
 	    dx = tdim.strtol(d_pos,10,&d_endpos);
-	    if ( 0 < dx ) {
+	    if ( 0 < dx ) {			/* 通常はここ */
 		d2 = d1 / dx;
 		d1 = dx;
+	    }
+	    else if ( dx == 0 ) {
+		if ( d1 == 0 ) {
+		    d2 = 0;
+		}
+		else {
+		    status = 1;			/* for WARNING */
+		}
 	    }
 	    *ret_dcol_size = d1;
 	    d_pos = tdim.strpbrk(d_endpos,"[0-9]");
@@ -1573,7 +1614,8 @@ static int parse_tform_and_tdim( const char *tform_in, const char *tdim_in,
 	}
 	/* 正しいかチェックする */
 	if ( *ret_elem_size < *ret_dcol_size ||
-	     *ret_elem_size % *ret_dcol_size != 0 ) {
+	     (*ret_dcol_size != 0 &&
+	      *ret_elem_size % *ret_dcol_size != 0) ) {
 	    *ret_dcol_size = *ret_elem_size;
 	    status = 1;				/* for WARNING */
 	}
@@ -1592,10 +1634,21 @@ static int parse_tform_and_tdim( const char *tform_in, const char *tdim_in,
 	    d_pos = tdim.strpbrk("[0-9]");
 	    if ( 0 <= d_pos ) {
 		long dx, d0=new_elem_size, d1=1;
+		if ( new_elem_size == 0 ) {
+		    d1 = 0;
+		}
 		dx = tdim.strtol(d_pos,10,&d_endpos);
-		if ( 0 < dx ) {
+		if ( 0 < dx ) {			/* 通常はここ */
 		    d1 = d0 / dx;
 		    d0 = dx;
+		}
+		else if ( dx == 0 ) {
+		    if ( d0 == 0 ) {
+			d1 = 0;
+		    }
+		    else {
+			status = 1;		/* for WARNING */
+		    }
 		}
 		*ret_dcol_size = d0;
 		d_pos = tdim.strpbrk(d_endpos,"[0-9]");
@@ -1612,7 +1665,8 @@ static int parse_tform_and_tdim( const char *tform_in, const char *tdim_in,
 	    }
 	    /* 正しいかチェックする */
 	    if ( *ret_elem_size < *ret_dcol_size ||
-		 *ret_elem_size % *ret_dcol_size != 0 ) {
+		 (*ret_dcol_size != 0 &&
+		  *ret_elem_size % *ret_dcol_size != 0) ) {
 		*ret_dcol_size = *ret_elem_size;
 		status = 1;			/* for WARNING */
 	    }
@@ -1811,6 +1865,18 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 		       tmp_tform.cstr());
 	}
 	if ( status != 0 ) {
+	    err_report1(__FUNCTION__,"WARNING","TFORM = [%s]",
+			tmp_tform.cstr());
+	    err_report1(__FUNCTION__,"WARNING","TDIM  = [%s]",
+			tmp_tdim.cstr());
+	    err_report1(__FUNCTION__,"WARNING","new_sz_bytes = [%ld]",
+			new_sz_bytes);
+	    err_report1(__FUNCTION__,"WARNING","new_elem_size = [%ld]",
+			new_elem_size);
+	    err_report1(__FUNCTION__,"WARNING","new_dcol_size = [%ld]",
+			new_dcol_size);
+	    err_report1(__FUNCTION__,"WARNING","new_full_bytes = [%ld]",
+			new_full_bytes);
 	    err_report(__FUNCTION__,"WARNING",
 		       "TFORM or TDIM includes non-standard definitions");
 	}
@@ -3055,7 +3121,7 @@ double fits_table_col::dvalue( long row_index ) const
     else if ( this->type_rec == FITS::STRING_T ) {
 	if ( row_index < 0 || this->row_size_rec <= row_index ) return NAN;
 	tstring sval;
-	this->get_string_value(row_index,sval);
+	this->get_string_value(row_index, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) return NAN;
 	else if ( this->tnull_is_set_rec == true &&
 		  this->tany.at_cs(TNULL_IDX).strcmp(sval.cstr()) == 0 )
@@ -3122,7 +3188,7 @@ double fits_table_col::dvalue( long row_index,
 	if ( row_index < 0 || this->row_size_rec <= row_index ) return NAN;
 	if ( elem_index < 0 || repetition_idx < 0 ) return NAN;
 	tstring sval;
-	this->get_string_value(row_index,elem_index,repetition_idx, sval);
+	this->get_string_value(row_index,elem_index,repetition_idx, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) return NAN;
 	else if ( this->tnull_is_set_rec == true &&
 		  this->tany.at_cs(TNULL_IDX).strcmp(sval.cstr()) == 0 )
@@ -3192,7 +3258,7 @@ double fits_table_col::dvalue( long row_index,
 	if ( row_index < 0 || this->row_size_rec <= row_index ) return NAN;
 	if ( elem_index < 0 || repetition_idx < 0 ) return NAN;
 	tstring sval;
-	this->get_string_value(row_index,elem_index,repetition_idx, sval);
+	this->get_string_value(row_index,elem_index,repetition_idx, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) return NAN;
 	else if ( this->tnull_is_set_rec == true &&
 		  this->tany.at_cs(TNULL_IDX).strcmp(sval.cstr()) == 0 )
@@ -3523,7 +3589,7 @@ bool fits_table_col::bvalue( long row_index ) const
 	tstring sval;
 	double dval;
 	size_t epos;
-	this->get_string_value(row_index,sval);
+	this->get_string_value(row_index, &sval);
 	if (sval.length() == 0 && this->tnull_is_set_rec == false) return false;
 	else if ( this->tnull_is_set_rec == true &&
 		  this->tany.at_cs(TNULL_IDX).strcmp(sval.cstr()) == 0 ) {
@@ -3593,7 +3659,7 @@ bool fits_table_col::bvalue( long row_index,
 	tstring sval;
 	double dval;
 	size_t epos;
-	this->get_string_value(row_index,elem_index,repetition_idx,sval);
+	this->get_string_value(row_index,elem_index,repetition_idx, &sval);
 	if (sval.length() == 0 && this->tnull_is_set_rec == false) return false;
 	else if ( this->tnull_is_set_rec == true &&
 		  this->tany.at_cs(TNULL_IDX).strcmp(sval.cstr()) == 0 ) {
@@ -3662,7 +3728,7 @@ bool fits_table_col::bvalue( long row_index,
 	tstring sval;
 	double dval;
 	size_t epos;
-	this->get_string_value(row_index,elem_index,repetition_idx,sval);
+	this->get_string_value(row_index,elem_index,repetition_idx, &sval);
 	if (sval.length() == 0 && this->tnull_is_set_rec == false) return false;
 	else if ( this->tnull_is_set_rec == true &&
 		  this->tany.at_cs(TNULL_IDX).strcmp(sval.cstr()) == 0 ) {
@@ -3852,7 +3918,8 @@ const char *fits_table_col::svalue( long row_index )
     if ( row_index < 0 || this->row_size_rec <= row_index ) goto ret_null;
 
     if ( this->type_rec == FITS::STRING_T ) {
-	const char *d_ptr = (const char *)this->data_ptr_rec;
+	const char *d_ptr = (const char *)this->data_ptr();
+	if ( d_ptr == NULL ) goto ret_null;
 	this->tmp_str_buf->assign(d_ptr +
 		this->bytes_rec * this->elem_size_rec * row_index,
 		this->bytes_rec);
@@ -4181,8 +4248,10 @@ const char *fits_table_col::svalue( long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) goto ret_null;
 
     if ( this->type_rec == FITS::STRING_T ) {
-	const char *d_ptr = (const char *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx 
+	const char *d_ptr = (const char *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) goto ret_null;
+	e_idx = this->dcol_size_rec * repetition_idx 
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -4449,7 +4518,8 @@ const char *fits_table_col::get_svalue( long row_index,
     if ( row_index < 0 || this->row_size_rec <= row_index ) goto ret_null;
 
     if ( this->type_rec == FITS::STRING_T ) {
-	const char *d_ptr = (const char *)this->data_ptr_rec;
+	const char *d_ptr = (const char *)this->data_ptr();
+	if ( d_ptr == NULL ) goto ret_null;
 	dest->assign(d_ptr + 
 		    this->bytes_rec * this->elem_size_rec * row_index,
 		    this->bytes_rec);
@@ -4864,8 +4934,10 @@ const char *fits_table_col::get_svalue( long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) goto ret_null;
 
     if ( this->type_rec == FITS::STRING_T ) {
-	const char *d_ptr = (const char *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx 
+	const char *d_ptr = (const char *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) goto ret_null;
+	e_idx = this->dcol_size_rec * repetition_idx 
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -5399,7 +5471,8 @@ int fits_table_col::logical_value( long row_index ) const
 
     if ( this->type_rec == FITS::LOGICAL_T ) {
 	fits::logical_t v;
-	const fits::logical_t *d_ptr = (fits::logical_t *)this->data_ptr_rec;
+	const fits::logical_t *d_ptr = (fits::logical_t *)this->data_ptr();
+	if ( d_ptr == NULL ) return '\0';
 	v = d_ptr[this->elem_size_rec * row_index];
 	if ( v == 'T' ) return 'T';
 	else if ( v == 'F' ) return 'F';
@@ -5446,7 +5519,7 @@ int fits_table_col::logical_value( long row_index ) const
 	tstring sval;
 	double dval;
 	size_t epos;
-	this->get_string_value(row_index,sval);
+	this->get_string_value(row_index, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return '\0';
 	}
@@ -5519,8 +5592,10 @@ int fits_table_col::logical_value( long row_index,
 
     if ( this->type_rec == FITS::LOGICAL_T ) {
 	fits::logical_t v;
-	const fits::logical_t *d_ptr = (fits::logical_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx + elem_index;
+	const fits::logical_t *d_ptr = (fits::logical_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) return '\0';
+	e_idx = this->dcol_size_rec * repetition_idx + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
 		+ elem_index % this->dcol_size_rec;
@@ -5570,7 +5645,7 @@ int fits_table_col::logical_value( long row_index,
 	tstring sval;
 	double dval;
 	size_t epos;
-	this->get_string_value(row_index,elem_index,repetition_idx,sval);
+	this->get_string_value(row_index,elem_index,repetition_idx, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return '\0';
 	}
@@ -5615,7 +5690,8 @@ short fits_table_col::short_value( long row_index ) const
     if ( row_index < 0 || this->row_size_rec <= row_index ) goto invalid;
 
     if ( this->type_rec == FITS::SHORT_T ) {
-	const fits::short_t *d_ptr = (fits::short_t *)this->data_ptr_rec;
+	const fits::short_t *d_ptr = (fits::short_t *)this->data_ptr();
+	if ( d_ptr == NULL ) goto invalid;
 	return d_ptr[this->elem_size_rec * row_index];
     }
     else if ( this->type_rec == FITS::LONG_T ) {
@@ -5657,7 +5733,7 @@ short fits_table_col::short_value( long row_index ) const
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
 	double v0;
-	this->get_string_value(row_index,sval);
+	this->get_string_value(row_index, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return this->tnull_short_rec;
 	}
@@ -5730,8 +5806,10 @@ short fits_table_col::short_value( long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) goto invalid;
 
     if ( this->type_rec == FITS::SHORT_T ) {
-	const fits::short_t *d_ptr = (fits::short_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx 
+	const fits::short_t *d_ptr = (fits::short_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) goto invalid;
+	e_idx = this->dcol_size_rec * repetition_idx 
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -5777,7 +5855,7 @@ short fits_table_col::short_value( long row_index,
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
 	double v0;
-	this->get_string_value(row_index,elem_index,repetition_idx,sval);
+	this->get_string_value(row_index,elem_index,repetition_idx, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return this->tnull_short_rec;
 	}
@@ -5819,7 +5897,8 @@ long fits_table_col::long_value( long row_index ) const
     if ( row_index < 0 || this->row_size_rec <= row_index ) goto invalid;
 
     if ( this->type_rec == FITS::LONG_T ) {
-	const fits::long_t *d_ptr = (fits::long_t *)this->data_ptr_rec;
+	const fits::long_t *d_ptr = (fits::long_t *)this->data_ptr();
+	if ( d_ptr == NULL ) goto invalid;
 	return d_ptr[this->elem_size_rec * row_index];
     }
     else if ( this->type_rec == FITS::SHORT_T ) {
@@ -5859,7 +5938,7 @@ long fits_table_col::long_value( long row_index ) const
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
 	double v0;
-	this->get_string_value(row_index,sval);
+	this->get_string_value(row_index, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return this->tnull_long_rec;
 	}
@@ -5936,8 +6015,10 @@ long fits_table_col::long_value( long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) goto invalid;
 
     if ( this->type_rec == FITS::LONG_T ) {
-	const fits::long_t *d_ptr = (fits::long_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx 
+	const fits::long_t *d_ptr = (fits::long_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) goto invalid;
+	e_idx = this->dcol_size_rec * repetition_idx 
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -5981,7 +6062,7 @@ long fits_table_col::long_value( long row_index,
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
 	double v0;
-	this->get_string_value(row_index,elem_index,repetition_idx,sval);
+	this->get_string_value(row_index,elem_index,repetition_idx, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return this->tnull_long_rec;
 	}
@@ -6021,7 +6102,8 @@ long long fits_table_col::longlong_value( long row_index ) const
     if ( row_index < 0 || this->row_size_rec <= row_index ) goto invalid;
 
     if ( this->type_rec == FITS::LONGLONG_T ) {
-	const fits::longlong_t *d_ptr = (fits::longlong_t *)this->data_ptr_rec;
+	const fits::longlong_t *d_ptr = (fits::longlong_t *)this->data_ptr();
+	if ( d_ptr == NULL ) goto invalid;
 	return d_ptr[this->elem_size_rec * row_index];
     }
     else if ( this->type_rec == FITS::LONG_T ) {
@@ -6057,7 +6139,7 @@ long long fits_table_col::longlong_value( long row_index ) const
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
 	double v0;
-	this->get_string_value(row_index,sval);
+	this->get_string_value(row_index, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return this->tnull_longlong_rec;
 	}
@@ -6129,8 +6211,10 @@ long long fits_table_col::longlong_value( long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) goto invalid;
 
     if ( this->type_rec == FITS::LONGLONG_T ) {
-	const fits::longlong_t *d_ptr = (fits::longlong_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx 
+	const fits::longlong_t *d_ptr = (fits::longlong_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) goto invalid;
+	e_idx = this->dcol_size_rec * repetition_idx 
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -6170,7 +6254,7 @@ long long fits_table_col::longlong_value( long row_index,
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
 	double v0;
-	this->get_string_value(row_index,elem_index,repetition_idx,sval);
+	this->get_string_value(row_index,elem_index,repetition_idx, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return this->tnull_longlong_rec;
 	}
@@ -6209,7 +6293,8 @@ float fits_table_col::float_value( long row_index ) const
     if ( row_index < 0 || this->row_size_rec <= row_index ) goto invalid;
 
     if ( this->type_rec == FITS::FLOAT_T ) {
-	const fits::float_t *d_ptr = (fits::float_t *)this->data_ptr_rec;
+	const fits::float_t *d_ptr = (fits::float_t *)this->data_ptr();
+	if ( d_ptr == NULL ) goto invalid;
 	return d_ptr[this->elem_size_rec * row_index];
     }
     else if ( this->type_rec == FITS::DOUBLE_T ) {
@@ -6250,7 +6335,7 @@ float fits_table_col::float_value( long row_index ) const
     }
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
-	this->get_string_value(row_index,sval);
+	this->get_string_value(row_index, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return NAN;
 	}
@@ -6316,8 +6401,10 @@ float fits_table_col::float_value( long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) goto invalid;
 
     if ( this->type_rec == FITS::FLOAT_T ) {
-	const fits::float_t *d_ptr = (fits::float_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx 
+	const fits::float_t *d_ptr = (fits::float_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) goto invalid;
+	e_idx = this->dcol_size_rec * repetition_idx 
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -6362,7 +6449,7 @@ float fits_table_col::float_value( long row_index,
     }
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
-	this->get_string_value(row_index,elem_index,repetition_idx,sval);
+	this->get_string_value(row_index,elem_index,repetition_idx, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return NAN;
 	}
@@ -6398,7 +6485,8 @@ double fits_table_col::double_value( long row_index ) const
     if ( row_index < 0 || this->row_size_rec <= row_index ) goto invalid;
 
     if ( this->type_rec == FITS::DOUBLE_T ) {
-	const fits::double_t *d_ptr = (fits::double_t *)this->data_ptr_rec;
+	const fits::double_t *d_ptr = (fits::double_t *)this->data_ptr();
+	if ( d_ptr == NULL ) goto invalid;
 	return d_ptr[this->elem_size_rec * row_index];
     }
     else if ( this->type_rec == FITS::FLOAT_T ) {
@@ -6439,7 +6527,7 @@ double fits_table_col::double_value( long row_index ) const
     }
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
-	this->get_string_value(row_index,sval);
+	this->get_string_value(row_index, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return NAN;
 	}
@@ -6505,8 +6593,10 @@ double fits_table_col::double_value( long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) goto invalid;
 
     if ( this->type_rec == FITS::DOUBLE_T ) {
-	const fits::double_t *d_ptr = (fits::double_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx 
+	const fits::double_t *d_ptr = (fits::double_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) goto invalid;
+	e_idx = this->dcol_size_rec * repetition_idx 
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -6551,7 +6641,7 @@ double fits_table_col::double_value( long row_index,
     }
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
-	this->get_string_value(row_index,elem_index,repetition_idx,sval);
+	this->get_string_value(row_index,elem_index,repetition_idx, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return NAN;
 	}
@@ -6588,7 +6678,8 @@ unsigned char fits_table_col::byte_value( long row_index ) const
     if ( row_index < 0 || this->row_size_rec <= row_index ) goto invalid;
 
     if ( this->type_rec == FITS::BYTE_T ) {
-	const fits::byte_t *d_ptr = (fits::byte_t *)this->data_ptr_rec;
+	const fits::byte_t *d_ptr = (fits::byte_t *)this->data_ptr();
+	if ( d_ptr == NULL ) goto invalid;
 	return d_ptr[this->elem_size_rec * row_index];
     }
     else if ( this->type_rec == FITS::LOGICAL_T ) {
@@ -6632,7 +6723,7 @@ unsigned char fits_table_col::byte_value( long row_index ) const
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
 	double v0;
-	this->get_string_value(row_index,sval);
+	this->get_string_value(row_index, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return this->tnull_byte_rec;
 	}
@@ -6706,8 +6797,10 @@ unsigned char fits_table_col::byte_value( long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) goto invalid;
 
     if ( this->type_rec == FITS::BYTE_T ) {
-	const fits::byte_t *d_ptr = (fits::byte_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx 
+	const fits::byte_t *d_ptr = (fits::byte_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) goto invalid;
+	e_idx = this->dcol_size_rec * repetition_idx 
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -6755,7 +6848,7 @@ unsigned char fits_table_col::byte_value( long row_index,
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
 	double v0;
-	this->get_string_value(row_index,elem_index,repetition_idx,sval);
+	this->get_string_value(row_index,elem_index,repetition_idx, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return this->tnull_byte_rec;
 	}
@@ -6795,8 +6888,10 @@ long long fits_table_col::bit_value( long row_index ) const
 
     if ( this->type_rec == FITS::BIT_T ) {
 	/* MSBを見る事 */
-	const unsigned char *d_ptr = (const unsigned char *)this->data_ptr_rec;
-	unsigned char v = d_ptr[this->full_bytes_rec * row_index];
+	const unsigned char *d_ptr = (const unsigned char *)this->data_ptr();
+	unsigned char v;
+	if ( d_ptr == NULL ) goto invalid;
+	v = d_ptr[this->full_bytes_rec * row_index];
 	if ( (v & 0x080) != 0 ) return 1;
 	else return 0;
     }
@@ -6833,7 +6928,7 @@ long long fits_table_col::bit_value( long row_index ) const
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
 	double v0;
-	this->get_string_value(row_index,sval);
+	this->get_string_value(row_index, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return this->tnull_longlong_rec;
 	}
@@ -6904,13 +6999,15 @@ long long fits_table_col::bit_value( long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) goto invalid;
 
     if ( this->type_rec == FITS::BIT_T ) {
-	const unsigned char *d_ptr = (const unsigned char *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx 
-	    + elem_index;
+	const unsigned char *d_ptr = (const unsigned char *)this->data_ptr();
+	long e_idx;
 	int n_bit;
 	long e_mod, e_div, e_align;
 	long long ret_val = 0;
 	int i;
+	if ( d_ptr == NULL ) goto invalid;
+	e_idx = this->dcol_size_rec * repetition_idx 
+	    + elem_index;
 	if ( nbit < 1 ) 
 	    n_bit = this->bit_size_telem.i_cs(elem_index % this->dcol_size_rec);
 	else
@@ -7015,7 +7112,7 @@ long long fits_table_col::bit_value( long row_index,
     else if ( this->type_rec == FITS::STRING_T ) {
 	tstring sval;
 	double v0;
-	this->get_string_value(row_index,elem_index,repetition_idx,sval);
+	this->get_string_value(row_index,elem_index,repetition_idx, &sval);
 	if ( sval.length() == 0 && this->tnull_is_set_rec == false ) {
 	    return this->tnull_longlong_rec;
 	}
@@ -7059,7 +7156,8 @@ const char *fits_table_col::string_value( long row_index )
     if ( row_index < 0 || this->row_size_rec <= row_index ) goto invalid;
 
     if ( this->type_rec == FITS::STRING_T ) {
-	const char *d_ptr = (const char *)this->data_ptr_rec;
+	const char *d_ptr = (const char *)this->data_ptr();
+	if ( d_ptr == NULL ) goto invalid;
 	this->str_buf->assign(d_ptr +
 		this->bytes_rec * this->elem_size_rec * row_index,
 		this->bytes_rec);
@@ -7188,8 +7286,10 @@ const char *fits_table_col::string_value( long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) goto invalid;
 
     if ( this->type_rec == FITS::STRING_T ) {
-	const char *d_ptr = (const char *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx 
+	const char *d_ptr = (const char *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) goto invalid;
+	e_idx = this->dcol_size_rec * repetition_idx 
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -7284,7 +7384,8 @@ const char *fits_table_col::get_string_value( long row_index,
     if ( row_index < 0 || this->row_size_rec <= row_index ) goto invalid;
 
     if ( this->type_rec == FITS::STRING_T ) {
-	const char *d_ptr = (const char *)this->data_ptr_rec;
+	const char *d_ptr = (const char *)this->data_ptr();
+	if ( d_ptr == NULL ) goto invalid;
 	dest->assign(d_ptr + 
 		    this->bytes_rec * this->elem_size_rec * row_index,
 		    this->bytes_rec);
@@ -7409,8 +7510,10 @@ const char *fits_table_col::get_string_value( long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) goto invalid;
 
     if ( this->type_rec == FITS::STRING_T ) {
-	const char *d_ptr = (const char *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx 
+	const char *d_ptr = (const char *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) goto invalid;
+	e_idx = this->dcol_size_rec * repetition_idx 
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -9491,7 +9594,8 @@ fits_table_col &fits_table_col::assign_logical( int value, long row_index )
 
     if ( this->type_rec == FITS::LOGICAL_T ) {
 	fits::logical_t v;
-	fits::logical_t *d_ptr = (fits::logical_t *)this->data_ptr_rec;
+	fits::logical_t *d_ptr = (fits::logical_t *)this->data_ptr();
+	if ( d_ptr == NULL ) return *this;	/* invalid */
 	if ( value == 'T' ) v = 'T';
 	else if ( value == 'F' ) v = 'F';
 	else v = '\0';
@@ -9609,8 +9713,10 @@ fits_table_col &fits_table_col::assign_logical( int value, long row_index,
 
     if ( this->type_rec == FITS::LOGICAL_T ) {
 	fits::logical_t v;
-	fits::logical_t *d_ptr = (fits::logical_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx + elem_index;
+	fits::logical_t *d_ptr = (fits::logical_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) return *this;	/* invalid */
+	e_idx = this->dcol_size_rec * repetition_idx + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
 		+ elem_index % this->dcol_size_rec;
@@ -9698,7 +9804,8 @@ fits_table_col &fits_table_col::assign_short( short value, long row_index )
     }
 
     if ( this->type_rec == FITS::SHORT_T ) {
-	fits::short_t *d_ptr = (fits::short_t *)this->data_ptr_rec;
+	fits::short_t *d_ptr = (fits::short_t *)this->data_ptr();
+	if ( d_ptr == NULL ) return *this;	/* invalid */
 	d_ptr[this->elem_size_rec * row_index] = value;
 	return *this;
     }
@@ -9794,8 +9901,10 @@ fits_table_col &fits_table_col::assign_short( short value, long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) return *this;	/* invalid */
 
     if ( this->type_rec == FITS::SHORT_T ) {
-	fits::short_t *d_ptr = (fits::short_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx
+	fits::short_t *d_ptr = (fits::short_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) return *this;	/* invalid */
+	e_idx = this->dcol_size_rec * repetition_idx
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -9870,7 +9979,8 @@ fits_table_col &fits_table_col::assign_long( long value, long row_index )
     }
 
     if ( this->type_rec == FITS::LONG_T ) {
-	fits::long_t *d_ptr = (fits::long_t *)this->data_ptr_rec;
+	fits::long_t *d_ptr = (fits::long_t *)this->data_ptr();
+	if ( d_ptr == NULL ) return *this;	/* invalid */
 	d_ptr += this->elem_size_rec * row_index;
 	if ( MIN_INT32 <= value && value <= MAX_INT32 )
 	    *d_ptr = value;
@@ -9978,8 +10088,10 @@ fits_table_col &fits_table_col::assign_long( long value, long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) return *this;	/* invalid */
 
     if ( this->type_rec == FITS::LONG_T ) {
-	fits::long_t *d_ptr = (fits::long_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx
+	fits::long_t *d_ptr = (fits::long_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) return *this;	/* invalid */
+	e_idx = this->dcol_size_rec * repetition_idx
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -10059,7 +10171,8 @@ fits_table_col &fits_table_col::assign_longlong( long long value,
     }
 
     if ( this->type_rec == FITS::LONGLONG_T ) {
-	fits::longlong_t *d_ptr = (fits::longlong_t *)this->data_ptr_rec;
+	fits::longlong_t *d_ptr = (fits::longlong_t *)this->data_ptr();
+	if ( d_ptr == NULL ) return *this;	/* invalid */
 	d_ptr += this->elem_size_rec * row_index;
 	if ( MIN_INT64 <= value && value <= MAX_INT64 )
 	    *d_ptr = value;
@@ -10168,8 +10281,10 @@ fits_table_col &fits_table_col::assign_longlong( long long value,
     if ( elem_index < 0 || repetition_idx < 0 ) return *this;	/* invalid */
 
     if ( this->type_rec == FITS::LONGLONG_T ) {
-	fits::longlong_t *d_ptr = (fits::longlong_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx
+	fits::longlong_t *d_ptr = (fits::longlong_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) return *this;	/* invalid */
+	e_idx = this->dcol_size_rec * repetition_idx
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -10252,7 +10367,8 @@ fits_table_col &fits_table_col::assign_byte( unsigned char value,
     }
 
     if ( this->type_rec == FITS::BYTE_T ) {
-	fits::byte_t *d_ptr = (fits::byte_t *)this->data_ptr_rec;
+	fits::byte_t *d_ptr = (fits::byte_t *)this->data_ptr();
+	if ( d_ptr == NULL ) return *this;	/* invalid */
 	d_ptr += this->elem_size_rec * row_index;
 	if ( MIN_UCHAR <= value && value <= MAX_UCHAR )
 	    *d_ptr = value;
@@ -10352,8 +10468,10 @@ fits_table_col &fits_table_col::assign_byte( unsigned char value,
     if ( elem_index < 0 || repetition_idx < 0 ) return *this;	/* invalid */
 
     if ( this->type_rec == FITS::BYTE_T ) {
-	fits::byte_t *d_ptr = (fits::byte_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx
+	fits::byte_t *d_ptr = (fits::byte_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) return *this;	/* invalid */
+	e_idx = this->dcol_size_rec * repetition_idx
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -10426,7 +10544,8 @@ fits_table_col &fits_table_col::assign_float( float value, long row_index )
     }
 
     if ( this->type_rec == FITS::FLOAT_T ) {
-	fits::float_t *d_ptr = (fits::float_t *)this->data_ptr_rec;
+	fits::float_t *d_ptr = (fits::float_t *)this->data_ptr();
+	if ( d_ptr == NULL ) return *this;	/* invalid */
 	d_ptr[this->elem_size_rec * row_index] = value;
 	return *this;
     }
@@ -10542,8 +10661,10 @@ fits_table_col &fits_table_col::assign_float( float value, long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) return *this;	/* invalid */
 
     if ( this->type_rec == FITS::FLOAT_T ) {
-	fits::float_t *d_ptr = (fits::float_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx
+	fits::float_t *d_ptr = (fits::float_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) return *this;	/* invalid */
+	e_idx = this->dcol_size_rec * repetition_idx
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -10631,7 +10752,8 @@ fits_table_col &fits_table_col::assign_double( double value, long row_index )
     }
 
     if ( this->type_rec == FITS::DOUBLE_T ) {
-	fits::double_t *d_ptr = (fits::double_t *)this->data_ptr_rec;
+	fits::double_t *d_ptr = (fits::double_t *)this->data_ptr();
+	if ( d_ptr == NULL ) return *this;	/* invalid */
 	d_ptr[this->elem_size_rec * row_index] = value;
 	return *this;
     }
@@ -10746,8 +10868,10 @@ fits_table_col &fits_table_col::assign_double( double value, long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) return *this;	/* invalid */
 
     if ( this->type_rec == FITS::DOUBLE_T ) {
-	fits::double_t *d_ptr = (fits::double_t *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx
+	fits::double_t *d_ptr = (fits::double_t *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) return *this;	/* invalid */
+	e_idx = this->dcol_size_rec * repetition_idx
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -10846,7 +10970,8 @@ fits_table_col &fits_table_col::assign_string( const char *value,
 
     if ( this->type_rec == FITS::STRING_T ) {
 	long i;
-	char *d_ptr = (char *)this->data_ptr_rec;
+	char *d_ptr = (char *)this->data_ptr();
+	if ( d_ptr == NULL ) return *this;	/* invalid */
 	d_ptr += this->bytes_rec * this->elem_size_rec * row_index;
 	if ( value == NULL ) {
 	    for ( i=0 ; i < this->bytes_rec ; i++ ) d_ptr[i] = '\0';
@@ -10977,8 +11102,10 @@ fits_table_col &fits_table_col::assign_string( const char *value,
 
     if ( this->type_rec == FITS::STRING_T ) {
 	long i;
-	char *d_ptr = (char *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx
+	char *d_ptr = (char *)this->data_ptr();
+	long e_idx;
+	if ( d_ptr == NULL ) return *this;	/* invalid */
+	e_idx = this->dcol_size_rec * repetition_idx
 	    + elem_index;
 	if ( this->elem_size_rec <= e_idx ) 
 	    e_idx = this->elem_size_rec - this->dcol_size_rec 
@@ -11057,7 +11184,8 @@ fits_table_col &fits_table_col::assign_bit( long long value, long row_index )
 
     if ( this->type_rec == FITS::BIT_T ) {
 	/* MSBに書く事 */
-	unsigned char *d_ptr = (unsigned char *)this->data_ptr_rec;
+	unsigned char *d_ptr = (unsigned char *)this->data_ptr();
+	if ( d_ptr == NULL ) return *this;	/* invalid */
 	if ( value != 0 ) 
 	    d_ptr[this->full_bytes_rec * row_index] |= 0x080;
 	else 
@@ -11154,12 +11282,14 @@ fits_table_col &fits_table_col::assign_bit( long long value, long row_index,
     if ( elem_index < 0 || repetition_idx < 0 ) return *this;	/* invalid */
 
     if ( this->type_rec == FITS::BIT_T ) {
-	unsigned char *d_ptr = (unsigned char *)this->data_ptr_rec;
-	long e_idx = this->dcol_size_rec * repetition_idx 
-	    + elem_index;
+	unsigned char *d_ptr = (unsigned char *)this->data_ptr();
+	long e_idx;
 	int n_bit;
 	long e_mod, e_div, e_align;
 	int i,j;
+	if ( d_ptr == NULL ) return *this;	/* invalid */
+	e_idx = this->dcol_size_rec * repetition_idx 
+	    + elem_index;
 	if ( nbit < 1 ) 
 	    n_bit = this->bit_size_telem.i(elem_index % this->dcol_size_rec);
 	else
@@ -11324,7 +11454,8 @@ fits_table_col &fits_table_col::assign_arrdesc( long length, long offset,
     }
 
     if ( this->type_rec == FITS::LONGARRDESC_T ) {
-	fits::longarrdesc_t *d_ptr = (fits::longarrdesc_t *)this->data_ptr_rec;
+	fits::longarrdesc_t *d_ptr = (fits::longarrdesc_t *)this->data_ptr();
+	if ( d_ptr == NULL ) return *this;	/* invalid */
 	d_ptr[this->elem_size_rec * row_index + elem_idx].length = length;
 	d_ptr[this->elem_size_rec * row_index + elem_idx].offset = offset;
 	if ( this->vl_max_length_rec < length ) {
@@ -11332,7 +11463,8 @@ fits_table_col &fits_table_col::assign_arrdesc( long length, long offset,
 	}
     }
     else if ( this->type_rec == FITS::LLONGARRDESC_T ) {
-	fits::llongarrdesc_t *d_ptr = (fits::llongarrdesc_t *)this->data_ptr_rec;
+	fits::llongarrdesc_t *d_ptr = (fits::llongarrdesc_t *)this->data_ptr();
+	if ( d_ptr == NULL ) return *this;	/* invalid */
 	d_ptr[this->elem_size_rec * row_index + elem_idx].length = length;
 	d_ptr[this->elem_size_rec * row_index + elem_idx].offset = offset;
 	if ( this->vl_max_length_rec < length ) {
