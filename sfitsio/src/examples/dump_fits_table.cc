@@ -57,9 +57,14 @@ int main( int argc, char *argv[] )
 		    if ( 0 < j ) sio.putchr(',');
 		    n = bte.col(j).elem_length();
 		    /* loop of elements */
-		    for ( k=0 ; k < n ; k++ ) {
-			if ( 0 < k ) sio.putchr(',');
-			sio.printf("%s",bte.col(j).svalue(i,k));
+		    if ( 0 < n ) {
+			for ( k=0 ; k < n ; k++ ) {
+			    if ( 0 < k ) sio.putchr(',');
+			    sio.printf("%s",bte.col(j).svalue(i,k));
+			}
+		    }
+		    else {
+			sio.printf("%s",bte.col(j).svalue(i));
 		    }
 		}
 		sio.printf("\n");
