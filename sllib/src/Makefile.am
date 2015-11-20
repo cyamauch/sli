@@ -9,7 +9,7 @@ docdir = $(datadir)/doc/@PACKAGE@
 #bin_PROGRAMS=
 
 lib_LTLIBRARIES = libsllib.la
-libsllib_la_LDFLAGS = -version-info 3:0
+libsllib_la_LDFLAGS = -version-info 4:0
 libsllib_la_SOURCES = \
 	cstreamio.cc stdstreamio.cc gzstreamio.cc bzstreamio.cc \
 	pipestreamio.cc termlineio.cc termscreenio.cc inetstreamio.cc \
