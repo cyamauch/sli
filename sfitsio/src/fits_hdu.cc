@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2014-05-08 02:22:08 cyamauch> */
+/* Time-stamp: <2015-11-20 14:31:27 cyamauch> */
 
 /**
  * @file   fits_hdu.cc
@@ -2588,7 +2588,7 @@ ssize_t fits_hdu::header_load( cstreamio &sref, const size_t *max_bytes_ptr )
 
     /* final setup */
     if ( this->header_load( tmp_header ) < 0 ) {
-	err_report(__FUNCTION__,"ERROR", 
+	err_report(__FUNCTION__,"WARNING", 
 		   "this->header_load(tmp_header) failed.");
 	goto quit;
     }
@@ -2718,7 +2718,8 @@ ssize_t fits_hdu::header_load( const fits_header &header_all )
 	    }
 	}
 	else {
-	    err_report(__FUNCTION__,"ERROR","unsupported FITS type");
+	    err_report(__FUNCTION__,"WARNING",
+		       "unsupported HDU type or invalid padding before EOF.");
 	    goto quit;
 	}
 

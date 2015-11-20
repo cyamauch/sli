@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2015-11-18 21:07:41 cyamauch> */
+/* Time-stamp: <2015-11-20 14:30:33 cyamauch> */
 
 /**
  * @file   fitscc.cc
@@ -2707,16 +2707,26 @@ ssize_t fitscc::fits_load( cstreamio &sref, const size_t *max_bytes_ptr )
       else
 	  sz = tmp_hdu.read_stream(sref);
       if ( sz < 0 ) {
-	  err_report(__FUNCTION__,"ERROR","tmp_hdu.read_stream() failed");
-	  sli__eprintf("HINT: When opening a file with extra zero padding at the end,\n");
-	  sli__eprintf("      append '[0]' at the end of file name. (e.g., 'COMAxxx.fits[0]')\n");
-	  goto quit;
+	  if ( hdu_cnt == 0 ) {
+	      err_report(__FUNCTION__,"ERROR","tmp_hdu.read_stream() failed");
+	      goto quit;
+	  }
+	  else {
+	      err_report1(__FUNCTION__,"WARNING",
+		 "Discontinued reading FITS stream at HDU No.%ld.", hdu_cnt);
+	      //sli__eprintf("HINT: When opening a file with extra zero padding at the end,\n");
+	      //sli__eprintf("      append '[0]' at the end of file name. (e.g., 'COMAxxx.fits[0]')\n");
+	      break;
+	  }
       }
       header_cnt ++;				/* number of read header */
       all_sz += sz;
 
       /* データ部を読む */
-      if ( (ssize_t)FITS::FILE_RECORD_UNIT <= sz ) {
+      if ( sz < (ssize_t)FITS::FILE_RECORD_UNIT ) {
+	  break;
+      }
+      else {		/* if ( (ssize_t)FITS::FILE_RECORD_UNIT <= sz ) */
 	  bool go_read_data = true;		/* 読むべきHDU?         */
 	  bool last_hdu_to_read = false;	/* 読むべき最後のHDU?   */
 	  const char *section_info = NULL;
@@ -2929,9 +2939,7 @@ ssize_t fitscc::fits_load( cstreamio &sref, const size_t *max_bytes_ptr )
 	      break;
 	  }
       }
-      else {
-	  break;
-      }
+
       //if ( max_bytes_ptr != NULL ) {
       //  if ( (*max_bytes_ptr) < FITS::FILE_RECORD_UNIT + all_sz ) {
       //      break;
