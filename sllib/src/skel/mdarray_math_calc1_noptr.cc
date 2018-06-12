@@ -54,8 +54,9 @@ namespace sli
 
 mdarray MD_NAME_FUNCTION( const mdarray &src )
 {
+    const ssize_t src_szt = src.size_type();
     mdarray dest;
-    ssize_t dest_sz_type;
+    ssize_t dest_szt;
     void (*fnc_calc)(const void *, void *, size_t, bool, bool, bool);
     bool func_ok = false;
     bool funcf_ok = false;
@@ -71,37 +72,29 @@ mdarray MD_NAME_FUNCTION( const mdarray &src )
 #endif
 
     /* 実数型でない場合は例外を返す */
-    switch( src.size_type() ) {
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
+    /* 実数型 */
+    if ( src_szt == FLOAT_ZT || src_szt == DOUBLE_ZT ||
+	 src_szt == LDOUBLE_ZT ||
+	 src_szt == UCHAR_ZT || src_szt == INT16_ZT ||
+	 src_szt == INT32_ZT || src_szt == INT64_ZT ) {
 	/* NO PROBLEM */
-	break;
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-      case DCOMPLEX_ZT  :
-      case LDCOMPLEX_ZT :
+    }
+    else if ( src_szt == FCOMPLEX_ZT || src_szt == DCOMPLEX_ZT ||
+	      src_szt == LDCOMPLEX_ZT ) {
 	err_throw(__FUNCTION__,"ERROR","complex type cannot be used");
-	break;
-      /* その他の型 */
-      default           :
+    }
+    else {
 	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
     }
 
     if ( src.length() == 0 ) goto quit;
 
     fnc_calc = NULL;
-    dest_sz_type = (0 < src.size_type()) ? -8 : src.size_type();
+    dest_szt = (0 < src_szt) ? -8 : src_szt;
 
     /* 関数を選択 */
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
-    if (src.size_type() == org_sz_type && dest_sz_type == new_sz_type) { \
+    if (src_szt == org_sz_type && dest_szt == new_sz_type) { \
         fnc_calc = &MD_NAME_NAMESPC::fncname; \
     }
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
@@ -110,14 +103,14 @@ mdarray MD_NAME_FUNCTION( const mdarray &src )
     if ( fnc_calc != NULL ) {
 	const size_t dim_len = src.dim_length();
 	const size_t *szs = src.cdimarray();
-	dest.init(dest_sz_type, true, szs, dim_len, false);
-	if ( dest_sz_type < -8 ) {
+	dest.init(dest_szt, true, szs, dim_len, false);
+	if ( dest_szt < -8 ) {
 	    if ( funcl_ok == true ) {
 		func_ok = false;
 		funcf_ok = false;
 	    }
 	}
-	if ( dest_sz_type == -4 ) {
+	if ( dest_szt == -4 ) {
 	    if ( funcf_ok == true ) {
 		func_ok = false;
 		funcl_ok = false;

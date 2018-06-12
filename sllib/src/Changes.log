@@ -186,8 +186,14 @@ Version 1.4.2f
 		(Jun.24,2013)
 
 Version 1.4.5
-		- Updated mdarray class:
+		 - Updated mdarray class:
 		 - Permit sz_type = 0 for zero-length columns in FITS BTE.
 		 - Changed access restriction of realloc_arr_rec() and 
 		   free_arr_rec(): private => protected.
 		(Nov.20,2015)
+Version 1.4.5a
+		 - Fixed compiler errors on Raspberry Pi 2 single-board
+		   computers.
+		   Thanks to Yamagami-sama.
+		(May.30,2018)
+

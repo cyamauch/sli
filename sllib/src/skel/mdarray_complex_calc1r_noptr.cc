@@ -26,6 +26,7 @@ namespace sli
 
 mdarray MD_NAME_FUNCTION( const mdarray &src )
 {
+    const ssize_t src_szt = src.size_type();
     const size_t dim_len = src.dim_length();
     const size_t *szs = src.cdimarray();
     ssize_t dest_sz_type = DOUBLE_ZT;
@@ -33,47 +34,42 @@ mdarray MD_NAME_FUNCTION( const mdarray &src )
     size_t i, len;
 
     /* 実数の場合は例外を返す */
-    switch( src.size_type() ) {
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-	  dest_sz_type = FLOAT_ZT;
-	  break;
-      case DCOMPLEX_ZT  :
-	  dest_sz_type = DOUBLE_ZT;
-	  break;
-      case LDCOMPLEX_ZT :
-	  dest_sz_type = LDOUBLE_ZT;
-	  break;
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
+    /* 複素数型 */
+    if ( src_szt == FCOMPLEX_ZT ) {
+	dest_sz_type = FLOAT_ZT;
+    }
+    else if ( src_szt == DCOMPLEX_ZT ) {
+	dest_sz_type = DOUBLE_ZT;
+    }
+    else if ( src_szt == LDCOMPLEX_ZT ) {
+	dest_sz_type = LDOUBLE_ZT;
+    }
+    /* 実数型 */
+    else if ( src_szt == FLOAT_ZT || src_szt == DOUBLE_ZT ||
+	      src_szt == LDOUBLE_ZT || src_szt == UCHAR_ZT ||
+	      src_szt == INT16_ZT || src_szt == INT32_ZT ||
+	      src_szt == INT64_ZT ) {
 	err_throw(__FUNCTION__,"ERROR","real type can not be used");
-	break;
-      /* その他の型 */
-      default           :
+    }
+    /* その他の型 */
+    else {
 	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
     }
 
     dest.init(dest_sz_type, true, szs, dim_len, false);
     len = dest.length();
 
-    if ( src.size_type() == DCOMPLEX_ZT ) {
+    if ( src_szt == DCOMPLEX_ZT ) {
 	double *dp = (double *)dest.data_ptr();
 	const dcomplex *sp = (const dcomplex *)src.data_ptr();
 	for (i=0 ; i < len ; i++) dp[i] = MD_NAME_MFNC(sp[i]);
     }
-    else if ( src.size_type() == FCOMPLEX_ZT ) {
+    else if ( src_szt == FCOMPLEX_ZT ) {
 	float *dp = (float *)dest.data_ptr();
 	const fcomplex *sp = (const fcomplex *)src.data_ptr();
 	for (i=0 ; i < len ; i++) dp[i] = __MD_NM_MFNCF(sp[i]);
     }
-    else if ( src.size_type() == LDCOMPLEX_ZT ) {
+    else if ( src_szt == LDCOMPLEX_ZT ) {
 	long double *dp = (long double *)dest.data_ptr();
 	const ldcomplex *sp = (const ldcomplex *)src.data_ptr();
 	for (i=0 ; i < len ; i++) dp[i] = __MD_NM_MFNCL(sp[i]);

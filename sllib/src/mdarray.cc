@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2015-11-20 12:46:04 cyamauch> */
+/* Time-stamp: <2018-05-28 02:30:39 cyamauch> */
 
 #define CLASS_NAME "mdarray"
 
@@ -95,7 +95,7 @@ inline static size_t zt2bytes( ssize_t sz_type )
  *
  * @note   private な関数です．
  */
-inline static unsigned char trunc_f2c( float v )
+inline static unsigned char tnc_f2c( float v )
 {
     return (unsigned char)v;
 }
@@ -104,7 +104,7 @@ inline static unsigned char trunc_f2c( float v )
  *
  * @note   private な関数です．
  */
-inline static unsigned char round_f2c( float v )
+inline static unsigned char rnd_f2c( float v )
 {
     if ( v < 0 ) return (unsigned char)(v-0.5);
     else return (unsigned char)(v+0.5);
@@ -115,7 +115,7 @@ inline static unsigned char round_f2c( float v )
  *
  * @note   private な関数です．
  */
-inline static int16_t trunc_f2i16( float v )
+inline static int16_t tnc_f2i16( float v )
 {
     return (int16_t)v;
 }
@@ -124,7 +124,7 @@ inline static int16_t trunc_f2i16( float v )
  *
  * @note   private な関数です．
  */
-inline static int16_t round_f2i16( float v )
+inline static int16_t rnd_f2i16( float v )
 {
     if ( v < 0 ) return (int16_t)(v-0.5);
     else return (int16_t)(v+0.5);
@@ -135,7 +135,7 @@ inline static int16_t round_f2i16( float v )
  *
  * @note   private な関数です．
  */
-inline static int32_t trunc_f2i32( float v )
+inline static int32_t tnc_f2i32( float v )
 {
     return (int32_t)v;
 }
@@ -144,7 +144,7 @@ inline static int32_t trunc_f2i32( float v )
  *
  * @note   private な関数です．
  */
-inline static int32_t round_f2i32( float v )
+inline static int32_t rnd_f2i32( float v )
 {
     if ( v < 0 ) return (int32_t)(v-0.5);
     else return (int32_t)(v+0.5);
@@ -155,7 +155,7 @@ inline static int32_t round_f2i32( float v )
  *
  * @note   private な関数です．
  */
-inline static int64_t trunc_f2i64( float v )
+inline static int64_t tnc_f2i64( float v )
 {
     return (int64_t)v;
 }
@@ -164,7 +164,7 @@ inline static int64_t trunc_f2i64( float v )
  *
  * @note   private な関数です．
  */
-inline static int64_t round_f2i64( float v )
+inline static int64_t rnd_f2i64( float v )
 {
     if ( v < 0 ) return (int64_t)(v-0.5);
     else return (int64_t)(v+0.5);
@@ -177,7 +177,7 @@ inline static int64_t round_f2i64( float v )
  *
  * @note   private な関数です．
  */
-inline static unsigned char trunc_d2c( double v )
+inline static unsigned char tnc_d2c( double v )
 {
     return (unsigned char)v;
 }
@@ -186,7 +186,7 @@ inline static unsigned char trunc_d2c( double v )
  *
  * @note   private な関数です．
  */
-inline static unsigned char round_d2c( double v )
+inline static unsigned char rnd_d2c( double v )
 {
     if ( v < 0 ) return (unsigned char)(v-0.5);
     else return (unsigned char)(v+0.5);
@@ -197,7 +197,7 @@ inline static unsigned char round_d2c( double v )
  *
  * @note   private な関数です．
  */
-inline static int16_t trunc_d2i16( double v )
+inline static int16_t tnc_d2i16( double v )
 {
     return (int16_t)v;
 }
@@ -206,7 +206,7 @@ inline static int16_t trunc_d2i16( double v )
  *
  * @note   private な関数です．
  */
-inline static int16_t round_d2i16( double v )
+inline static int16_t rnd_d2i16( double v )
 {
     if ( v < 0 ) return (int16_t)(v-0.5);
     else return (int16_t)(v+0.5);
@@ -217,7 +217,7 @@ inline static int16_t round_d2i16( double v )
  *
  * @note   private な関数です．
  */
-inline static int32_t trunc_d2i32( double v )
+inline static int32_t tnc_d2i32( double v )
 {
     return (int32_t)v;
 }
@@ -226,7 +226,7 @@ inline static int32_t trunc_d2i32( double v )
  *
  * @note   private な関数です．
  */
-inline static int32_t round_d2i32( double v )
+inline static int32_t rnd_d2i32( double v )
 {
     if ( v < 0 ) return (int32_t)(v-0.5);
     else return (int32_t)(v+0.5);
@@ -237,7 +237,7 @@ inline static int32_t round_d2i32( double v )
  *
  * @note   private な関数です．
  */
-inline static int64_t trunc_d2i64( double v )
+inline static int64_t tnc_d2i64( double v )
 {
     return (int64_t)v;
 }
@@ -246,7 +246,7 @@ inline static int64_t trunc_d2i64( double v )
  *
  * @note   private な関数です．
  */
-inline static int64_t round_d2i64( double v )
+inline static int64_t rnd_d2i64( double v )
 {
     if ( v < 0 ) return (int64_t)(v-0.5);
     else return (int64_t)(v+0.5);
@@ -259,7 +259,7 @@ inline static int64_t round_d2i64( double v )
  *
  * @note   private な関数です．
  */
-inline static unsigned char trunc_ld2c( long double v )
+inline static unsigned char tnc_ld2c( long double v )
 {
     return (unsigned char)v;
 }
@@ -268,7 +268,7 @@ inline static unsigned char trunc_ld2c( long double v )
  *
  * @note   private な関数です．
  */
-inline static unsigned char round_ld2c( long double v )
+inline static unsigned char rnd_ld2c( long double v )
 {
     if ( v < 0 ) return (unsigned char)(v-0.5);
     else return (unsigned char)(v+0.5);
@@ -279,7 +279,7 @@ inline static unsigned char round_ld2c( long double v )
  *
  * @note   private な関数です．
  */
-inline static int16_t trunc_ld2i16( long double v )
+inline static int16_t tnc_ld2i16( long double v )
 {
     return (int16_t)v;
 }
@@ -288,7 +288,7 @@ inline static int16_t trunc_ld2i16( long double v )
  *
  * @note   private な関数です．
  */
-inline static int16_t round_ld2i16( long double v )
+inline static int16_t rnd_ld2i16( long double v )
 {
     if ( v < 0 ) return (int16_t)(v-0.5);
     else return (int16_t)(v+0.5);
@@ -299,7 +299,7 @@ inline static int16_t round_ld2i16( long double v )
  *
  * @note   private な関数です．
  */
-inline static int32_t trunc_ld2i32( long double v )
+inline static int32_t tnc_ld2i32( long double v )
 {
     return (int32_t)v;
 }
@@ -308,7 +308,7 @@ inline static int32_t trunc_ld2i32( long double v )
  *
  * @note   private な関数です．
  */
-inline static int32_t round_ld2i32( long double v )
+inline static int32_t rnd_ld2i32( long double v )
 {
     if ( v < 0 ) return (int32_t)(v-0.5);
     else return (int32_t)(v+0.5);
@@ -319,7 +319,7 @@ inline static int32_t round_ld2i32( long double v )
  *
  * @note   private な関数です．
  */
-inline static int64_t trunc_ld2i64( long double v )
+inline static int64_t tnc_ld2i64( long double v )
 {
     return (int64_t)v;
 }
@@ -328,7 +328,7 @@ inline static int64_t trunc_ld2i64( long double v )
  *
  * @note   private な関数です．
  */
-inline static int64_t round_ld2i64( long double v )
+inline static int64_t rnd_ld2i64( long double v )
 {
     if ( v < 0 ) return (int64_t)(v-0.5);
     else return (int64_t)(v+0.5);
@@ -342,7 +342,7 @@ inline static int64_t round_ld2i64( long double v )
  *
  * @note   private な関数です．
  */
-inline static unsigned char trunc_fx2c( fcomplex v )
+inline static unsigned char tnc_fx2c( fcomplex v )
 {
     /* 実数部のみ変換する */
     return (unsigned char)(creal( v ));
@@ -353,7 +353,7 @@ inline static unsigned char trunc_fx2c( fcomplex v )
  *
  * @note   private な関数です．
  */
-inline static unsigned char round_fx2c( fcomplex v )
+inline static unsigned char rnd_fx2c( fcomplex v )
 {
     /* 実数部のみ変換する */
     float freal = creal( v );
@@ -368,7 +368,7 @@ inline static unsigned char round_fx2c( fcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int16_t trunc_fx2i16( fcomplex v )
+inline static int16_t tnc_fx2i16( fcomplex v )
 {
     /* 実数部のみ変換する */
     return (int16_t)(creal( v ));
@@ -379,7 +379,7 @@ inline static int16_t trunc_fx2i16( fcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int16_t round_fx2i16( fcomplex v )
+inline static int16_t rnd_fx2i16( fcomplex v )
 {
     /* 実数部のみ変換する */
     float freal = creal( v );
@@ -394,7 +394,7 @@ inline static int16_t round_fx2i16( fcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int32_t trunc_fx2i32( fcomplex v )
+inline static int32_t tnc_fx2i32( fcomplex v )
 {
     /* 実数部のみ変換する */
     return (int32_t)(creal( v ));
@@ -405,7 +405,7 @@ inline static int32_t trunc_fx2i32( fcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int32_t round_fx2i32( fcomplex v )
+inline static int32_t rnd_fx2i32( fcomplex v )
 {
     /* 実数部のみ変換する */
     float freal = creal( v );
@@ -420,7 +420,7 @@ inline static int32_t round_fx2i32( fcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int64_t trunc_fx2i64( fcomplex v )
+inline static int64_t tnc_fx2i64( fcomplex v )
 {
     /* 実数部のみ変換する */
     return (int64_t)(creal( v ));
@@ -431,7 +431,7 @@ inline static int64_t trunc_fx2i64( fcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int64_t round_fx2i64( fcomplex v )
+inline static int64_t rnd_fx2i64( fcomplex v )
 {
     /* 実数部のみ変換する */
     float freal = creal( v );
@@ -448,7 +448,7 @@ inline static int64_t round_fx2i64( fcomplex v )
  *
  * @note   private な関数です．
  */
-inline static unsigned char trunc_dx2c( dcomplex v )
+inline static unsigned char tnc_dx2c( dcomplex v )
 {
     /* 実数部のみ変換する */
     return (unsigned char)(creal( v ));
@@ -459,7 +459,7 @@ inline static unsigned char trunc_dx2c( dcomplex v )
  *
  * @note   private な関数です．
  */
-inline static unsigned char round_dx2c( dcomplex v )
+inline static unsigned char rnd_dx2c( dcomplex v )
 {
     /* 実数部のみ変換する */
     double dreal = creal( v );
@@ -474,7 +474,7 @@ inline static unsigned char round_dx2c( dcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int16_t trunc_dx2i16( dcomplex v )
+inline static int16_t tnc_dx2i16( dcomplex v )
 {
     /* 実数部のみ変換する */
     return (int16_t)(creal( v ));
@@ -485,7 +485,7 @@ inline static int16_t trunc_dx2i16( dcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int16_t round_dx2i16( dcomplex v )
+inline static int16_t rnd_dx2i16( dcomplex v )
 {
     /* 実数部のみ変換する */
     double dreal = creal( v );
@@ -500,7 +500,7 @@ inline static int16_t round_dx2i16( dcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int32_t trunc_dx2i32( dcomplex v )
+inline static int32_t tnc_dx2i32( dcomplex v )
 {
     /* 実数部のみ変換する */
     return (int32_t)(creal( v ));
@@ -511,7 +511,7 @@ inline static int32_t trunc_dx2i32( dcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int32_t round_dx2i32( dcomplex v )
+inline static int32_t rnd_dx2i32( dcomplex v )
 {
     /* 実数部のみ変換する */
     double dreal = creal( v );
@@ -526,7 +526,7 @@ inline static int32_t round_dx2i32( dcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int64_t trunc_dx2i64( dcomplex v )
+inline static int64_t tnc_dx2i64( dcomplex v )
 {
     /* 実数部のみ変換する */
     return (int64_t)(creal( v ));
@@ -537,7 +537,7 @@ inline static int64_t trunc_dx2i64( dcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int64_t round_dx2i64( dcomplex v )
+inline static int64_t rnd_dx2i64( dcomplex v )
 {
     /* 実数部のみ変換する */
     double dreal = creal( v );
@@ -554,7 +554,7 @@ inline static int64_t round_dx2i64( dcomplex v )
  *
  * @note   private な関数です．
  */
-inline static unsigned char trunc_ldx2c( ldcomplex v )
+inline static unsigned char tnc_ldx2c( ldcomplex v )
 {
     /* 実数部のみ変換する */
     return (unsigned char)(creal( v ));
@@ -565,7 +565,7 @@ inline static unsigned char trunc_ldx2c( ldcomplex v )
  *
  * @note   private な関数です．
  */
-inline static unsigned char round_ldx2c( ldcomplex v )
+inline static unsigned char rnd_ldx2c( ldcomplex v )
 {
     /* 実数部のみ変換する */
     long double ldreal = creal( v );
@@ -580,7 +580,7 @@ inline static unsigned char round_ldx2c( ldcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int16_t trunc_ldx2i16( ldcomplex v )
+inline static int16_t tnc_ldx2i16( ldcomplex v )
 {
     /* 実数部のみ変換する */
     return (int16_t)(creal( v ));
@@ -591,7 +591,7 @@ inline static int16_t trunc_ldx2i16( ldcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int16_t round_ldx2i16( ldcomplex v )
+inline static int16_t rnd_ldx2i16( ldcomplex v )
 {
     /* 実数部のみ変換する */
     long double ldreal = creal( v );
@@ -606,7 +606,7 @@ inline static int16_t round_ldx2i16( ldcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int32_t trunc_ldx2i32( ldcomplex v )
+inline static int32_t tnc_ldx2i32( ldcomplex v )
 {
     /* 実数部のみ変換する */
     return (int32_t)(creal( v ));
@@ -617,7 +617,7 @@ inline static int32_t trunc_ldx2i32( ldcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int32_t round_ldx2i32( ldcomplex v )
+inline static int32_t rnd_ldx2i32( ldcomplex v )
 {
     /* 実数部のみ変換する */
     long double ldreal = creal( v );
@@ -632,7 +632,7 @@ inline static int32_t round_ldx2i32( ldcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int64_t trunc_ldx2i64( ldcomplex v )
+inline static int64_t tnc_ldx2i64( ldcomplex v )
 {
     /* 実数部のみ変換する */
     return (int64_t)(creal( v ));
@@ -643,7 +643,7 @@ inline static int64_t trunc_ldx2i64( ldcomplex v )
  *
  * @note   private な関数です．
  */
-inline static int64_t round_ldx2i64( ldcomplex v )
+inline static int64_t rnd_ldx2i64( ldcomplex v )
 {
     /* 実数部のみ変換する */
     long double ldreal = creal( v );
@@ -659,7 +659,7 @@ inline static int64_t round_ldx2i64( ldcomplex v )
  *
  * @note   private な関数です．
  */
-inline static long trunc_f2l( float v )
+inline static long tnc_f2l( float v )
 {
     return (long)v;
 }
@@ -668,7 +668,7 @@ inline static long trunc_f2l( float v )
  *
  * @note   private な関数です．
  */
-inline static long round_f2l( float v )
+inline static long rnd_f2l( float v )
 {
     if ( v < 0 ) return (long)(v-0.5);
     else return (long)(v+0.5);
@@ -679,7 +679,7 @@ inline static long round_f2l( float v )
  *
  * @note   private な関数です．
  */
-inline static long long trunc_f2ll( float v )
+inline static long long tnc_f2ll( float v )
 {
     return (long long)v;
 }
@@ -688,7 +688,7 @@ inline static long long trunc_f2ll( float v )
  *
  * @note   private な関数です．
  */
-inline static long long round_f2ll( float v )
+inline static long long rnd_f2ll( float v )
 {
     if ( v < 0 ) return (long long)(v-0.5);
     else return (long long)(v+0.5);
@@ -699,7 +699,7 @@ inline static long long round_f2ll( float v )
  *
  * @note   private な関数です．
  */
-inline static long trunc_d2l( double v )
+inline static long tnc_d2l( double v )
 {
     return (long)v;
 }
@@ -708,7 +708,7 @@ inline static long trunc_d2l( double v )
  *
  * @note   private な関数です．
  */
-inline static long round_d2l( double v )
+inline static long rnd_d2l( double v )
 {
     if ( v < 0 ) return (long)(v-0.5);
     else return (long)(v+0.5);
@@ -719,7 +719,7 @@ inline static long round_d2l( double v )
  *
  * @note   private な関数です．
  */
-inline static long long trunc_d2ll( double v )
+inline static long long tnc_d2ll( double v )
 {
     return (long long)v;
 }
@@ -728,7 +728,7 @@ inline static long long trunc_d2ll( double v )
  *
  * @note   private な関数です．
  */
-inline static long long round_d2ll( double v )
+inline static long long rnd_d2ll( double v )
 {
     if ( v < 0 ) return (long long)(v-0.5);
     else return (long long)(v+0.5);
@@ -739,7 +739,7 @@ inline static long long round_d2ll( double v )
  *
  * @note   private な関数です．
  */
-inline static long trunc_ld2l( long double v )
+inline static long tnc_ld2l( long double v )
 {
     return (long)v;
 }
@@ -748,7 +748,7 @@ inline static long trunc_ld2l( long double v )
  *
  * @note   private な関数です．
  */
-inline static long round_ld2l( long double v )
+inline static long rnd_ld2l( long double v )
 {
     if ( v < 0 ) return (long)(v-0.5);
     else return (long)(v+0.5);
@@ -759,7 +759,7 @@ inline static long round_ld2l( long double v )
  *
  * @note   private な関数です．
  */
-inline static long long trunc_ld2ll( long double v )
+inline static long long tnc_ld2ll( long double v )
 {
     return (long long)v;
 }
@@ -768,7 +768,7 @@ inline static long long trunc_ld2ll( long double v )
  *
  * @note   private な関数です．
  */
-inline static long long round_ld2ll( long double v )
+inline static long long rnd_ld2ll( long double v )
 {
     if ( v < 0 ) return (long long)(v-0.5);
     else return (long long)(v+0.5);
@@ -841,7 +841,7 @@ static void fncname(const void *src_p, void *dst_p, size_t n_vals, int f_b, void
     } \
     i = flg; /* junk code for warning */ \
 }
-SLI__MDARRAY__DO_OPERATION_2TYPES_ALL(MAKE_FUNC, flg ? round_f2c(src[i]) : trunc_f2c,flg ? round_f2i16(src[i]) : trunc_f2i16,flg ? round_f2i32(src[i]) : trunc_f2i32,flg ? round_f2i64(src[i]) : trunc_f2i64, flg ? round_d2c(src[i]) : trunc_d2c,flg ? round_d2i16(src[i]) : trunc_d2i16,flg ? round_d2i32(src[i]) : trunc_d2i32,flg ? round_d2i64(src[i]) : trunc_d2i64, flg ? round_ld2c(src[i]) : trunc_ld2c,flg ? round_ld2i16(src[i]) : trunc_ld2i16,flg ? round_ld2i32(src[i]) : trunc_ld2i32,flg ? round_ld2i64(src[i]) : trunc_ld2i64, flg ? round_fx2c(src[i]) : trunc_fx2c,flg ? round_fx2i16(src[i]) : trunc_fx2i16,flg ? round_fx2i32(src[i]) : trunc_fx2i32,flg ? round_fx2i64(src[i]) : trunc_fx2i64, flg ? round_dx2c(src[i]) : trunc_dx2c,flg ? round_dx2i16(src[i]) : trunc_dx2i16,flg ? round_dx2i32(src[i]) : trunc_dx2i32,flg ? round_dx2i64(src[i]) : trunc_dx2i64, flg ? round_ldx2c(src[i]) : trunc_ldx2c,flg ? round_ldx2i16(src[i]) : trunc_ldx2i16,flg ? round_ldx2i32(src[i]) : trunc_ldx2i32,flg ? round_ldx2i64(src[i]) : trunc_ldx2i64,f2fx,d2dx,ld2ldx,);
+SLI__MDARRAY__DO_OPERATION_2TYPES_ALL(MAKE_FUNC, flg ? rnd_f2c(src[i]) : tnc_f2c,flg ? rnd_f2i16(src[i]) : tnc_f2i16,flg ? rnd_f2i32(src[i]) : tnc_f2i32,flg ? rnd_f2i64(src[i]) : tnc_f2i64, flg ? rnd_d2c(src[i]) : tnc_d2c,flg ? rnd_d2i16(src[i]) : tnc_d2i16,flg ? rnd_d2i32(src[i]) : tnc_d2i32,flg ? rnd_d2i64(src[i]) : tnc_d2i64, flg ? rnd_ld2c(src[i]) : tnc_ld2c,flg ? rnd_ld2i16(src[i]) : tnc_ld2i16,flg ? rnd_ld2i32(src[i]) : tnc_ld2i32,flg ? rnd_ld2i64(src[i]) : tnc_ld2i64, flg ? rnd_fx2c(src[i]) : tnc_fx2c,flg ? rnd_fx2i16(src[i]) : tnc_fx2i16,flg ? rnd_fx2i32(src[i]) : tnc_fx2i32,flg ? rnd_fx2i64(src[i]) : tnc_fx2i64, flg ? rnd_dx2c(src[i]) : tnc_dx2c,flg ? rnd_dx2i16(src[i]) : tnc_dx2i16,flg ? rnd_dx2i32(src[i]) : tnc_dx2i32,flg ? rnd_dx2i64(src[i]) : tnc_dx2i64, flg ? rnd_ldx2c(src[i]) : tnc_ldx2c,flg ? rnd_ldx2i16(src[i]) : tnc_ldx2i16,flg ? rnd_ldx2i32(src[i]) : tnc_ldx2i32,flg ? rnd_ldx2i64(src[i]) : tnc_ldx2i64,f2fx,d2dx,ld2ldx,);
 #undef MAKE_FUNC
 }
 
@@ -9292,7 +9292,7 @@ static void fncname(const void *_src, void *_dest, size_t len_0, size_t _src_ste
     j = flg; /* junk code for warning */ \
     return; \
 }
-SLI__MDARRAY__DO_OPERATION_2TYPES_ALL(MAKE_FUNC, flg ? round_f2c(v0) : trunc_f2c,flg ? round_f2i16(v0) : trunc_f2i16,flg ? round_f2i32(v0) : trunc_f2i32,flg ? round_f2i64(v0) : trunc_f2i64, flg ? round_d2c(v0) : trunc_d2c,flg ? round_d2i16(v0) : trunc_d2i16,flg ? round_d2i32(v0) : trunc_d2i32,flg ? round_d2i64(v0) : trunc_d2i64, flg ? round_ld2c(v0) : trunc_ld2c,flg ? round_ld2i16(v0) : trunc_ld2i16,flg ? round_ld2i32(v0) : trunc_ld2i32,flg ? round_ld2i64(v0) : trunc_ld2i64, flg ? round_fx2c(v0) : trunc_fx2c,flg ? round_fx2i16(v0) : trunc_fx2i16,flg ? round_fx2i32(v0) : trunc_fx2i32,flg ? round_fx2i64(v0) : trunc_fx2i64, flg ? round_dx2c(v0) : trunc_dx2c,flg ? round_dx2i16(v0) : trunc_dx2i16,flg ? round_dx2i32(v0) : trunc_dx2i32,flg ? round_dx2i64(v0) : trunc_dx2i64, flg ? round_ldx2c(v0) : trunc_ldx2c,flg ? round_ldx2i16(v0) : trunc_ldx2i16,flg ? round_ldx2i32(v0) : trunc_ldx2i32,flg ? round_ldx2i64(v0) : trunc_ldx2i64,f2fx,d2dx,ld2ldx,);
+SLI__MDARRAY__DO_OPERATION_2TYPES_ALL(MAKE_FUNC, flg ? rnd_f2c(v0) : tnc_f2c,flg ? rnd_f2i16(v0) : tnc_f2i16,flg ? rnd_f2i32(v0) : tnc_f2i32,flg ? rnd_f2i64(v0) : tnc_f2i64, flg ? rnd_d2c(v0) : tnc_d2c,flg ? rnd_d2i16(v0) : tnc_d2i16,flg ? rnd_d2i32(v0) : tnc_d2i32,flg ? rnd_d2i64(v0) : tnc_d2i64, flg ? rnd_ld2c(v0) : tnc_ld2c,flg ? rnd_ld2i16(v0) : tnc_ld2i16,flg ? rnd_ld2i32(v0) : tnc_ld2i32,flg ? rnd_ld2i64(v0) : tnc_ld2i64, flg ? rnd_fx2c(v0) : tnc_fx2c,flg ? rnd_fx2i16(v0) : tnc_fx2i16,flg ? rnd_fx2i32(v0) : tnc_fx2i32,flg ? rnd_fx2i64(v0) : tnc_fx2i64, flg ? rnd_dx2c(v0) : tnc_dx2c,flg ? rnd_dx2i16(v0) : tnc_dx2i16,flg ? rnd_dx2i32(v0) : tnc_dx2i32,flg ? rnd_dx2i64(v0) : tnc_dx2i64, flg ? rnd_ldx2c(v0) : tnc_ldx2c,flg ? rnd_ldx2i16(v0) : tnc_ldx2i16,flg ? rnd_ldx2i32(v0) : tnc_ldx2i32,flg ? rnd_ldx2i64(v0) : tnc_ldx2i64,f2fx,d2dx,ld2ldx,);
 #undef MAKE_FUNC
 }
 
@@ -13872,50 +13872,43 @@ mdarray &mdarray::calc2(const mdarray &obj, bool obj_1st,
 		      float (*)(float,float),
 		      long double (*)(long double,long double));
 
+    const ssize_t this_szt =  this->size_type();
+    const ssize_t obj_szt = obj.size_type();
+
     /* 複素数の場合は例外を返す */
-    switch( this->size_type() ) {
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-      case DCOMPLEX_ZT  :
-      case LDCOMPLEX_ZT :
+
+    /* 複素数型 */
+    if ( this_szt == FCOMPLEX_ZT || this_szt == DCOMPLEX_ZT ||
+	 this_szt == LDCOMPLEX_ZT ) {
 	err_throw(__FUNCTION__,"ERROR","complex type cannot be used");
-	break;
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
-	/* NO PROBLEM */
-	break;
-      /* その他の型 */
-      default           :
-	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
     }
-    switch( obj.size_type() ) {
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-      case DCOMPLEX_ZT  :
-      case LDCOMPLEX_ZT :
-	err_throw(__FUNCTION__,"ERROR","complex type cannot be used");
-	break;
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
+    /* 実数型 */
+    else if ( this_szt == FLOAT_ZT || this_szt == DOUBLE_ZT ||
+	      this_szt == LDOUBLE_ZT || this_szt == UCHAR_ZT ||
+	      this_szt == INT16_ZT || this_szt == INT32_ZT ||
+	      this_szt == INT64_ZT ) {
 	/* NO PROBLEM */
-	break;
-      /* その他の型 */
-      default           :
+    }
+    /* その他の型 */
+    else {
 	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
+    }
+
+    /* 複素数型 */
+    if ( obj_szt == FCOMPLEX_ZT || obj_szt == DCOMPLEX_ZT ||
+	 obj_szt == LDCOMPLEX_ZT ) {
+	err_throw(__FUNCTION__,"ERROR","complex type cannot be used");
+    }
+    /* 実数型 */
+    else if ( obj_szt == FLOAT_ZT || obj_szt == DOUBLE_ZT ||
+	      obj_szt == LDOUBLE_ZT || obj_szt == UCHAR_ZT ||
+	      obj_szt == INT16_ZT || obj_szt == INT32_ZT ||
+	      obj_szt == INT64_ZT ) {
+	/* NO PROBLEM */
+    }
+    /* その他の型 */
+    else {
+	err_throw(__FUNCTION__,"ERROR","unsupported type");
     }
 
     if ( this->auto_resize() == true ) {
@@ -14174,50 +14167,43 @@ mdarray &mdarray::calcx2(const mdarray &obj, bool obj_1st,
 			 fcomplex (*funcf)(fcomplex,fcomplex),
 			 ldcomplex (*funcl)(ldcomplex,ldcomplex))
 {
+    const ssize_t this_szt =  this->size_type();
+    const ssize_t obj_szt = obj.size_type();
+
     /* 実数の場合は例外を返す */
-    switch( this->size_type() ) {
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-      case DCOMPLEX_ZT  :
-      case LDCOMPLEX_ZT :
+
+    /* 複素数型 */
+    if ( this_szt == FCOMPLEX_ZT || this_szt == DCOMPLEX_ZT ||
+	 this_szt == LDCOMPLEX_ZT ) {
 	/* NO PROBLEM */
-	break;
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
-	err_throw(__FUNCTION__,"ERROR","real type cannot be used");
-	break;
-      /* その他の型 */
-      default           :
-	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
     }
-    switch( obj.size_type() ) {
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-      case DCOMPLEX_ZT  :
-      case LDCOMPLEX_ZT :
-	/* NO PROBLEM */
-	break;
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
-	err_throw(__FUNCTION__,"ERROR","complex type cannot be used");
-	break;
-      /* その他の型 */
-      default           :
+    /* 実数型 */
+    else if ( this_szt == FLOAT_ZT || this_szt == DOUBLE_ZT ||
+	      this_szt == LDOUBLE_ZT || this_szt == UCHAR_ZT ||
+	      this_szt == INT16_ZT || this_szt == INT32_ZT ||
+	      this_szt == INT64_ZT ) {
+	err_throw(__FUNCTION__,"ERROR","real type cannot be used");
+    }
+    /* その他の型 */
+    else {
 	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
+    }
+
+    /* 複素数型 */
+    if ( obj_szt == FCOMPLEX_ZT || obj_szt == DCOMPLEX_ZT ||
+	 obj_szt == LDCOMPLEX_ZT ) {
+	/* NO PROBLEM */
+    }
+    /* 実数型 */
+    else if ( obj_szt == FLOAT_ZT || obj_szt == DOUBLE_ZT ||
+	      obj_szt == LDOUBLE_ZT || obj_szt == UCHAR_ZT ||
+	      obj_szt == INT16_ZT || obj_szt == INT32_ZT ||
+	      obj_szt == INT64_ZT ) {
+	err_throw(__FUNCTION__,"ERROR","real type cannot be used");
+    }
+    /* その他の型 */
+    else {
+	err_throw(__FUNCTION__,"ERROR","unsupported type");
     }
 
     void (*func_calc)(const void *, void *, bool, size_t, const void *,

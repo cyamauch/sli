@@ -54,6 +54,7 @@ SLI__MDARRAY__DO_OPERATION_1TYPE_COMPLEX(MAKE_FUNC,);
 
 mdarray MD_NAME_FUNCTION( const mdarray &src )
 {
+    const ssize_t src_szt = src.size_type();
     const ssize_t dest_sz_type = src.size_type();
     mdarray dest;
     void (*fnc_calc)(const void *, void *, size_t, bool, bool, bool);
@@ -71,27 +72,21 @@ mdarray MD_NAME_FUNCTION( const mdarray &src )
 #endif
 
     /* 複素数型でない場合は例外を返す */
-    switch( src.size_type() ) {
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-      case DCOMPLEX_ZT  :
-      case LDCOMPLEX_ZT :
+    /* 複素数型 */
+    if ( src_szt == FCOMPLEX_ZT || src_szt == DCOMPLEX_ZT ||
+	 src_szt == LDCOMPLEX_ZT ) {
 	/* NO PROBLEM */
-	break;
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
+    }
+    /* 実数型 */
+    else if ( src_szt == FLOAT_ZT || src_szt == DOUBLE_ZT ||
+	      src_szt == LDOUBLE_ZT || src_szt == UCHAR_ZT ||
+	      src_szt == INT16_ZT || src_szt == INT32_ZT ||
+	      src_szt == INT64_ZT ) {
 	err_throw(__FUNCTION__,"ERROR","real type cannot be used");
-	break;
-      /* その他の型 */
-      default           :
+    }
+    /* その他の型 */
+    else {
 	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
     }
 
     if ( src.length() == 0 ) goto quit;
@@ -100,7 +95,7 @@ mdarray MD_NAME_FUNCTION( const mdarray &src )
 
     /* 関数を選択 */
 #define SEL_FUNC(fncname,sz_type,op_type) \
-    if ( src.size_type() == sz_type ) { \
+    if ( src_szt == sz_type ) { \
         fnc_calc = &MD_NAME_NAMESPC::fncname; \
     }
     SLI__MDARRAY__DO_OPERATION_1TYPE_COMPLEX(SEL_FUNC,else);

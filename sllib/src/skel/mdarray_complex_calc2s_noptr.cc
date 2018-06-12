@@ -224,9 +224,9 @@ static void MD_NAME_S_FUNCTION(mdarray *thisp, const mdarray &obj, bool obj_1st)
 
 mdarray MD_NAME_FUNCTION( const mdarray &src0, const mdarray &src1 )
 {
-    const ssize_t zt0 = src0.size_type();
-    const ssize_t zt1 = src1.size_type();
-    const ssize_t dest_sz_type = (zt0 < zt1) ? zt0 : zt1;
+    const ssize_t src0_szt = src0.size_type();
+    const ssize_t src1_szt = src1.size_type();
+    const ssize_t dest_sz_type = (src0_szt < src1_szt) ? src0_szt : src1_szt;
     size_t dim_len = src0.dim_length();
     mdarray ret(dest_sz_type, true);
     mdarray_size nx;
@@ -240,49 +240,37 @@ mdarray MD_NAME_FUNCTION( const mdarray &src0, const mdarray &src1 )
     }
 
     /* 実数の場合は例外を返す */
-    switch( src0.size_type() ) {
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-      case DCOMPLEX_ZT  :
-      case LDCOMPLEX_ZT :
+    /* 複素数型 */
+    if ( src0_szt == FCOMPLEX_ZT || src0_szt == DCOMPLEX_ZT ||
+	 src0_szt == LDCOMPLEX_ZT ) {
 	/* NO PROBLEM */
-	break;
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
-	err_throw(__FUNCTION__,"ERROR","real type cannot be used");
-	break;
-      /* その他の型 */
-      default           :
-	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
     }
-    switch( src1.size_type() ) {
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-      case DCOMPLEX_ZT  :
-      case LDCOMPLEX_ZT :
-	/* NO PROBLEM */
-	break;
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
+    /* 実数型 */
+    else if ( src0_szt == FLOAT_ZT || src0_szt == DOUBLE_ZT ||
+	      src0_szt == LDOUBLE_ZT || src0_szt == UCHAR_ZT ||
+	      src0_szt == INT16_ZT || src0_szt == INT32_ZT ||
+	      src0_szt == INT64_ZT ) {
 	err_throw(__FUNCTION__,"ERROR","real type cannot be used");
-	break;
-      /* その他の型 */
-      default           :
+    }
+    /* その他の型 */
+    else {
 	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
+    }
+    /* 複素数型 */
+    if ( src1_szt == FCOMPLEX_ZT || src1_szt == DCOMPLEX_ZT ||
+	 src1_szt == LDCOMPLEX_ZT ) {
+	/* NO PROBLEM */
+    }
+    /* 実数型 */
+    else if ( src1_szt == FLOAT_ZT || src1_szt == DOUBLE_ZT ||
+	      src1_szt == LDOUBLE_ZT || src1_szt == UCHAR_ZT ||
+	      src1_szt == INT16_ZT || src1_szt == INT32_ZT ||
+	      src1_szt == INT64_ZT ) {
+	err_throw(__FUNCTION__,"ERROR","real type cannot be used");
+    }
+    /* その他の型 */
+    else {
+	err_throw(__FUNCTION__,"ERROR","unsupported type");
     }
 
     ret.reallocate(nx.array_ptr(), dim_len, true);

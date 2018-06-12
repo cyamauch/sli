@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2013-04-27 20:59:04 cyamauch> */
+/* Time-stamp: <2018-05-28 02:54:04 cyamauch> */
 
 /**
  * @file   mdarray_math.cc
@@ -554,43 +554,38 @@ mdarray calc1( const mdarray &src,
 	       double (*func)(double), float (*funcf)(float),
 	       long double (*funcl)(long double) )
 {
+    const ssize_t src_szt = src.size_type();
     mdarray dest;
-    ssize_t dest_sz_type;
+    ssize_t dest_szt;
     void (*fnc_calc)(const void *, void *, size_t,
 	   double (*)(double), float (*)(float), long double (*)(long double));
 
     /* 実数型でない場合は例外を返す */
-    switch( src.size_type() ) {
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
+    /* 実数型 */
+    if ( src_szt == FLOAT_ZT || src_szt == DOUBLE_ZT ||
+	 src_szt == LDOUBLE_ZT || src_szt == UCHAR_ZT ||
+	 src_szt == INT16_ZT || src_szt == INT32_ZT ||
+	 src_szt == INT64_ZT ) {
 	/* NO PROBLEM */
-	break;
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-      case DCOMPLEX_ZT  :
-      case LDCOMPLEX_ZT :
+    }
+    /* 複素数型 */
+    else if ( src_szt == FCOMPLEX_ZT || src_szt == DCOMPLEX_ZT ||
+	      src_szt == LDCOMPLEX_ZT ) {
 	err_throw(__FUNCTION__,"ERROR","complex type cannot be used");
-	break;
-      /* その他の型 */
-      default           :
+    }
+    /* その他の型 */
+    else {
 	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
     }
 
     if ( src.length() == 0 ) goto quit;
 
     fnc_calc = NULL;
-    dest_sz_type = (0 < src.size_type()) ? -8 : src.size_type();
+    dest_szt = (0 < src_szt) ? -8 : src_szt;
 
     /* 関数を選択 */
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
-    if (src.size_type() == org_sz_type && dest_sz_type == new_sz_type) { \
+    if (src_szt == org_sz_type && dest_szt == new_sz_type) { \
         fnc_calc = &_calc1::fncname; \
     }
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
@@ -599,14 +594,14 @@ mdarray calc1( const mdarray &src,
     if ( fnc_calc != NULL ) {
 	const size_t dim_len = src.dim_length();
 	const size_t *szs = src.cdimarray();
-	dest.init(dest_sz_type, true, szs, dim_len, false);
-	if ( dest_sz_type < -8 ) {
+	dest.init(dest_szt, true, szs, dim_len, false);
+	if ( dest_szt < -8 ) {
 	    if ( funcl != NULL ) {
 		func = NULL;
 		funcf = NULL;
 	    }
 	}
-	if ( dest_sz_type == -4 ) {
+	if ( dest_szt == -4 ) {
 	    if ( funcf != NULL ) {
 		func = NULL;
 		funcl = NULL;
@@ -671,50 +666,45 @@ SLI__MDARRAY__DO_OPERATION_2TYPES(MAKE_FUNC,,,,,,,,,,,,,);
  * @brief  mdarray の演算 (未使用)
  */
 mdarray calc2( const mdarray &src0, 
-	       long double src1, ssize_t szt_src1, bool rv,
+	       long double src1, ssize_t src1_szt, bool rv,
 	       double (*func)(double,double), float (*funcf)(float,float),
 	       long double (*funcl)(long double,long double))
 {
+    const ssize_t src0_szt = src0.size_type();
     mdarray dest;
-    ssize_t zt0, zt1, dest_sz_type;
+    ssize_t zt0, zt1, dest_szt;
     void (*fnc_calc)(const void *, long double, bool, void *, size_t,
 		     double (*)(double,double), float (*)(float,float), 
 		     long double (*)(long double,long double));
 
     /* 実数型でない場合は例外を返す */
-    switch( src0.size_type() ) {
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
+    /* 実数型 */
+    if ( src0_szt == FLOAT_ZT || src0_szt == DOUBLE_ZT ||
+	 src0_szt == LDOUBLE_ZT || src0_szt == UCHAR_ZT ||
+	 src0_szt == INT16_ZT || src0_szt == INT32_ZT ||
+	 src0_szt == INT64_ZT ) {
 	/* NO PROBLEM */
-	break;
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-      case DCOMPLEX_ZT  :
-      case LDCOMPLEX_ZT :
+    }
+    /* 複素数型 */
+    else if ( src0_szt == FCOMPLEX_ZT || src0_szt == DCOMPLEX_ZT ||
+	      src0_szt == LDCOMPLEX_ZT ) {
 	err_throw(__FUNCTION__,"ERROR","complex type cannot be used");
-	break;
-      /* その他の型 */
-      default           :
+    }
+    /* その他の型 */
+    else {
 	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
     }
 
     if ( src0.length() == 0 ) goto quit;
 
     fnc_calc = NULL;
-    zt0 = (0 < src0.size_type()) ? -8 : src0.size_type();
-    zt1 = szt_src1;
-    dest_sz_type = (zt0 < zt1) ? zt0 : zt1;
+    zt0 = (0 < src0_szt) ? -8 : src0_szt;
+    zt1 = src1_szt;
+    dest_szt = (zt0 < zt1) ? zt0 : zt1;
 
     /* 関数を選択 */
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
-    if (src0.size_type() == org_sz_type && dest_sz_type == new_sz_type) { \
+    if (src0_szt == org_sz_type && dest_szt == new_sz_type) { \
         fnc_calc = &_calc2::fncname; \
     }
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
@@ -723,14 +713,14 @@ mdarray calc2( const mdarray &src0,
     if ( fnc_calc != NULL ) {
 	const size_t dim_len = src0.dim_length();
 	const size_t *szs = src0.cdimarray();
-	dest.init(dest_sz_type, true, szs, dim_len, false);
-	if ( dest_sz_type < -8 ) {
+	dest.init(dest_szt, true, szs, dim_len, false);
+	if ( dest_szt < -8 ) {
 	    if ( funcl != NULL ) {
 		func = NULL;
 		funcf = NULL;
 	    }
 	}
-	if ( dest_sz_type == -4 ) {
+	if ( dest_szt == -4 ) {
 	    if ( funcf != NULL ) {
 		func = NULL;
 		funcl = NULL;
@@ -757,11 +747,13 @@ mdarray calc2( const mdarray &src0, const mdarray &src1,
 	       double (*func)(double,double), float (*funcf)(float,float),
 	       long double (*funcl)(long double,long double) )
 {
-    const ssize_t zt0 = (0 < src0.size_type()) ? -8 : src0.size_type();
-    const ssize_t zt1 = (0 < src1.size_type()) ? -8 : src1.size_type();
-    const ssize_t dest_sz_type = (zt0 < zt1) ? zt0 : zt1;
+    const ssize_t src0_szt = src0.size_type();
+    const ssize_t src1_szt = src1.size_type();
+    const ssize_t zt0 = (0 < src0_szt) ? -8 : src0_szt;
+    const ssize_t zt1 = (0 < src1_szt) ? -8 : src1_szt;
+    const ssize_t dest_szt = (zt0 < zt1) ? zt0 : zt1;
     size_t dim_len = src0.dim_length();
-    mdarray ret(dest_sz_type, true);
+    mdarray ret(dest_szt, true);
     mdarray_size nx;
     size_t i;
     if ( dim_len < src1.dim_length() ) dim_len = src1.dim_length();
@@ -773,51 +765,37 @@ mdarray calc2( const mdarray &src0, const mdarray &src1,
     }
 
     /* 実数型でない場合は例外を返す */
-    switch( src0.size_type() ) {
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
+    /* 実数型 */
+    if ( src0_szt == FLOAT_ZT || src0_szt == DOUBLE_ZT ||
+	 src0_szt == LDOUBLE_ZT || src0_szt == UCHAR_ZT ||
+	 src0_szt == INT16_ZT || src0_szt == INT32_ZT ||
+	 src0_szt == INT64_ZT ) {
 	/* NO PROBLEM */
-	break;
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-      case DCOMPLEX_ZT  :
-      case LDCOMPLEX_ZT :
-	err_throw(__FUNCTION__,"ERROR","complex type cannot be used");
-	break;
-      /* その他の型 */
-      default           :
-	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
     }
-
-    /* 実数型でない場合は例外を返す */
-    switch( src1.size_type() ) {
-      /* 実数型 */
-      case FLOAT_ZT     :
-      case DOUBLE_ZT    :
-      case LDOUBLE_ZT   :
-      case UCHAR_ZT     :
-      case INT16_ZT     :
-      case INT32_ZT     :
-      case INT64_ZT     :
-	/* NO PROBLEM */
-	break;
-      /* 複素数型 */
-      case FCOMPLEX_ZT  :
-      case DCOMPLEX_ZT  :
-      case LDCOMPLEX_ZT :
+    /* 複素数型 */
+    else if ( src0_szt == FCOMPLEX_ZT || src0_szt == DCOMPLEX_ZT ||
+	      src0_szt == LDCOMPLEX_ZT ) {
 	err_throw(__FUNCTION__,"ERROR","complex type cannot be used");
-	break;
-      /* その他の型 */
-      default           :
+    }
+    /* その他の型 */
+    else {
 	err_throw(__FUNCTION__,"ERROR","unsupported type");
-	break;
+    }
+    /* 実数型 */
+    if ( src1_szt == FLOAT_ZT || src1_szt == DOUBLE_ZT ||
+	 src1_szt == LDOUBLE_ZT || src1_szt == UCHAR_ZT ||
+	 src1_szt == INT16_ZT || src1_szt == INT32_ZT ||
+	 src1_szt == INT64_ZT ) {
+	/* NO PROBLEM */
+    }
+    /* 複素数型 */
+    else if ( src1_szt == FCOMPLEX_ZT || src1_szt == DCOMPLEX_ZT ||
+	      src1_szt == LDCOMPLEX_ZT ) {
+	err_throw(__FUNCTION__,"ERROR","complex type cannot be used");
+    }
+    /* その他の型 */
+    else {
+	err_throw(__FUNCTION__,"ERROR","unsupported type");
     }
 
     ret.reallocate(nx.array_ptr(), dim_len, true);
