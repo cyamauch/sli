@@ -34,6 +34,8 @@ LIBPRIVATE = -lreadline -lcurses -lbz2 -lz
 CCFLAGS  =
 # This requires recent Cygwin
 #CCFLAGS  = -D_XOPEN_SOURCE=700
+# This is also possible
+#CCFLAGS  = -std=gnu++11
 # for 32-bit library on 64-bit Linux
 #CCFLAGS = -m32
 # for 64-bit library on MacOSX
