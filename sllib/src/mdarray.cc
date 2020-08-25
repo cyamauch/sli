@@ -17316,7 +17316,7 @@ int mdarray::test_paste_arg( const mdarray &src_img,
     //err_report1(__FUNCTION__,"DEBUG","src_img.layer_row() = %zd",src_img.row_length());
     //err_report1(__FUNCTION__,"DEBUG","src_img.layer_length() = %zd",src_img.layer_length());
 
-    if ( 3 <= this->dim_length() && 1 <= src_img.dim_length() && 
+    if ( 1 <= this->dim_length() && 1 <= src_img.dim_length() && 
 	 0 < this->layer_length() && 0 < src_img.layer_length() ) {
 	size_t abs_idx = abs_sz2z(layer_idx);
 	layer_size = src_img.layer_length();
@@ -17355,7 +17355,7 @@ int mdarray::test_paste_arg( const mdarray &src_img,
 	layer_begin = 0;
     }
 
-    if ( 2 <= this->dim_length() && 1 <= src_img.dim_length() &&
+    if ( 1 <= this->dim_length() && 1 <= src_img.dim_length() &&
 	 0 < this->row_length() && 0 < src_img.row_length() ) {
 	size_t abs_idx = abs_sz2z(row_idx);
 	row_size = src_img.row_length();
