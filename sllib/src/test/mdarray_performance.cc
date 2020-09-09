@@ -9,7 +9,7 @@
 using namespace sli;
 
 const size_t Width = 4096*2;
-const size_t Height = 4096*2;
+const size_t Height = 4096*3;
 
 //static ssize_t scan_1d( double v[], size_t n, ssize_t x, ssize_t y, ssize_t z,
 //			const mdarray_double *thisp, void *u_p )
@@ -17,14 +17,20 @@ const size_t Height = 4096*2;
 //    return n;
 //}
 
+//#define TYPE_TARGET double
+//#define TYPE_MD_TARGET mdarray_double
+
+#define TYPE_TARGET float
+#define TYPE_MD_TARGET mdarray_float
+
 int main( int argc, char *argv[] )
 {
     stdstreamio sio;
-    double *arr0_ptr;
-    double *arr1_ptr;
-    double *const *arr0_ptr2d;
-    double *const *arr1_ptr2d;
-    mdarray_double arr0, arr1;
+    TYPE_TARGET *arr0_ptr;
+    TYPE_TARGET *arr1_ptr;
+    TYPE_TARGET *const *arr0_ptr2d;
+    TYPE_TARGET *const *arr1_ptr2d;
+    TYPE_MD_TARGET arr0, arr1;
     double tm0, tm1;
     size_t i,j;
     long ii;
@@ -133,6 +139,28 @@ int main( int argc, char *argv[] )
 
     for ( j=0 ; j < arr0.length() ; j++ ) arr0_ptr[j] = drand48();
 
+    tm0 = clock() / (double)CLOCKS_PER_SEC;
+    arr0 += arr1;
+    tm1 = clock() / (double)CLOCKS_PER_SEC;
+    sio.printf("arr0 += arr1: %g\n",tm1 - tm0);
+
+    tm0 = clock() / (double)CLOCKS_PER_SEC;
+    arr0 -= arr1;
+    tm1 = clock() / (double)CLOCKS_PER_SEC;
+    sio.printf("arr0 -= arr1: %g\n",tm1 - tm0);
+    
+    tm0 = clock() / (double)CLOCKS_PER_SEC;
+    arr0 *= arr1;
+    tm1 = clock() / (double)CLOCKS_PER_SEC;
+    sio.printf("arr0 *= arr1: %g\n",tm1 - tm0);
+    
+    tm0 = clock() / (double)CLOCKS_PER_SEC;
+    arr0 /= arr1;
+    tm1 = clock() / (double)CLOCKS_PER_SEC;
+    sio.printf("arr0 /= arr1: %g\n",tm1 - tm0);
+
+    for ( j=0 ; j < arr0.length() ; j++ ) arr0_ptr[j] = drand48();
+    
     tm0 = clock() / (double)CLOCKS_PER_SEC;
     arr0 = arr0 + arr1;
     tm1 = clock() / (double)CLOCKS_PER_SEC;
@@ -300,6 +328,35 @@ int main( int argc, char *argv[] )
     }
 
     sio.printf("******** test of math functions ********\n");
+
+    for ( j=0 ; j < arr0.length() ; j++ ) arr0_ptr[j] = drand48();
+
+    tm0 = clock() / (double)CLOCKS_PER_SEC;
+    arr0.abs();
+    tm1 = clock() / (double)CLOCKS_PER_SEC;
+    sio.printf("arr0.abs() %g\n",tm1 - tm0);
+
+    for ( j=0 ; j < arr0.length() ; j++ ) arr0_ptr[j] = drand48();
+
+    tm0 = clock() / (double)CLOCKS_PER_SEC;
+    arr0.floor();
+    tm1 = clock() / (double)CLOCKS_PER_SEC;
+    sio.printf("arr0.floor() %g\n",tm1 - tm0);
+
+    for ( j=0 ; j < arr0.length() ; j++ ) arr0_ptr[j] = drand48();
+
+    tm0 = clock() / (double)CLOCKS_PER_SEC;
+    arr0.ceil();
+    tm1 = clock() / (double)CLOCKS_PER_SEC;
+    sio.printf("arr0.ceil() %g\n",tm1 - tm0);
+
+    for ( j=0 ; j < arr0.length() ; j++ ) arr0_ptr[j] = drand48();
+
+    tm0 = clock() / (double)CLOCKS_PER_SEC;
+    arr0.round();
+    tm1 = clock() / (double)CLOCKS_PER_SEC;
+    sio.printf("arr0.round() %g\n",tm1 - tm0);
+    
 
     for ( j=0 ; j < arr0.length() ; j++ ) arr0_ptr[j] = drand48();
 
