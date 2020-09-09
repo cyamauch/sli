@@ -8,7 +8,7 @@
 #include <string.h>
 using namespace sli;
 
-const size_t Width = 4096*2;
+const size_t Width = 4096*3;
 const size_t Height = 4096*3;
 
 //static ssize_t scan_1d( double v[], size_t n, ssize_t x, ssize_t y, ssize_t z,
@@ -220,6 +220,16 @@ int main( int argc, char *argv[] )
     tm1 = clock() / (double)CLOCKS_PER_SEC;
     sio.printf("arr0.addf(arr1,\"*\"): %g\n",tm1 - tm0);
 
+    tm0 = clock() / (double)CLOCKS_PER_SEC;
+    arr0.add(arr1, 7, 13);
+    tm1 = clock() / (double)CLOCKS_PER_SEC;
+    sio.printf("arr0.add(arr1, 7, 13): %g\n",tm1 - tm0);
+
+    tm0 = clock() / (double)CLOCKS_PER_SEC;
+    arr0.add(arr1, -15, -9);
+    tm1 = clock() / (double)CLOCKS_PER_SEC;
+    sio.printf("arr0.add(arr1, -15, -9): %g\n",tm1 - tm0);
+    
     tm0 = clock() / (double)CLOCKS_PER_SEC;
     arr0.pastef(arr1,"*");
     tm1 = clock() / (double)CLOCKS_PER_SEC;
