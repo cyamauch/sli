@@ -9,6 +9,10 @@
 /* NOTE: Do not set values less than 16.                  */
 #define _SSE2_MIN_NBYTES 64
 
+/* Minimum byte length of vector calculation by SSE2. */
+/* NOTE: Do not set values less than 32.              */
+#define _SSE2_CALC_MIN_NBYTES 64
+
 /* Typical size of CPU cache in functions using SSE2. */
 /* This is used for switching _mm_store/_mm_stream.   */
 #define _SSE2_CPU_CACHE_SIZE (1024*1024*8)

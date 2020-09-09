@@ -48,6 +48,13 @@
 #include "private/s_memswap.h"
 #include "private/s_byteswap.h"
 
+#include "private/s_ope.h"
+#include "private/s_abs_vector_float.h"
+#include "private/s_abs_vector_double.h"
+#include "private/s_xeq_n_float.h"
+#include "private/s_xeq_n_double.h"
+
+
 #ifndef debug_report
 //#define debug_report(xx) err_report(__FUNCTION__,"DEBUG",xx)
 #define debug_report(xx)
@@ -1630,10 +1637,10 @@ static void x_equal_r( const mdarray &src_obj, mdarray *dest_obj, int ope,
     return;
 }
 
-static const int Ope_plus  = 0;
-static const int Ope_minus = 1;
-static const int Ope_star  = 2;
-static const int Ope_slash = 3;
+static const int Ope_plus  = S_OPE_PLUS;
+static const int Ope_minus = S_OPE_MINUS;
+static const int Ope_star  = S_OPE_STAR;
+static const int Ope_slash = S_OPE_SLASH;
 
 namespace xeq_n
 {
@@ -1697,9 +1704,15 @@ mdarray &mdarray::ope_plus_equal(const mdarray &obj, bool do_resize)
     }
 
     if ( this->length() == 0 ) return *this;
-
+    
     func_calc = NULL;
-
+    if ( this->sz_type_rec == obj.sz_type_rec ) {
+	/* set funcs using SIMD instructions */
+	if ( this->sz_type_rec == FLOAT_ZT ) func_calc = &s_xeq_n_float;
+	else if ( this->sz_type_rec == DOUBLE_ZT ) func_calc = &s_xeq_n_double;
+    }
+    if ( func_calc == NULL ) {
+    
     /* 関数を選択 */
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( obj.sz_type_rec == org_sz_type && this->sz_type_rec == new_sz_type ) { \
@@ -1708,6 +1721,11 @@ mdarray &mdarray::ope_plus_equal(const mdarray &obj, bool do_resize)
     SLI__MDARRAY__DO_OPERATION_2TYPES_ALL(SEL_FUNC,,,,,,,,,,,,,,,,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    else {
+	//err_report(__FUNCTION__,"NOTICE","using SIMD instructions [vector]");
+    }
+    
     /* 関数があれば代入を行なう */
     if ( func_calc != NULL ) {
 	size_t len_src, len_dest, ndim;
@@ -1796,6 +1814,12 @@ mdarray &mdarray::ope_minus_equal(const mdarray &obj, bool do_resize)
     if ( this->length() == 0 ) return *this;
 
     func_calc = NULL;
+    if ( this->sz_type_rec == obj.sz_type_rec ) {
+	/* set funcs using SIMD instructions */
+	if ( this->sz_type_rec == FLOAT_ZT ) func_calc = &s_xeq_n_float;
+	else if ( this->sz_type_rec == DOUBLE_ZT ) func_calc = &s_xeq_n_double;
+    }
+    if ( func_calc == NULL ) {
 
     /* 関数を選択 */
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
@@ -1805,6 +1829,11 @@ mdarray &mdarray::ope_minus_equal(const mdarray &obj, bool do_resize)
     SLI__MDARRAY__DO_OPERATION_2TYPES_ALL(SEL_FUNC,,,,,,,,,,,,,,,,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    else {
+	//err_report(__FUNCTION__,"NOTICE","using SIMD instructions [vector]");
+    }
+    
     /* 関数があれば代入を行なう */
     if ( func_calc != NULL ) {
 	size_t len_src, len_dest, ndim;
@@ -1893,6 +1922,12 @@ mdarray &mdarray::ope_star_equal(const mdarray &obj, bool do_resize)
     if ( this->length() == 0 ) return *this;
 
     func_calc = NULL;
+    if ( this->sz_type_rec == obj.sz_type_rec ) {
+	/* set funcs using SIMD instructions */
+	if ( this->sz_type_rec == FLOAT_ZT ) func_calc = &s_xeq_n_float;
+	else if ( this->sz_type_rec == DOUBLE_ZT ) func_calc = &s_xeq_n_double;
+    }
+    if ( func_calc == NULL ) {
 
     /* 関数を選択 */
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
@@ -1902,6 +1937,11 @@ mdarray &mdarray::ope_star_equal(const mdarray &obj, bool do_resize)
     SLI__MDARRAY__DO_OPERATION_2TYPES_ALL(SEL_FUNC,,,,,,,,,,,,,,,,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    else {
+	//err_report(__FUNCTION__,"NOTICE","using SIMD instructions [vector]");
+    }
+    
     /* 関数があれば代入を行なう */
     if ( func_calc != NULL ) {
 	size_t len_src, len_dest, ndim;
@@ -1990,6 +2030,12 @@ mdarray &mdarray::ope_slash_equal(const mdarray &obj, bool do_resize)
     if ( this->length() == 0 ) return *this;
 
     func_calc = NULL;
+    if ( this->sz_type_rec == obj.sz_type_rec ) {
+	/* set funcs using SIMD instructions */
+	if ( this->sz_type_rec == FLOAT_ZT ) func_calc = &s_xeq_n_float;
+	else if ( this->sz_type_rec == DOUBLE_ZT ) func_calc = &s_xeq_n_double;
+    }
+    if ( func_calc == NULL ) {
 
     /* 関数を選択 */
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
@@ -1999,6 +2045,11 @@ mdarray &mdarray::ope_slash_equal(const mdarray &obj, bool do_resize)
     SLI__MDARRAY__DO_OPERATION_2TYPES_ALL(SEL_FUNC,,,,,,,,,,,,,,,,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    else {
+	//err_report(__FUNCTION__,"NOTICE","using SIMD instructions [vector]");
+    }
+    
     /* 関数があれば代入を行なう */
     if ( func_calc != NULL ) {
 	size_t len_src, len_dest, ndim;
@@ -2178,7 +2229,71 @@ mdarray &mdarray::operator=(int v)
 mdarray &mdarray::ope_plus_equal(ssize_t szt, const void *v_ptr)
 {
     void (*func_calc)(void *,const void *,size_t,size_t,int);
+    float float_v;
+    double double_v;
+
+    if ( this->sz_type_rec == FLOAT_ZT ) {	/* for SIMD */
+	if ( szt == DOUBLE_ZT ) {
+	    float_v = (float)(((const double *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == INT_ZT ) {
+	    float_v = (float)(((const int *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == LONG_ZT ) {
+	    float_v = (float)(((const long *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == LLONG_ZT ) {
+	    float_v = (float)(((const long long *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == DCOMPLEX_ZT ) {
+	    float_v = (float)creal(((const dcomplex *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+    }
+    else if ( this->sz_type_rec == DOUBLE_ZT ) {
+	if ( szt == FLOAT_ZT ) {
+	    double_v = (double)(((const float *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == INT_ZT ) {
+	    double_v = (double)(((const int *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == LONG_ZT ) {
+	    double_v = (double)(((const long *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == LLONG_ZT ) {
+	    double_v = (double)(((const long long *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == DCOMPLEX_ZT ) {
+	    double_v = (double)creal(((const dcomplex *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+    }
+    
     func_calc = NULL;
+    if ( this->sz_type_rec == szt ) {
+	/* set funcs using SIMD instructions */
+	if ( this->sz_type_rec == FLOAT_ZT ) func_calc = &s_xeq_n_float;
+	else if ( this->sz_type_rec == DOUBLE_ZT ) func_calc = &s_xeq_n_double;
+    }
+    if ( func_calc == NULL ) {
 
     /* 関数を選択 */
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
@@ -2188,6 +2303,11 @@ mdarray &mdarray::ope_plus_equal(ssize_t szt, const void *v_ptr)
     SLI__MDARRAY__DO_OPERATION_2TYPES_ALL(SEL_FUNC,,,,,,,,,,,,,,,,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    else {
+	//err_report(__FUNCTION__,"NOTICE","using SIMD instructions");
+    }
+    
     if ( func_calc == NULL ) {
 	err_report(__FUNCTION__,"WARNING","invalid size of type; ignored");
     }
@@ -2299,7 +2419,71 @@ mdarray &mdarray::operator+=(int v)
 mdarray &mdarray::ope_minus_equal(ssize_t szt, const void *v_ptr)
 {
     void (*func_calc)(void *,const void *,size_t,size_t,int);
+    float float_v;
+    double double_v;
+
+    if ( this->sz_type_rec == FLOAT_ZT ) {	/* for SIMD */
+	if ( szt == DOUBLE_ZT ) {
+	    float_v = (float)(((const double *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == INT_ZT ) {
+	    float_v = (float)(((const int *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == LONG_ZT ) {
+	    float_v = (float)(((const long *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == LLONG_ZT ) {
+	    float_v = (float)(((const long long *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == DCOMPLEX_ZT ) {
+	    float_v = (float)creal(((const dcomplex *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+    }
+    else if ( this->sz_type_rec == DOUBLE_ZT ) {
+	if ( szt == FLOAT_ZT ) {
+	    double_v = (double)(((const float *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == INT_ZT ) {
+	    double_v = (double)(((const int *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == LONG_ZT ) {
+	    double_v = (double)(((const long *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == LLONG_ZT ) {
+	    double_v = (double)(((const long long *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == DCOMPLEX_ZT ) {
+	    double_v = (double)creal(((const dcomplex *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+    }
+
     func_calc = NULL;
+    if ( this->sz_type_rec == szt ) {
+	/* set funcs using SIMD instructions */
+	if ( this->sz_type_rec == FLOAT_ZT ) func_calc = &s_xeq_n_float;
+	else if ( this->sz_type_rec == DOUBLE_ZT ) func_calc = &s_xeq_n_double;
+    }
+    if ( func_calc == NULL ) {
 
     /* 関数を選択 */
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
@@ -2309,6 +2493,11 @@ mdarray &mdarray::ope_minus_equal(ssize_t szt, const void *v_ptr)
     SLI__MDARRAY__DO_OPERATION_2TYPES_ALL(SEL_FUNC,,,,,,,,,,,,,,,,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    else {
+	//err_report(__FUNCTION__,"NOTICE","using SIMD instructions");
+    }
+    
     if ( func_calc == NULL ) {
 	err_report(__FUNCTION__,"WARNING","invalid size of type; ignored");
     }
@@ -2420,7 +2609,71 @@ mdarray &mdarray::operator-=(int v)
 mdarray &mdarray::ope_star_equal(ssize_t szt, const void *v_ptr)
 {
     void (*func_calc)(void *,const void *,size_t,size_t,int);
+    float float_v;
+    double double_v;
+
+    if ( this->sz_type_rec == FLOAT_ZT ) {	/* for SIMD */
+	if ( szt == DOUBLE_ZT ) {
+	    float_v = (float)(((const double *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == INT_ZT ) {
+	    float_v = (float)(((const int *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == LONG_ZT ) {
+	    float_v = (float)(((const long *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == LLONG_ZT ) {
+	    float_v = (float)(((const long long *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == DCOMPLEX_ZT ) {
+	    float_v = (float)creal(((const dcomplex *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+    }
+    else if ( this->sz_type_rec == DOUBLE_ZT ) {
+	if ( szt == FLOAT_ZT ) {
+	    double_v = (double)(((const float *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == INT_ZT ) {
+	    double_v = (double)(((const int *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == LONG_ZT ) {
+	    double_v = (double)(((const long *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == LLONG_ZT ) {
+	    double_v = (double)(((const long long *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == DCOMPLEX_ZT ) {
+	    double_v = (double)creal(((const dcomplex *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+    }
+
     func_calc = NULL;
+    if ( this->sz_type_rec == szt ) {
+	/* set funcs using SIMD instructions */
+	if ( this->sz_type_rec == FLOAT_ZT ) func_calc = &s_xeq_n_float;
+	else if ( this->sz_type_rec == DOUBLE_ZT ) func_calc = &s_xeq_n_double;
+    }
+    if ( func_calc == NULL ) {
 
     /* 関数を選択 */
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
@@ -2430,6 +2683,11 @@ mdarray &mdarray::ope_star_equal(ssize_t szt, const void *v_ptr)
     SLI__MDARRAY__DO_OPERATION_2TYPES_ALL(SEL_FUNC,,,,,,,,,,,,,,,,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    else {
+	//err_report(__FUNCTION__,"NOTICE","using SIMD instructions");
+    }
+    
     if ( func_calc == NULL ) {
 	err_report(__FUNCTION__,"WARNING","invalid size of type; ignored");
     }
@@ -2541,7 +2799,71 @@ mdarray &mdarray::operator*=(int v)
 mdarray &mdarray::ope_slash_equal(ssize_t szt, const void *v_ptr)
 {
     void (*func_calc)(void *,const void *,size_t,size_t,int);
+    float float_v;
+    double double_v;
+    
+    if ( this->sz_type_rec == FLOAT_ZT ) {	/* for SIMD */
+	if ( szt == DOUBLE_ZT ) {
+	    float_v = (float)(((const double *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == INT_ZT ) {
+	    float_v = (float)(((const int *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == LONG_ZT ) {
+	    float_v = (float)(((const long *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == LLONG_ZT ) {
+	    float_v = (float)(((const long long *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+	else if ( szt == DCOMPLEX_ZT ) {
+	    float_v = (float)creal(((const dcomplex *)v_ptr)[0]);
+	    v_ptr = (const void *)&float_v;
+	    szt = FLOAT_ZT;			/* overwritten */
+	}
+    }
+    else if ( this->sz_type_rec == DOUBLE_ZT ) {
+	if ( szt == FLOAT_ZT ) {
+	    double_v = (double)(((const float *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == INT_ZT ) {
+	    double_v = (double)(((const int *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == LONG_ZT ) {
+	    double_v = (double)(((const long *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == LLONG_ZT ) {
+	    double_v = (double)(((const long long *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+	else if ( szt == DCOMPLEX_ZT ) {
+	    double_v = (double)creal(((const dcomplex *)v_ptr)[0]);
+	    v_ptr = (const void *)&double_v;
+	    szt = DOUBLE_ZT;			/* overwritten */
+	}
+    }
+    
     func_calc = NULL;
+    if ( this->sz_type_rec == szt ) {
+	/* set funcs using SIMD instructions */
+	if ( this->sz_type_rec == FLOAT_ZT ) func_calc = &s_xeq_n_float;
+	else if ( this->sz_type_rec == DOUBLE_ZT ) func_calc = &s_xeq_n_double;
+    }
+    if ( func_calc == NULL ) {
 
     /* 関数を選択 */
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
@@ -2551,6 +2873,11 @@ mdarray &mdarray::ope_slash_equal(ssize_t szt, const void *v_ptr)
     SLI__MDARRAY__DO_OPERATION_2TYPES_ALL(SEL_FUNC,,,,,,,,,,,,,,,,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    else {
+	//err_report(__FUNCTION__,"NOTICE","using SIMD instructions");
+    }
+    
     if ( func_calc == NULL ) {
 	err_report(__FUNCTION__,"WARNING","invalid size of type; ignored");
     }
@@ -7201,19 +7528,29 @@ mdarray &mdarray::abs()
     size_t i;
     if ( this->sz_type_rec == DOUBLE_ZT ) {
 	double *pp = (double *)(this->data_ptr());
+#if 1
+	//err_report(__FUNCTION__,"NOTICE","using s_abs_vector_double()");
+	s_abs_vector_double(pp,len,pp);	/* use SIMD instructions */
+#else
 	double v;
 	for ( i=0 ; i < len ; i++ ) {
 	    v = pp[i];
 	    if ( v < 0 ) pp[i] = -v;
 	}
+#endif
     }
     else if ( this->sz_type_rec == FLOAT_ZT ) {
 	float *pp = (float *)(this->data_ptr());
+#if 1
+	//err_report(__FUNCTION__,"NOTICE","using s_abs_vector_float()");
+	s_abs_vector_float(pp,len,pp);	/* use SIMD instructions */
+#else
 	float v;
 	for ( i=0 ; i < len ; i++ ) {
 	    v = pp[i];
 	    if ( v < 0 ) pp[i] = -v;
 	}
+#endif
     }
     else if ( this->sz_type_rec == LDOUBLE_ZT ) {
 	long double *pp = (long double *)(this->data_ptr());
@@ -17991,3 +18328,7 @@ mdarray &mdarray::init( ssize_t sz_type, size_t naxis0 )
 #include "private/s_memflip.cc"
 #include "private/s_memswap.cc"
 #include "private/s_byteswap.cc"
+#include "private/s_abs_vector_float.cc"
+#include "private/s_abs_vector_double.cc"
+#include "private/s_xeq_n_float.cc"
+#include "private/s_xeq_n_double.cc"
