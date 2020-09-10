@@ -53,6 +53,8 @@
 #include "private/s_abs_vector_double.h"
 #include "private/s_xeq_n_float.h"
 #include "private/s_xeq_n_double.h"
+#include "private/s_calc_arr_nd_float.h"
+#include "private/s_calc_arr_nd_double.h"
 
 
 #ifndef debug_report
@@ -8677,6 +8679,13 @@ mdarray &mdarray::vaddf( double value, const char *exp_fmt, va_list ap )
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    /* set funcs using SIMD instructions */
+    if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+    else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( DOUBLE_ZT == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -8684,6 +8693,8 @@ mdarray &mdarray::vaddf( double value, const char *exp_fmt, va_list ap )
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_vfillf( value, func, &prms, exp_fmt, ap );
     }
@@ -8732,6 +8743,13 @@ mdarray &mdarray::vsubtractf( double value, const char *exp_fmt, va_list ap )
     prms.round_flg = this->rounding();
 
     func = NULL;
+    
+    /* set funcs using SIMD instructions */
+    if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+    else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+
+    if ( func == NULL ) {
+	
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( DOUBLE_ZT == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -8739,6 +8757,8 @@ mdarray &mdarray::vsubtractf( double value, const char *exp_fmt, va_list ap )
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_vfillf( value, func, &prms, exp_fmt, ap );
     }
@@ -8787,6 +8807,13 @@ mdarray &mdarray::vmultiplyf( double value, const char *exp_fmt, va_list ap )
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    /* set funcs using SIMD instructions */
+    if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+    else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( DOUBLE_ZT == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -8794,6 +8821,8 @@ mdarray &mdarray::vmultiplyf( double value, const char *exp_fmt, va_list ap )
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_vfillf( value, func, &prms, exp_fmt, ap );
     }
@@ -8842,6 +8871,13 @@ mdarray &mdarray::vdividef( double value, const char *exp_fmt, va_list ap )
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    /* set funcs using SIMD instructions */
+    if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+    else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( DOUBLE_ZT == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -8849,6 +8885,8 @@ mdarray &mdarray::vdividef( double value, const char *exp_fmt, va_list ap )
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_vfillf( value, func, &prms, exp_fmt, ap );
     }
@@ -9051,6 +9089,14 @@ mdarray &mdarray::vaddf( const mdarray &src_img, const char *exp_fmt, va_list ap
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    if ( this->sz_type_rec == src_img.sz_type_rec ) {
+      /* set funcs using SIMD instructions */
+      if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+      else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+    }
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( src_img.size_type() == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -9058,6 +9104,8 @@ mdarray &mdarray::vaddf( const mdarray &src_img, const char *exp_fmt, va_list ap
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_vpastef( src_img, func, &prms, exp_fmt, ap );
     }
@@ -9102,6 +9150,14 @@ mdarray &mdarray::vsubtractf( const mdarray &src_img, const char *exp_fmt, va_li
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    if ( this->sz_type_rec == src_img.sz_type_rec ) {
+      /* set funcs using SIMD instructions */
+      if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+      else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+    }
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( src_img.size_type() == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -9109,6 +9165,8 @@ mdarray &mdarray::vsubtractf( const mdarray &src_img, const char *exp_fmt, va_li
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_vpastef( src_img, func, &prms, exp_fmt, ap );
     }
@@ -9153,6 +9211,14 @@ mdarray &mdarray::vmultiplyf( const mdarray &src_img, const char *exp_fmt, va_li
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    if ( this->sz_type_rec == src_img.sz_type_rec ) {
+      /* set funcs using SIMD instructions */
+      if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+      else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+    }
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( src_img.size_type() == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -9160,6 +9226,8 @@ mdarray &mdarray::vmultiplyf( const mdarray &src_img, const char *exp_fmt, va_li
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_vpastef( src_img, func, &prms, exp_fmt, ap );
     }
@@ -9204,6 +9272,14 @@ mdarray &mdarray::vdividef( const mdarray &src_img, const char *exp_fmt, va_list
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    if ( this->sz_type_rec == src_img.sz_type_rec ) {
+      /* set funcs using SIMD instructions */
+      if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+      else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+    }
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( src_img.size_type() == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -9211,6 +9287,8 @@ mdarray &mdarray::vdividef( const mdarray &src_img, const char *exp_fmt, va_list
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_vpastef( src_img, func, &prms, exp_fmt, ap );
     }
@@ -10412,6 +10490,13 @@ mdarray &mdarray::add( double value, ssize_t col_index, size_t col_size,
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    /* set funcs using SIMD instructions */
+    if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+    else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( DOUBLE_ZT == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -10419,6 +10504,8 @@ mdarray &mdarray::add( double value, ssize_t col_index, size_t col_size,
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_fill( value, func, &prms, 
 			  col_index, col_size, row_index, row_size,
@@ -10469,6 +10556,13 @@ mdarray &mdarray::subtract( double value, ssize_t col_index, size_t col_size,
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    /* set funcs using SIMD instructions */
+    if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+    else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( DOUBLE_ZT == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -10476,6 +10570,8 @@ mdarray &mdarray::subtract( double value, ssize_t col_index, size_t col_size,
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_fill( value, func, &prms, 
 			  col_index, col_size, row_index, row_size,
@@ -10526,6 +10622,13 @@ mdarray &mdarray::multiply( double value, ssize_t col_index, size_t col_size,
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    /* set funcs using SIMD instructions */
+    if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+    else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( DOUBLE_ZT == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -10533,6 +10636,8 @@ mdarray &mdarray::multiply( double value, ssize_t col_index, size_t col_size,
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_fill( value, func, &prms, 
 			  col_index, col_size, row_index, row_size,
@@ -10583,6 +10688,13 @@ mdarray &mdarray::divide( double value, ssize_t col_index, size_t col_size,
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    /* set funcs using SIMD instructions */
+    if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+    else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( DOUBLE_ZT == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -10590,6 +10702,8 @@ mdarray &mdarray::divide( double value, ssize_t col_index, size_t col_size,
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_fill( value, func, &prms, 
 			  col_index, col_size, row_index, row_size,
@@ -10773,6 +10887,14 @@ mdarray &mdarray::add( const mdarray &src_img,
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    if ( this->sz_type_rec == src_img.sz_type_rec ) {
+      /* set funcs using SIMD instructions */
+      if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+      else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+    }
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( src_img.size_type() == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -10780,6 +10902,8 @@ mdarray &mdarray::add( const mdarray &src_img,
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_paste( src_img, func, &prms, 
 			   dest_col, dest_row, dest_layer );
@@ -10817,6 +10941,14 @@ mdarray &mdarray::subtract( const mdarray &src_img,
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    if ( this->sz_type_rec == src_img.sz_type_rec ) {
+      /* set funcs using SIMD instructions */
+      if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+      else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+    }
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( src_img.size_type() == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -10824,6 +10956,8 @@ mdarray &mdarray::subtract( const mdarray &src_img,
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_paste( src_img, func, &prms, 
 			   dest_col, dest_row, dest_layer );
@@ -10861,6 +10995,14 @@ mdarray &mdarray::multiply( const mdarray &src_img,
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    if ( this->sz_type_rec == src_img.sz_type_rec ) {
+      /* set funcs using SIMD instructions */
+      if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+      else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+    }
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( src_img.size_type() == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -10868,6 +11010,8 @@ mdarray &mdarray::multiply( const mdarray &src_img,
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_paste( src_img, func, &prms, 
 			   dest_col, dest_row, dest_layer );
@@ -10905,6 +11049,14 @@ mdarray &mdarray::divide( const mdarray &src_img,
     prms.round_flg = this->rounding();
 
     func = NULL;
+
+    if ( this->sz_type_rec == src_img.sz_type_rec ) {
+      /* set funcs using SIMD instructions */
+      if ( this->sz_type_rec == FLOAT_ZT ) func = &s_calc_arr_nd_float;
+      else if ( this->sz_type_rec == DOUBLE_ZT ) func = &s_calc_arr_nd_double;
+    }
+    if ( func == NULL ) {
+    
 #define SEL_FUNC(fncname,org_sz_type,org_type,new_sz_type,new_type,fnc) \
     if ( src_img.size_type() == org_sz_type && this->size_type() == new_sz_type ) { \
 	func = &calc_arr_nd::fncname; \
@@ -10912,6 +11064,8 @@ mdarray &mdarray::divide( const mdarray &src_img,
     SLI__MDARRAY__DO_OPERATION_2TYPES(SEL_FUNC,,,,,,,,,,,,,else);
 #undef SEL_FUNC
 
+    }
+    
     if ( func != NULL ) {
 	this->image_paste( src_img, func, &prms, 
 			   dest_col, dest_row, dest_layer );
@@ -18332,3 +18486,5 @@ mdarray &mdarray::init( ssize_t sz_type, size_t naxis0 )
 #include "private/s_abs_vector_double.cc"
 #include "private/s_xeq_n_float.cc"
 #include "private/s_xeq_n_double.cc"
+#include "private/s_calc_arr_nd_float.cc"
+#include "private/s_calc_arr_nd_double.cc"
