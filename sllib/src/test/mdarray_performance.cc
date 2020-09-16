@@ -118,22 +118,22 @@ int main( int argc, char *argv[] )
     for ( j=0 ; j < arr0.length() ; j++ ) arr0_ptr[j] = drand48();
 
     tm0 = clock() / (double)CLOCKS_PER_SEC;
-    arr0 = arr0 + 34.7;
+    arr0 = arr0 + (TYPE_TARGET)34.7;
     tm1 = clock() / (double)CLOCKS_PER_SEC;
     sio.printf("arr0 = arr0 + scalar: %g\n",tm1 - tm0);
 
     tm0 = clock() / (double)CLOCKS_PER_SEC;
-    arr0 = arr0 - 3.59;
+    arr0 = arr0 - (TYPE_TARGET)3.59;
     tm1 = clock() / (double)CLOCKS_PER_SEC;
     sio.printf("arr0 = arr0 - scalar: %g\n",tm1 - tm0);
 
     tm0 = clock() / (double)CLOCKS_PER_SEC;
-    arr0 = arr0 * 1.23;
+    arr0 = arr0 * (TYPE_TARGET)1.23;
     tm1 = clock() / (double)CLOCKS_PER_SEC;
     sio.printf("arr0 = arr0 * scalar: %g\n",tm1 - tm0);
 
     tm0 = clock() / (double)CLOCKS_PER_SEC;
-    arr0 = arr0 / 23.45;
+    arr0 = arr0 / (TYPE_TARGET)23.45;
     tm1 = clock() / (double)CLOCKS_PER_SEC;
     sio.printf("arr0 = arr0 / scalar: %g\n",tm1 - tm0);
 

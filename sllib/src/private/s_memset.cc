@@ -21,8 +21,9 @@ inline static void *s_memset( void *s, int c, size_t n, size_t total_n )
 
 #ifdef _SSE2_IS_OK
     if ( _SSE2_MIN_NBYTES <= n ) {	/* use SSE2 if n is large enough */
+	const unsigned char c_ = (unsigned char)c;
 	const unsigned char src[16] __attribute__((aligned(16))) = 
-					  {c,c,c,c, c,c,c,c, c,c,c,c, c,c,c,c};
+			  {c_,c_,c_,c_, c_,c_,c_,c_, c_,c_,c_,c_, c_,c_,c_,c_};
 	size_t mm = ((size_t)d_ptr & 0x0f);
 	bool use_mm_stream;
 	if ( _SSE2_CPU_CACHE_SIZE <= n || _SSE2_CPU_CACHE_SIZE <= total_n ) {
