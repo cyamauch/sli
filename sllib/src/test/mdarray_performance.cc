@@ -230,6 +230,15 @@ int main( int argc, char *argv[] )
     tm1 = clock() / (double)CLOCKS_PER_SEC;
     sio.printf("arr0.add(arr1, -15, -9): %g\n",tm1 - tm0);
     
+    for ( j=0 ; j < arr0.length() ; j++ ) arr0_ptr[j] = drand48();
+
+    tm0 = clock() / (double)CLOCKS_PER_SEC;
+    arr0.paste(arr1);
+    tm1 = clock() / (double)CLOCKS_PER_SEC;
+    sio.printf("arr0.paste(arr1): %g\n",tm1 - tm0);
+
+    for ( j=0 ; j < arr0.length() ; j++ ) arr0_ptr[j] = drand48();
+
     tm0 = clock() / (double)CLOCKS_PER_SEC;
     arr0.pastef(arr1,"*");
     tm1 = clock() / (double)CLOCKS_PER_SEC;

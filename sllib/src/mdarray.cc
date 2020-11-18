@@ -840,13 +840,24 @@ static void fncname(const void *src_p, void *dst_p, size_t n_vals, int f_b, void
     const bool flg = prms->round_flg; \
     size_t i; \
     if ( f_b < 0 ) { \
-	for ( i=n ; 0 < i ; ) { \
-	    i--; \
-	    dst[i] = (new_type)(fnc(src[i])); \
+	if ( org_sz_type == new_sz_type ) { \
+	    s_memmove( dst, src, sizeof(org_type) * n ); \
+	} else { \
+	    for ( i=n ; 0 < i ; ) { \
+	        i--; \
+	        dst[i] = (new_type)(fnc(src[i])); \
+	    } \
+	} \
+    } \
+    else if ( 0 < f_b ) { \
+	if ( org_sz_type == new_sz_type ) { \
+	    s_memmove( dst, src, sizeof(org_type) * n ); \
+	} else { \
+	    for ( i=0 ; i < n ; i++ ) dst[i] = (new_type)(fnc(src[i])); \
 	} \
     } \
     else { \
-	const size_t n_v = ((0 < f_b) ? n : ((0 < n) ? 1 : 0)); \
+	const size_t n_v = ((0 < n) ? 1 : 0); \
 	for ( i=0 ; i < n_v ; i++ ) dst[i] = (new_type)(fnc(src[i])); \
 	if ( i < n ) s_memfill(dst+i, dst, sizeof(new_type), n - i, prms->total_len_elements); \
     } \

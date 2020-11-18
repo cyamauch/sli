@@ -44,24 +44,35 @@ inline static void *s_memcpy( void *dest, const void *src, size_t n,
 	    s_ptr += mm;
 	}
 	if ( _SSE2_CPU_CACHE_SIZE <= n_bytes || total_large == true ) {
-	    while ( 16 <= n ) {
-		__m128i r0;
-		n -= 16;
+	    while ( 32 <= n ) {
+		__m128i r0, r1;
+		n -= 32;
+		/* */
 		r0 = _mm_loadu_si128((__m128i *)s_ptr);
+		s_ptr += 16;
+		r1 = _mm_loadu_si128((__m128i *)s_ptr);
+		s_ptr += 16;
 		/* without polluting the cache */
 		_mm_stream_si128((__m128i *)d_ptr, r0);
 		d_ptr += 16;
-		s_ptr += 16;
+		_mm_stream_si128((__m128i *)d_ptr, r1);
+		d_ptr += 16;
 	    }
 	}
 	else {
-	    while ( 16 <= n ) {
-		__m128i r0;
-		n -= 16;
+	    while ( 32 <= n ) {
+		__m128i r0, r1;
+		n -= 32;
+		/* */
 		r0 = _mm_loadu_si128((__m128i *)s_ptr);
+		s_ptr += 16;
+		r1 = _mm_loadu_si128((__m128i *)s_ptr);
+		s_ptr += 16;
+		/* */
 		_mm_store_si128((__m128i *)d_ptr, r0);
 		d_ptr += 16;
-		s_ptr += 16;
+		_mm_store_si128((__m128i *)d_ptr, r1);
+		d_ptr += 16;
 	    }
 	}
     }

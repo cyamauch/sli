@@ -32,13 +32,19 @@ inline static void *s_memmove( void *dest, const void *src, size_t n )
 		s_ptr -= mm;
 		memmove(d_ptr, s_ptr, mm);
 	    }
-	    while ( 16 <= n ) {
-		__m128i r0;
-		n -= 16;
-		d_ptr -= 16;
+	    while ( 32 <= n ) {
+		__m128i r0, r1;
+		n -= 32;
+		/* */
 		s_ptr -= 16;
 		r0 = _mm_loadu_si128((__m128i *)s_ptr);
+		s_ptr -= 16;
+		r1 = _mm_loadu_si128((__m128i *)s_ptr);
+		/* */
+		d_ptr -= 16;
 		_mm_store_si128((__m128i *)d_ptr, r0);
+		d_ptr -= 16;
+		_mm_store_si128((__m128i *)d_ptr, r1);
 	    }
 	    memmove(dest, src, n);	/* NOTE: don't use d_ptr, s_ptr here */
 	}
@@ -52,13 +58,19 @@ inline static void *s_memmove( void *dest, const void *src, size_t n )
 		d_ptr += mm;
 		s_ptr += mm;
 	    }
-	    while ( 16 <= n ) {
-		__m128i r0;
-		n -= 16;
+	    while ( 32 <= n ) {
+		__m128i r0, r1;
+		n -= 32;
+		/* */
 		r0 = _mm_loadu_si128((__m128i *)s_ptr);
+		s_ptr += 16;
+		r1 = _mm_loadu_si128((__m128i *)s_ptr);
+		s_ptr += 16;
+		/* */
 		_mm_store_si128((__m128i *)d_ptr, r0);
 		d_ptr += 16;
-		s_ptr += 16;
+		_mm_store_si128((__m128i *)d_ptr, r1);
+		d_ptr += 16;
 	    }
 	    memmove(d_ptr, s_ptr, n);
 	}
