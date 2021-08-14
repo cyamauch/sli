@@ -1,7 +1,7 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
 /* Time-stamp: <2015-11-20 15:03:28 cyamauch> */
 
-/* SLLIB version 1.4.5a [STABLE] */
+/* SLLIB version 1.4.6 [STABLE] */
 
 #ifndef _SLI__CSTREAMIO_H
 #define _SLI__CSTREAMIO_H 1

@@ -1,4 +1,4 @@
-AC_INIT(sllib, 1.4.5, cyamauch@ir.isas.jaxa.jp)
+AC_INIT(sllib, 1.4.6, cyamauch@ir.isas.jaxa.jp)
 AM_INIT_AUTOMAKE([foreign])
 #LT_INIT([disable-shared])
 

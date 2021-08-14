@@ -197,3 +197,24 @@ Version 1.4.5a
 		   Thanks to Yamagami-sama.
 		(May.30,2018)
 
+Version 1.4.5c
+		 - Added support for latest Cygwin build. (See Makefile)
+		(Aug.5,2020)
+
+Version 1.4.6
+		Applying SIMD instructions for four arithmetic operations of
+		float and double types in mdarray class:
+		 - Added code to use SIMD instructions for float/double in
+		   mdarray::operator[+-*/]=() and mdarray::abs().
+		 - Applied SIMD instructions for float/double type in
+		   mdarray::addf(), etc.
+		 - Applied SIMD instructions mdarray::operator[+-*/]() for
+		   float and double type.
+		Other updates:
+		 - Improved performance of mdarray::paste() using SIMD.
+		 - Updated test/mdarray_performance.cc: added some tests.
+		 - Updated mdarray::paste(): removed some restriction when
+		   different number of dimension between dest and src.
+		 - Added Makefile.cygwin.
+		(Aug.15,2021)
+
