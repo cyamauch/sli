@@ -150,3 +150,8 @@ Version 1.4.5
 		- Supported reading FITS files with invalid padding chars
 		  before EOF.
 		(Nov.20.2015)
+
+Version 1.4.5a
+		Appended "CCFLAGS = -std=gnu++11" in Makefile.
+		(Jun.3.2022)
+

@@ -24,6 +24,8 @@ DOCDIR   = $(PREFIX)/share/doc/sfitsio
 #  $ make CCFLAGS=-m64
 
 CCFLAGS =
+# This is required for recent g++
+#CCFLAGS = -std=gnu++11
 # for 32-bit library on 64-bit Linux
 #CCFLAGS = -m32
 # for 64-bit library on MacOSX
