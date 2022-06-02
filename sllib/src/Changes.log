@@ -218,3 +218,7 @@ Version 1.4.6
 		 - Added Makefile.cygwin.
 		(Aug.15,2021)
 
+Version 1.4.6a
+		Appended "CCFLAGS = -std=gnu++11" in Makefile.cygwin to fix
+		g++ errors on Cygwin.
+
