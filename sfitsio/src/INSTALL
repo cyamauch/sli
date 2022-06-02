@@ -42,6 +42,10 @@
     $ gzip -dc sllib-xxx.tar.gz | tar xvf -
     $ cd sllib-xxx
     $ make
+
+  If errors are displayed, edit Makefile and enable "CCFLAGS = -std=gnu++11".
+
+  Let's install include files and binary files:
     $ su
     # make install32
   When you use 64-bit OS, replace "install32" with "install64".

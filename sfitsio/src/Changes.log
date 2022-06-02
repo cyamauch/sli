@@ -136,7 +136,7 @@ Version 1.4.4a
 		- Fixed a bug of error handling in fitscc::read_template().
 		- Added a hint message for opening a file with extra zero 
 		  padding at the end.
-		(Jan.29.2015)
+		(Jan.29,2015)
 
 Version 1.4.5
 		- Fixed a bug of cropping an image section using additional
@@ -149,9 +149,9 @@ Version 1.4.5
 		  Binary/ASCII tables (required SLLIB-1.4.5).
 		- Supported reading FITS files with invalid padding chars
 		  before EOF.
-		(Nov.20.2015)
+		(Nov.20,2015)
 
 Version 1.4.5a
 		Appended "CCFLAGS = -std=gnu++11" in Makefile.
-		(Jun.3.2022)
+		(Jun.3,2022)
 
