@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2015-11-19 19:37:39 cyamauch> */
+/* Time-stamp: <2022-10-01 00:00:00 cyamauch> */
 
 /**
  * @file   fits_table_col.cc
@@ -25,6 +25,72 @@
 
 namespace sli
 {
+
+static const char *Bit_str =
+    "00000000\0" "00000001\0" "00000010\0" "00000011\0"
+    "00000100\0" "00000101\0" "00000110\0" "00000111\0"
+    "00001000\0" "00001001\0" "00001010\0" "00001011\0"
+    "00001100\0" "00001101\0" "00001110\0" "00001111\0"
+    "00010000\0" "00010001\0" "00010010\0" "00010011\0"
+    "00010100\0" "00010101\0" "00010110\0" "00010111\0"
+    "00011000\0" "00011001\0" "00011010\0" "00011011\0"
+    "00011100\0" "00011101\0" "00011110\0" "00011111\0"
+    "00100000\0" "00100001\0" "00100010\0" "00100011\0"
+    "00100100\0" "00100101\0" "00100110\0" "00100111\0"
+    "00101000\0" "00101001\0" "00101010\0" "00101011\0"
+    "00101100\0" "00101101\0" "00101110\0" "00101111\0"
+    "00110000\0" "00110001\0" "00110010\0" "00110011\0"
+    "00110100\0" "00110101\0" "00110110\0" "00110111\0"
+    "00111000\0" "00111001\0" "00111010\0" "00111011\0"
+    "00111100\0" "00111101\0" "00111110\0" "00111111\0"
+    "01000000\0" "01000001\0" "01000010\0" "01000011\0"
+    "01000100\0" "01000101\0" "01000110\0" "01000111\0"
+    "01001000\0" "01001001\0" "01001010\0" "01001011\0"
+    "01001100\0" "01001101\0" "01001110\0" "01001111\0"
+    "01010000\0" "01010001\0" "01010010\0" "01010011\0"
+    "01010100\0" "01010101\0" "01010110\0" "01010111\0"
+    "01011000\0" "01011001\0" "01011010\0" "01011011\0"
+    "01011100\0" "01011101\0" "01011110\0" "01011111\0"
+    "01100000\0" "01100001\0" "01100010\0" "01100011\0"
+    "01100100\0" "01100101\0" "01100110\0" "01100111\0"
+    "01101000\0" "01101001\0" "01101010\0" "01101011\0"
+    "01101100\0" "01101101\0" "01101110\0" "01101111\0"
+    "01110000\0" "01110001\0" "01110010\0" "01110011\0"
+    "01110100\0" "01110101\0" "01110110\0" "01110111\0"
+    "01111000\0" "01111001\0" "01111010\0" "01111011\0"
+    "01111100\0" "01111101\0" "01111110\0" "01111111\0"
+    "10000000\0" "10000001\0" "10000010\0" "10000011\0"
+    "10000100\0" "10000101\0" "10000110\0" "10000111\0"
+    "10001000\0" "10001001\0" "10001010\0" "10001011\0"
+    "10001100\0" "10001101\0" "10001110\0" "10001111\0"
+    "10010000\0" "10010001\0" "10010010\0" "10010011\0"
+    "10010100\0" "10010101\0" "10010110\0" "10010111\0"
+    "10011000\0" "10011001\0" "10011010\0" "10011011\0"
+    "10011100\0" "10011101\0" "10011110\0" "10011111\0"
+    "10100000\0" "10100001\0" "10100010\0" "10100011\0"
+    "10100100\0" "10100101\0" "10100110\0" "10100111\0"
+    "10101000\0" "10101001\0" "10101010\0" "10101011\0"
+    "10101100\0" "10101101\0" "10101110\0" "10101111\0"
+    "10110000\0" "10110001\0" "10110010\0" "10110011\0"
+    "10110100\0" "10110101\0" "10110110\0" "10110111\0"
+    "10111000\0" "10111001\0" "10111010\0" "10111011\0"
+    "10111100\0" "10111101\0" "10111110\0" "10111111\0"
+    "11000000\0" "11000001\0" "11000010\0" "11000011\0"
+    "11000100\0" "11000101\0" "11000110\0" "11000111\0"
+    "11001000\0" "11001001\0" "11001010\0" "11001011\0"
+    "11001100\0" "11001101\0" "11001110\0" "11001111\0"
+    "11010000\0" "11010001\0" "11010010\0" "11010011\0"
+    "11010100\0" "11010101\0" "11010110\0" "11010111\0"
+    "11011000\0" "11011001\0" "11011010\0" "11011011\0"
+    "11011100\0" "11011101\0" "11011110\0" "11011111\0"
+    "11100000\0" "11100001\0" "11100010\0" "11100011\0"
+    "11100100\0" "11100101\0" "11100110\0" "11100111\0"
+    "11101000\0" "11101001\0" "11101010\0" "11101011\0"
+    "11101100\0" "11101101\0" "11101110\0" "11101111\0"
+    "11110000\0" "11110001\0" "11110010\0" "11110011\0"
+    "11110100\0" "11110101\0" "11110110\0" "11110111\0"
+    "11111000\0" "11111001\0" "11111010\0" "11111011\0"
+    "11111100\0" "11111101\0" "11111110\0" "11111111";
 
 /* this->tany array の番号 */
 static const int TTYPE_IDX         = 0;
@@ -2160,7 +2226,7 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 
     if ( def.tdisp != NULL ) {
 	bool a_ok = true;
-	bool oz_ok = true;
+	bool boz_ok = true;
 	bool fegd_ok = true;
         tmp_str.assign(def.tdisp).strtrim();
 	this->tany.put(TDISP_IDX,tmp_str.cstr(),1);
@@ -2170,8 +2236,8 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 	/* 各データ型でどの TDISP のタイプを許可するかを設定 */
 	if ( this->type_rec != FITS::STRING_T &&
 	     this->type_rec != FITS::LOGICAL_T ) a_ok = false;
-	if ( this->type_rec == FITS::STRING_T ) oz_ok = false;
-	if ( this->type_rec == FITS::LOGICAL_T ) oz_ok = false;
+	if ( this->type_rec == FITS::STRING_T ) boz_ok = false;
+	if ( this->type_rec == FITS::LOGICAL_T ) boz_ok = false;
 	if ( this->type_rec == FITS::LOGICAL_T ) fegd_ok = false;
 	if ( this->type_rec == FITS::BIT_T ) fegd_ok = false;
 	if ( 0 < tmp_str.length() ) {
@@ -2221,7 +2287,17 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 		    }
 		}
 	    }
-	    else if ( tmp_str.cchr(0) == 'O' && oz_ok == true ) {
+	    else if ( tmp_str.cchr(0) == 'B' && boz_ok == true ) {
+		if ( 0 < len0 ) {
+		    this->fmt_str.printf("0b%%%ds",len0);
+		    this->fmt_nullstr.printf("%%%ds",len0+2);
+		}
+		else {
+		    this->fmt_str.printf("0b%%s");
+		    this->fmt_nullstr.printf("%%s");
+		}
+	    }
+	    else if ( tmp_str.cchr(0) == 'O' && boz_ok == true ) {
 		if ( 0 < len0 ) {
 		    this->fmt_str.printf("%%#%dllo",len0+1);
 		    this->fmt_nullstr.printf("%%%ds",len0+1);
@@ -2231,7 +2307,7 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 		    this->fmt_nullstr.printf("%%s");
 		}
 	    }
-	    else if ( tmp_str.cchr(0) == 'Z' && oz_ok == true ) {
+	    else if ( tmp_str.cchr(0) == 'Z' && boz_ok == true ) {
 		if ( 0 < len0 ) {
 		    this->fmt_str.printf("%%#%dllx",len0+2);
 		    this->fmt_nullstr.printf("%%%ds",len0+2);
@@ -2251,7 +2327,6 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 		    this->fmt_nullstr.printf("%%s");
 		}
 	    }
-	    /* 'B' is not supported */
 	    else if ( (tmp_str.cchr(0) == 'F' || tmp_str.cchr(0) == 'E' ||
 		       tmp_str.cchr(0) == 'G' || tmp_str.cchr(0) == 'D') &&
 		      fegd_ok == true ) {
@@ -3758,8 +3833,23 @@ bool fits_table_col::bvalue( long row_index,
 
 
 #define DO_LL(ll_v) { \
-	    if ( 0 ) {	/* */ \
-		/* NONE */ \
+	    if ( this->tany.cchr(TDISP_IDX,0) == 'B' ) {	/* Binary */ \
+		const char *bit_str_p[8]; \
+		size_t p_cnt = 0; \
+		uint64_t ll_one, ll_tmp = (uint64_t)ll_v; \
+		while ( ll_tmp != 0LL ) { \
+		    ll_one = (ll_tmp & (uint64_t)0x0ff); \
+		    bit_str_p[p_cnt] = Bit_str + (9 * ll_one);	\
+		    ll_tmp >>= 8; \
+		    p_cnt ++; \
+		} \
+		this->tmp_str_buf->assign(""); \
+		while ( 0 < p_cnt ) { \
+		    p_cnt--; \
+		    this->tmp_str_buf->append(bit_str_p[p_cnt]); \
+		} \
+		p_cnt = this->tmp_str_buf->strspn(0,'0'); \
+		this->str_buf->printf(this->fmt_str.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
 	    } \
 	    else { \
 		this->str_buf->printf(this->fmt_str.cstr(),ll_v); \
@@ -3767,16 +3857,32 @@ bool fits_table_col::bvalue( long row_index,
 }
 
 #define DO_LL_TS(ll_v,ts) { \
-	    if ( 0 ) {	/* */ \
-		/* NONE */ \
+	    if ( this->tany.cchr(TDISP_IDX,0) == 'B' ) {	/* Binary */ \
+		const char *bit_str_p[8]; \
+		size_t p_cnt = 0; \
+		uint64_t ll_one, ll_tmp = (uint64_t)ll_v; \
+		while ( ll_tmp != 0LL ) { \
+		    ll_one = (ll_tmp & (uint64_t)0x0ff); \
+		    bit_str_p[p_cnt] = Bit_str + (9 * ll_one);	\
+		    ll_tmp >>= 8; \
+		    p_cnt ++; \
+		} \
+		this->tmp_str_buf->assign(""); \
+		while ( 0 < p_cnt ) { \
+		    p_cnt--; \
+		    this->tmp_str_buf->append(bit_str_p[p_cnt]); \
+		} \
+		p_cnt = this->tmp_str_buf->strspn(0,'0'); \
+		ts.printf(this->fmt_str.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
 	    } \
 	    else { \
 		ts.printf(this->fmt_str.cstr(),ll_v); \
 	    } \
 }
 
-#define DO_IZOFEGD(val) { \
+#define DO_IBOZFEGD(val) { \
 	if ( this->tany.cchr(TDISP_IDX,0) == 'I' || \
+	     this->tany.cchr(TDISP_IDX,0) == 'B' || \
 	     this->tany.cchr(TDISP_IDX,0) == 'Z' || \
 	     this->tany.cchr(TDISP_IDX,0) == 'O' ) { \
 	    double dv = this->tzero_rec + val * this->tscal_rec; \
@@ -3803,8 +3909,9 @@ bool fits_table_col::bvalue( long row_index,
 	} \
 }
 
-#define DO_IZOFEGD_TS(val,ts) { \
+#define DO_IBOZFEGD_TS(val,ts) { \
 	if ( this->tany.cchr(TDISP_IDX,0) == 'I' || \
+	     this->tany.cchr(TDISP_IDX,0) == 'B' || \
 	     this->tany.cchr(TDISP_IDX,0) == 'Z' || \
 	     this->tany.cchr(TDISP_IDX,0) == 'O' ) { \
 	    double dv = this->tzero_rec + val * this->tscal_rec; \
@@ -3941,7 +4048,7 @@ const char *fits_table_col::svalue( long row_index )
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD(val);
+	    DO_IBOZFEGD(val);
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -3961,7 +4068,7 @@ const char *fits_table_col::svalue( long row_index )
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD(val);
+	    DO_IBOZFEGD(val);
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -3981,7 +4088,7 @@ const char *fits_table_col::svalue( long row_index )
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD(val);
+	    DO_IBOZFEGD(val);
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4001,7 +4108,7 @@ const char *fits_table_col::svalue( long row_index )
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD(val);
+	    DO_IBOZFEGD(val);
 	}
 	else {
 	    double v = this->tzero_rec + val * this->tscal_rec;
@@ -4016,7 +4123,7 @@ const char *fits_table_col::svalue( long row_index )
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD(val);
+	    DO_IBOZFEGD(val);
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4036,7 +4143,7 @@ const char *fits_table_col::svalue( long row_index )
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD(val);
+	    DO_IBOZFEGD(val);
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4277,7 +4384,7 @@ const char *fits_table_col::svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD(val);
+	    DO_IBOZFEGD(val);
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4298,7 +4405,7 @@ const char *fits_table_col::svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD(val);
+	    DO_IBOZFEGD(val);
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4318,7 +4425,7 @@ const char *fits_table_col::svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD(val);
+	    DO_IBOZFEGD(val);
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4338,7 +4445,7 @@ const char *fits_table_col::svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD(val);
+	    DO_IBOZFEGD(val);
 	}
 	else {
 	    double v = this->tzero_rec + val * this->tscal_rec;
@@ -4353,7 +4460,7 @@ const char *fits_table_col::svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD(val);
+	    DO_IBOZFEGD(val);
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4374,7 +4481,7 @@ const char *fits_table_col::svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD(val);
+	    DO_IBOZFEGD(val);
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4530,7 +4637,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD_TS(val,(*dest));
+	    DO_IBOZFEGD_TS(val,(*dest));
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4550,7 +4657,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD_TS(val,(*dest));
+	    DO_IBOZFEGD_TS(val,(*dest));
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4570,7 +4677,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD_TS(val,(*dest));
+	    DO_IBOZFEGD_TS(val,(*dest));
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4590,7 +4697,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD_TS(val,(*dest));
+	    DO_IBOZFEGD_TS(val,(*dest));
 	}
 	else {
 	    double v = this->tzero_rec + val * this->tscal_rec;
@@ -4605,7 +4712,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD_TS(val,(*dest));
+	    DO_IBOZFEGD_TS(val,(*dest));
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4625,7 +4732,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD_TS(val,(*dest));
+	    DO_IBOZFEGD_TS(val,(*dest));
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4952,7 +5059,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD_TS(val,(*dest));
+	    DO_IBOZFEGD_TS(val,(*dest));
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4973,7 +5080,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD_TS(val,(*dest));
+	    DO_IBOZFEGD_TS(val,(*dest));
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -4994,7 +5101,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD_TS(val,(*dest));
+	    DO_IBOZFEGD_TS(val,(*dest));
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -5014,7 +5121,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD_TS(val,(*dest));
+	    DO_IBOZFEGD_TS(val,(*dest));
 	}
 	else {
 	    double v = this->tzero_rec + val * this->tscal_rec;
@@ -5029,7 +5136,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD_TS(val,(*dest));
+	    DO_IBOZFEGD_TS(val,(*dest));
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -5050,7 +5157,7 @@ const char *fits_table_col::get_svalue( long row_index,
 	    goto ret_null;
 	}
 	else if ( 0 < this->fmt_str.length() ) {
-	    DO_IZOFEGD_TS(val,(*dest));
+	    DO_IBOZFEGD_TS(val,(*dest));
 	}
 	else {
 	    if ( this->tscal_rec == 1.0 && this->tzero_rec == 0.0 ) {
@@ -5162,8 +5269,8 @@ const char *fits_table_col::get_svalue( long row_index,
     return this->get_svalue(row_index, elem_index, repetition_idx, &dest);
 }
 
-#undef DO_IZOFEGD_TS
-#undef DO_IZOFEGD
+#undef DO_IBOZFEGD_TS
+#undef DO_IBOZFEGD
 #undef DO_LL_TS
 #undef DO_LL
 
