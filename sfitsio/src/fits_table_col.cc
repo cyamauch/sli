@@ -3837,7 +3837,7 @@ bool fits_table_col::bvalue( long row_index,
 		const char *bit_str_p[8]; \
 		size_t p_cnt = 0; \
 		uint64_t ll_one, ll_tmp = (uint64_t)ll_v; \
-		while ( ll_tmp != 0LL ) { \
+		while ( ll_tmp != (uint64_t)0 ) { \
 		    ll_one = (ll_tmp & (uint64_t)0x0ff); \
 		    bit_str_p[p_cnt] = Bit_str + (9 * ll_one);	\
 		    ll_tmp >>= 8; \
@@ -3862,7 +3862,7 @@ bool fits_table_col::bvalue( long row_index,
 		const char *bit_str_p[8]; \
 		size_t p_cnt = 0; \
 		uint64_t ll_one, ll_tmp = (uint64_t)ll_v; \
-		while ( ll_tmp != 0LL ) { \
+		while ( ll_tmp != (uint64_t)0 ) { \
 		    ll_one = (ll_tmp & (uint64_t)0x0ff); \
 		    bit_str_p[p_cnt] = Bit_str + (9 * ll_one);	\
 		    ll_tmp >>= 8; \
