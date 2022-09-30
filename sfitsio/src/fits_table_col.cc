@@ -2289,11 +2289,11 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 	    }
 	    else if ( tmp_str.cchr(0) == 'B' && boz_ok == true ) {
 		if ( 0 < len0 ) {
-		    this->fmt_str.printf("0b%%%ds",len0);
+		    this->fmt_str.printf("%%%ds",len0+2);
 		    this->fmt_nullstr.printf("%%%ds",len0+2);
 		}
 		else {
-		    this->fmt_str.printf("0b%%s");
+		    this->fmt_str.printf("%%s");
 		    this->fmt_nullstr.printf("%%s");
 		}
 	    }
@@ -3843,12 +3843,13 @@ bool fits_table_col::bvalue( long row_index,
 		    ll_tmp >>= 8; \
 		    p_cnt ++; \
 		} \
-		this->tmp_str_buf->assign(""); \
+		this->tmp_str_buf->assign("0b"); \
 		while ( 0 < p_cnt ) { \
 		    p_cnt--; \
 		    this->tmp_str_buf->append(bit_str_p[p_cnt]); \
 		} \
-		p_cnt = this->tmp_str_buf->strspn(0,'0'); \
+		p_cnt = this->tmp_str_buf->strspn(2,'0'); \
+		this->tmp_str_buf->put(0 + p_cnt, "0b"); \
 		this->str_buf->printf(this->fmt_str.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
 	    } \
 	    else { \
@@ -3867,12 +3868,13 @@ bool fits_table_col::bvalue( long row_index,
 		    ll_tmp >>= 8; \
 		    p_cnt ++; \
 		} \
-		this->tmp_str_buf->assign(""); \
+		this->tmp_str_buf->assign("0b"); \
 		while ( 0 < p_cnt ) { \
 		    p_cnt--; \
 		    this->tmp_str_buf->append(bit_str_p[p_cnt]); \
 		} \
-		p_cnt = this->tmp_str_buf->strspn(0,'0'); \
+		p_cnt = this->tmp_str_buf->strspn(2,'0'); \
+		this->tmp_str_buf->put(0 + p_cnt, "0b"); \
 		ts.printf(this->fmt_str.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
 	    } \
 	    else { \
