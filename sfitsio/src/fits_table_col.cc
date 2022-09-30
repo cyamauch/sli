@@ -2223,21 +2223,21 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 	    }
 	    else if ( tmp_str.cchr(0) == 'O' && oz_ok == true ) {
 		if ( 0 < len0 ) {
-		    this->fmt_str.printf("0%%%dllo",len0+1);
+		    this->fmt_str.printf("%%#%dllo",len0+1);
 		    this->fmt_nullstr.printf("%%%ds",len0+1);
 		}
 		else {
-		    this->fmt_str.printf("0%%llo");
+		    this->fmt_str.printf("%%#llo");
 		    this->fmt_nullstr.printf("%%s");
 		}
 	    }
 	    else if ( tmp_str.cchr(0) == 'Z' && oz_ok == true ) {
 		if ( 0 < len0 ) {
-		    this->fmt_str.printf("0x%%%dllx",len0+2);
+		    this->fmt_str.printf("%%#%dllx",len0+2);
 		    this->fmt_nullstr.printf("%%%ds",len0+2);
 		}
 		else {
-		    this->fmt_str.printf("0x%%llx");
+		    this->fmt_str.printf("%%#llx");
 		    this->fmt_nullstr.printf("%%s");
 		}
 	    }
@@ -3758,33 +3758,8 @@ bool fits_table_col::bvalue( long row_index,
 
 
 #define DO_LL(ll_v) { \
-	    if ( this->tany.cchr(TDISP_IDX,0) == 'O' ) {	/* Octal */ \
-		this->tmp_str_buf->printf(this->fmt_str.cstr(),ll_v); \
-		size_t spn = this->tmp_str_buf->strspn(1,' '); \
-		if ( 0 < spn ) { \
-		    this->tmp_str_buf->at(spn) = '0'; \
-		    this->str_buf->assign(this->tmp_str_buf->cstr() + 1); \
-		} \
-		else { \
-		    this->str_buf->assign(this->tmp_str_buf->cstr()); \
-		} \
-	    } \
-	    else if ( this->tany.cchr(TDISP_IDX,0) == 'Z' ) {	/* Hexi */ \
-		this->tmp_str_buf->printf(this->fmt_str.cstr(),ll_v); \
-		size_t spn = this->tmp_str_buf->strspn(2,' '); \
-		if ( 1 < spn ) { \
-		    this->tmp_str_buf->at(spn) = '0'; \
-		    this->tmp_str_buf->at(spn+1) = 'x'; \
-		    this->str_buf->assign(this->tmp_str_buf->cstr() + 2); \
-		} \
-		else if ( 1 == spn ) { \
-		    this->tmp_str_buf->at(spn) = '0'; \
-		    this->tmp_str_buf->at(spn+1) = 'x'; \
-		    this->str_buf->assign(this->tmp_str_buf->cstr() + 1); \
-		} \
-		else { \
-		    this->str_buf->assign(this->tmp_str_buf->cstr()); \
-		} \
+	    if ( 0 ) {	/* */ \
+		/* NONE */ \
 	    } \
 	    else { \
 		this->str_buf->printf(this->fmt_str.cstr(),ll_v); \
@@ -3792,25 +3767,8 @@ bool fits_table_col::bvalue( long row_index,
 }
 
 #define DO_LL_TS(ll_v,ts) { \
-	    if ( this->tany.cchr(TDISP_IDX,0) == 'O' ) {	/* Octal */ \
-		ts.printf(this->fmt_str.cstr(),ll_v); \
-		size_t spn = ts.strspn(1,' '); \
-		if ( 0 < spn ) { \
-		    ts.at(spn) = '0'; \
-		    ts.erase(0,1); \
-		} \
-	    } \
-	    else if ( this->tany.cchr(TDISP_IDX,0) == 'Z' ) {	/* Hexi */ \
-		ts.printf(this->fmt_str.cstr(),ll_v); \
-		size_t spn = ts.strspn(2,' '); \
-		if ( 1 < spn ) { \
-		    ts.at(spn) = '0';  ts.at(spn+1) = 'x'; \
-		    ts.erase(0,2); \
-		} \
-		else if ( 1 == spn ) { \
-		    ts.at(spn) = '0';  ts.at(spn+1) = 'x'; \
-		    ts.erase(0,1); \
-		} \
+	    if ( 0 ) {	/* */ \
+		/* NONE */ \
 	    } \
 	    else { \
 		ts.printf(this->fmt_str.cstr(),ll_v); \
