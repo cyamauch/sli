@@ -2028,8 +2028,9 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 		err_throw(__FUNCTION__,"FATAL","new failed");
 	    }
 	}
-	else if (this->str_buf == NULL || this->str_buf->max_length() != 64) {
-	    size_t len_alc = 64;
+	/* len_alc=127 for TDISP='Bxx' 2022/10/5 */
+	else if (this->str_buf == NULL || this->str_buf->max_length() != 127) {
+	    size_t len_alc = 127;
 	    if ( this->str_buf != NULL ) {
 		delete this->str_buf;
 		this->str_buf = NULL;
@@ -3843,14 +3844,17 @@ bool fits_table_col::bvalue( long row_index,
 		    ll_tmp >>= 8; \
 		    p_cnt ++; \
 		} \
-		this->tmp_str_buf->assign("0b"); \
-		while ( 0 < p_cnt ) { \
-		    p_cnt--; \
-		    this->tmp_str_buf->append(bit_str_p[p_cnt]); \
+		if ( p_cnt == 0 ) this->str_buf->printf(this->fmt_str.cstr(), "0"); \
+		else { \
+		    this->tmp_str_buf->assign("0b"); \
+		    while ( 0 < p_cnt ) { \
+		        p_cnt--; \
+		        this->tmp_str_buf->append(bit_str_p[p_cnt]); \
+		    } \
+		    p_cnt = this->tmp_str_buf->strspn(2,'0'); \
+		    this->tmp_str_buf->put(0 + p_cnt, "0b"); \
+		    this->str_buf->printf(this->fmt_str.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
 		} \
-		p_cnt = this->tmp_str_buf->strspn(2,'0'); \
-		this->tmp_str_buf->put(0 + p_cnt, "0b"); \
-		this->str_buf->printf(this->fmt_str.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
 	    } \
 	    else { \
 		this->str_buf->printf(this->fmt_str.cstr(),ll_v); \
@@ -3868,14 +3872,17 @@ bool fits_table_col::bvalue( long row_index,
 		    ll_tmp >>= 8; \
 		    p_cnt ++; \
 		} \
-		this->tmp_str_buf->assign("0b"); \
-		while ( 0 < p_cnt ) { \
-		    p_cnt--; \
-		    this->tmp_str_buf->append(bit_str_p[p_cnt]); \
+		if ( p_cnt == 0 ) ts.printf(this->fmt_str.cstr(), "0"); \
+		else { \
+		    this->tmp_str_buf->assign("0b"); \
+		    while ( 0 < p_cnt ) { \
+		        p_cnt--; \
+		        this->tmp_str_buf->append(bit_str_p[p_cnt]); \
+		    } \
+		    p_cnt = this->tmp_str_buf->strspn(2,'0'); \
+		    this->tmp_str_buf->put(0 + p_cnt, "0b"); \
+		    ts.printf(this->fmt_str.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
 		} \
-		p_cnt = this->tmp_str_buf->strspn(2,'0'); \
-		this->tmp_str_buf->put(0 + p_cnt, "0b"); \
-		ts.printf(this->fmt_str.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
 	    } \
 	    else { \
 		ts.printf(this->fmt_str.cstr(),ll_v); \
