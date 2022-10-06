@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2022-10-01 00:00:00 cyamauch> */
+/* Time-stamp: <2022-10-06 00:00:00 cyamauch> */
 
 /**
  * @file   fits_table_col.cc
@@ -2244,7 +2244,11 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 	if ( 0 < tmp_str.length() ) {
 	    ssize_t pos = tmp_str.strpbrk("[-0-9]");
 	    int len0 = 0;
-	    if ( 0 <= pos ) len0 = tmp_str.atoi(pos);
+	    const char *len0_zero_pad = "";
+	    if ( 0 <= pos ) {
+		len0 = tmp_str.atoi(pos);
+		if ( tmp_str.cchr(pos) == '0' ) len0_zero_pad = "0";
+	    }
 	    if ( (tmp_str.cchr(0) == 'A' || tmp_str.cchr(0) == 'L') && 
 		 a_ok == true ) {
 		if ( len0 != 0 ) {
@@ -2290,7 +2294,9 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 	    }
 	    else if ( tmp_str.cchr(0) == 'B' && boz_ok == true ) {
 		if ( 0 < len0 ) {
-		    this->fmt_str.printf("%%%ds",len0+2);
+		    /* This is a format for 0 cell */
+		    this->fmt_str.printf("%%%s%dlld",len0_zero_pad,len0+2);
+		    /* This is also used for non-NULL cells */
 		    this->fmt_nullstr.printf("%%%ds",len0+2);
 		}
 		else {
@@ -2300,7 +2306,7 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 	    }
 	    else if ( tmp_str.cchr(0) == 'O' && boz_ok == true ) {
 		if ( 0 < len0 ) {
-		    this->fmt_str.printf("%%#%dllo",len0+1);
+		    this->fmt_str.printf("%%#%s%dllo",len0_zero_pad,len0+1);
 		    this->fmt_nullstr.printf("%%%ds",len0+1);
 		}
 		else {
@@ -2310,7 +2316,7 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 	    }
 	    else if ( tmp_str.cchr(0) == 'Z' && boz_ok == true ) {
 		if ( 0 < len0 ) {
-		    this->fmt_str.printf("%%#%dllx",len0+2);
+		    this->fmt_str.printf("%%#%s%dllx",len0_zero_pad,len0+2);
 		    this->fmt_nullstr.printf("%%%ds",len0+2);
 		}
 		else {
@@ -2320,7 +2326,7 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 	    }
 	    else if ( tmp_str.cchr(0) == 'I' ) {
 		if ( 0 < len0 ) {
-		    this->fmt_str.printf("%%%dlld",len0);
+		    this->fmt_str.printf("%%%s%dlld",len0_zero_pad,len0);
 		    this->fmt_nullstr.printf("%%%ds",len0);
 		}
 		else {
@@ -3844,7 +3850,14 @@ bool fits_table_col::bvalue( long row_index,
 		    ll_tmp >>= 8; \
 		    p_cnt ++; \
 		} \
-		if ( p_cnt == 0 ) this->str_buf->printf(this->fmt_str.cstr(), "0"); \
+		if ( p_cnt == 0 ) { \
+		    if ( this->fmt_str.cchr(1) == '0' ) { /* "%0??lld" */ \
+		        this->str_buf->printf(this->fmt_str.cstr(), 0LL); \
+		    } \
+		    else {			 /* use format of NULL to handle string */ \
+		        this->str_buf->printf(this->fmt_nullstr.cstr(), "0"); \
+		    } \
+		} \
 		else { \
 		    this->tmp_str_buf->assign("0b"); \
 		    while ( 0 < p_cnt ) { \
@@ -3853,7 +3866,15 @@ bool fits_table_col::bvalue( long row_index,
 		    } \
 		    p_cnt = this->tmp_str_buf->strspn(2,'0'); \
 		    this->tmp_str_buf->put(0 + p_cnt, "0b"); \
-		    this->str_buf->printf(this->fmt_str.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
+		    /* use format of NULL to handle string */ \
+		    this->str_buf->printf(this->fmt_nullstr.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
+		    if ( this->fmt_str.cchr(1) == '0' ) { /* "%0??lld" */ \
+			p_cnt = this->str_buf->strspn(0,' '); \
+			if ( 0 < p_cnt ) { /* do zero-padding */ \
+			    this->str_buf->replace(2,p_cnt, '0',p_cnt); \
+			    this->str_buf->put(0, "0b"); \
+			} \
+		    } \
 		} \
 	    } \
 	    else { \
@@ -3872,7 +3893,14 @@ bool fits_table_col::bvalue( long row_index,
 		    ll_tmp >>= 8; \
 		    p_cnt ++; \
 		} \
-		if ( p_cnt == 0 ) ts.printf(this->fmt_str.cstr(), "0"); \
+		if ( p_cnt == 0 ) { \
+		    if ( this->fmt_str.cchr(1) == '0' ) { /* "%0??lld" */ \
+		        ts.printf(this->fmt_str.cstr(), 0LL); \
+		    } \
+		    else {			 /* use format of NULL to handle string */ \
+		        ts.printf(this->fmt_nullstr.cstr(), "0"); \
+		    } \
+		} \
 		else { \
 		    this->tmp_str_buf->assign("0b"); \
 		    while ( 0 < p_cnt ) { \
@@ -3881,7 +3909,15 @@ bool fits_table_col::bvalue( long row_index,
 		    } \
 		    p_cnt = this->tmp_str_buf->strspn(2,'0'); \
 		    this->tmp_str_buf->put(0 + p_cnt, "0b"); \
-		    ts.printf(this->fmt_str.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
+		    /* use format of NULL to handle string */ \
+		    ts.printf(this->fmt_nullstr.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
+		    if ( this->fmt_str.cchr(1) == '0' ) { /* "%0??lld" */ \
+			p_cnt = ts.strspn(0,' '); \
+			if ( 0 < p_cnt ) { /* do zero-padding */ \
+			    ts.replace(2,p_cnt, '0',p_cnt); \
+			    ts.put(0, "0b"); \
+			} \
+		    } \
 		} \
 	    } \
 	    else { \
