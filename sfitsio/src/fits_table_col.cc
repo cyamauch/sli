@@ -1,5 +1,5 @@
 /* -*- Mode: C++ ; Coding: euc-japan -*- */
-/* Time-stamp: <2022-10-06 00:00:00 cyamauch> */
+/* Time-stamp: <2022-10-07 00:00:00 cyamauch> */
 
 /**
  * @file   fits_table_col.cc
@@ -2294,7 +2294,7 @@ fits_table_col &fits_table_col::_define( const fits::table_def_all &def )
 	    }
 	    else if ( tmp_str.cchr(0) == 'B' && boz_ok == true ) {
 		if ( 0 < len0 ) {
-		    /* This is a format for 0 cell */
+		    /* Only for telling zero-padding (used in DO_LL() and DO_LL_TS()) */
 		    this->fmt_str.printf("%%%s%dlld",len0_zero_pad,len0+2);
 		    /* This is also used for non-NULL cells */
 		    this->fmt_nullstr.printf("%%%ds",len0+2);
@@ -3843,42 +3843,42 @@ bool fits_table_col::bvalue( long row_index,
 	    if ( this->tany.cchr(TDISP_IDX,0) == 'B' ) {	/* Binary */ \
 		const char *bit_str_p[8]; \
 		size_t p_cnt = 0; \
-		uint64_t ll_one, ll_tmp = (uint64_t)ll_v; \
+		uint64_t ll_one, ll_tmp; \
+		if ( ll_v == 0LL ) ll_tmp = 1; /* for output "0b0" */ \
+		else ll_tmp = (uint64_t)ll_v; \
 		while ( ll_tmp != (uint64_t)0 ) { \
 		    ll_one = (ll_tmp & (uint64_t)0x0ff); \
 		    bit_str_p[p_cnt] = Bit_str + (9 * ll_one);	\
 		    ll_tmp >>= 8; \
 		    p_cnt ++; \
 		} \
-		if ( p_cnt == 0 ) { \
-		    if ( this->fmt_str.cchr(1) == '0' ) { /* "%0??lld" */ \
-		        this->str_buf->printf(this->fmt_str.cstr(), 0LL); \
-		    } \
-		    else {			 /* use format of NULL to handle string */ \
-		        this->str_buf->printf(this->fmt_nullstr.cstr(), "0"); \
+		/* always 0 < p_cnt here */ \
+		this->tmp_str_buf->assign("0b"); \
+		while ( 0 < p_cnt ) { \
+		    p_cnt--; \
+		    this->tmp_str_buf->append(bit_str_p[p_cnt]); \
+		} \
+		p_cnt = this->tmp_str_buf->strspn(2,'0'); \
+		this->tmp_str_buf->put(0 + p_cnt, "0b"); \
+		/* use format of NULL to handle string */ \
+		this->str_buf->printf(this->fmt_nullstr.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
+		if ( this->fmt_str.cchr(1) == '0' ) { /* "%0??lld" */ \
+		    p_cnt = this->str_buf->strspn(0,' '); \
+		    if ( 0 < p_cnt ) { /* do zero-padding */ \
+		        this->str_buf->replace(2,p_cnt, '0',p_cnt); \
+		        this->str_buf->put(0, "0b"); \
 		    } \
 		} \
-		else { \
-		    this->tmp_str_buf->assign("0b"); \
-		    while ( 0 < p_cnt ) { \
-		        p_cnt--; \
-		        this->tmp_str_buf->append(bit_str_p[p_cnt]); \
-		    } \
-		    p_cnt = this->tmp_str_buf->strspn(2,'0'); \
-		    this->tmp_str_buf->put(0 + p_cnt, "0b"); \
-		    /* use format of NULL to handle string */ \
-		    this->str_buf->printf(this->fmt_nullstr.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
-		    if ( this->fmt_str.cchr(1) == '0' ) { /* "%0??lld" */ \
-			p_cnt = this->str_buf->strspn(0,' '); \
-			if ( 0 < p_cnt ) { /* do zero-padding */ \
-			    this->str_buf->replace(2,p_cnt, '0',p_cnt); \
-			    this->str_buf->put(0, "0b"); \
-			} \
-		    } \
-		} \
+		if ( ll_v == 0LL ) this->str_buf->put(this->str_buf->length() - 1, "0"); /* overwritten */ \
 	    } \
 	    else { \
-		this->str_buf->printf(this->fmt_str.cstr(),ll_v); \
+		if ( ll_v == 0LL ) { /* output 0x0, 00, etc. */ \
+		    this->str_buf->printf(this->fmt_str.cstr(),1LL); \
+		    this->str_buf->put(this->str_buf->length() - 1, "0"); /* overwritten */ \
+		} \
+		else { \
+		    this->str_buf->printf(this->fmt_str.cstr(),ll_v); \
+		} \
 	    } \
 }
 
@@ -3886,42 +3886,42 @@ bool fits_table_col::bvalue( long row_index,
 	    if ( this->tany.cchr(TDISP_IDX,0) == 'B' ) {	/* Binary */ \
 		const char *bit_str_p[8]; \
 		size_t p_cnt = 0; \
-		uint64_t ll_one, ll_tmp = (uint64_t)ll_v; \
+		uint64_t ll_one, ll_tmp; \
+		if ( ll_v == 0LL ) ll_tmp = 1; /* for output "0b0" */ \
+		else ll_tmp = (uint64_t)ll_v; \
 		while ( ll_tmp != (uint64_t)0 ) { \
 		    ll_one = (ll_tmp & (uint64_t)0x0ff); \
 		    bit_str_p[p_cnt] = Bit_str + (9 * ll_one);	\
 		    ll_tmp >>= 8; \
 		    p_cnt ++; \
 		} \
-		if ( p_cnt == 0 ) { \
-		    if ( this->fmt_str.cchr(1) == '0' ) { /* "%0??lld" */ \
-		        ts.printf(this->fmt_str.cstr(), 0LL); \
-		    } \
-		    else {			 /* use format of NULL to handle string */ \
-		        ts.printf(this->fmt_nullstr.cstr(), "0"); \
+		/* always 0 < p_cnt here */ \
+		this->tmp_str_buf->assign("0b"); \
+		while ( 0 < p_cnt ) { \
+		    p_cnt--; \
+		    this->tmp_str_buf->append(bit_str_p[p_cnt]); \
+		} \
+		p_cnt = this->tmp_str_buf->strspn(2,'0'); \
+		this->tmp_str_buf->put(0 + p_cnt, "0b"); \
+		/* use format of NULL to handle string */ \
+		ts.printf(this->fmt_nullstr.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
+		if ( this->fmt_str.cchr(1) == '0' ) { /* "%0??lld" */ \
+		    p_cnt = ts.strspn(0,' '); \
+		    if ( 0 < p_cnt ) { /* do zero-padding */ \
+		        ts.replace(2,p_cnt, '0',p_cnt); \
+		        ts.put(0, "0b"); \
 		    } \
 		} \
-		else { \
-		    this->tmp_str_buf->assign("0b"); \
-		    while ( 0 < p_cnt ) { \
-		        p_cnt--; \
-		        this->tmp_str_buf->append(bit_str_p[p_cnt]); \
-		    } \
-		    p_cnt = this->tmp_str_buf->strspn(2,'0'); \
-		    this->tmp_str_buf->put(0 + p_cnt, "0b"); \
-		    /* use format of NULL to handle string */ \
-		    ts.printf(this->fmt_nullstr.cstr(),this->tmp_str_buf->cstr() + p_cnt); \
-		    if ( this->fmt_str.cchr(1) == '0' ) { /* "%0??lld" */ \
-			p_cnt = ts.strspn(0,' '); \
-			if ( 0 < p_cnt ) { /* do zero-padding */ \
-			    ts.replace(2,p_cnt, '0',p_cnt); \
-			    ts.put(0, "0b"); \
-			} \
-		    } \
-		} \
+		if ( ll_v == 0LL ) ts.put(ts.length() - 1, "0"); /* overwritten */ \
 	    } \
 	    else { \
-		ts.printf(this->fmt_str.cstr(),ll_v); \
+		if ( ll_v == 0LL ) { /* output 0x0, 00, etc. */ \
+		    ts.printf(this->fmt_str.cstr(),1LL); \
+		    ts.put(ts.length() - 1, "0"); /* overwritten */ \
+		} \
+		else { \
+		    ts.printf(this->fmt_str.cstr(),ll_v); \
+		} \
 	    } \
 }
 
