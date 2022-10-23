@@ -155,3 +155,8 @@ Version 1.4.5a
 		Appended "CCFLAGS = -std=gnu++11" in Makefile.
 		(Jun.3,2022)
 
+Version 1.4.6
+		Supported 'B' of TDISPn in BTE.
+		Supported 'B0x', 'Z0x' and 'O0x' expressions of TDISPn in BTE.
+		(Oct.24,2022)
+
